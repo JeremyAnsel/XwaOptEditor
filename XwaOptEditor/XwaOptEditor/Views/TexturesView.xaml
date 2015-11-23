@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="XwaOptEditor.Views.TexturesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:vm="clr-namespace:XwaOptEditor.ViewModels"
+             xmlns:vc="clr-namespace:XwaOptEditor.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="700">
+    <UserControl.DataContext>
+        <vm:TexturesViewModel />
+    </UserControl.DataContext>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Left">
+            <ToolBarTray DockPanel.Dock="Bottom"
+                         IsLocked="True"
+                         DataContext="{Binding ElementName=Textures}">
+                <ToolBar Band="0"
+                         BandIndex="0"
+                         IsEnabled="{Binding HasItems}">
+                    <TextBlock Text="Save As...: " />
+                    <Button Content="Color/Alpha Map"
+                            Command="{Binding DataContext.SaveAsCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                    <Button Content="Color Map"
+                            Command="{Binding DataContext.SaveAsColorCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                    <Button IsEnabled="{Binding SelectedItem.Value.HasAlpha}"
+                            Content="Alpha Map"
+                            Command="{Binding DataContext.SaveAsAlphaCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                </ToolBar>
+                <ToolBar Band="1"
+                         BandIndex="0"
+                         IsEnabled="{Binding HasItems}">
+                    <TextBlock Text="Replace With...: " />
+                    <Button Content="Color/Alpha Map"
+                            Command="{Binding DataContext.ReplaceMapCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                    <Button Content="Alpha Map"
+                            Command="{Binding DataContext.ReplaceAlphaMapCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                </ToolBar>
+                <ToolBar Band="2"
+                         BandIndex="0"
+                         IsEnabled="{Binding HasItems}">
+                    <Button Content="Generate Mipmaps"
+                            Command="{Binding DataContext.GenerateAllMipmapsCommand}" />
+                    <Separator />
+                    <TextBlock Text="Convert All to: " />
+                    <Button Content="8 bits"
+                            Command="{Binding DataContext.ConvertAllTo8BitsCommand}" />
+                    <Button Content="32 bits"
+                            Command="{Binding DataContext.ConvertAllTo32BitsCommand}" />
+                </ToolBar>
+            </ToolBarTray>
+            <DataGrid x:Name="Textures"
+                      ItemsSource="{Binding OptModel.File.Textures}"
+                      IsReadOnly="True"
+                      AutoGenerateColumns="False"
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectionMode="Single"
+                      EnableRowVirtualization="True"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <DataGrid.ContextMenu>
+                    <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                        <MenuItem IsEnabled="{Binding HasItems}"
+                                  Header="Save As...">
+                            <MenuItem Header="Color/Alpha Map"
+                                      Command="{Binding DataContext.SaveAsCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                            <MenuItem Header="Color Map"
+                                      Command="{Binding DataContext.SaveAsColorCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                            <MenuItem IsEnabled="{Binding SelectedItem.Value.HasAlpha}"
+                                      Header="Alpha Map"
+                                      Command="{Binding DataContext.SaveAsAlphaCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                        </MenuItem>
+                        <MenuItem IsEnabled="{Binding HasItems}"
+                                  Header="Replace With...">
+                            <MenuItem Header="Color/Alpha Map"
+                                      Command="{Binding DataContext.ReplaceMapCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                            <MenuItem Header="Alpha Map"
+                                      Command="{Binding DataContext.ReplaceAlphaMapCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name"
+                                        Binding="{Binding Value.Name}" />
+                    <DataGridTextColumn Header="Width"
+                                        Binding="{Binding Value.Width}" />
+                    <DataGridTextColumn Header="Height"
+                                        Binding="{Binding Value.Height}" />
+                    <DataGridTextColumn Header="Has Alpha"
+                                        Binding="{Binding Value.HasAlpha}" />
+                    <DataGridTextColumn Header="Mipmaps"
+                                        Binding="{Binding Value.MipmapsCount}" />
+                    <DataGridTextColumn Header="Bpp"
+                                        Binding="{Binding Value.BitsPerPixel}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <TabControl>
+            <TabItem Header="Color / Alpha maps">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="Color map"
+                                   TextAlignment="Center">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90" />
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                        <xctk:Zoombox ClipToBounds="True"
+                                      KeepContentInBounds="True"
+                                      Background="Black"
+                                      ViewStackMode="Manual"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Top"
+                                      xctk:Zoombox.ViewFinderVisibility="Visible">
+                            <xctk:Zoombox.ViewStack>
+                                <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                            </xctk:Zoombox.ViewStack>
+                            <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=0}"
+                                   Stretch="None"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Unspecified" />
+                        </xctk:Zoombox>
+                    </DockPanel>
+                    <DockPanel Grid.Row="1">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="Alpha map"
+                                   TextAlignment="Center">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90" />
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                        <xctk:Zoombox ClipToBounds="True"
+                                      KeepContentInBounds="True"
+                                      Background="Black"
+                                      ViewStackMode="Manual"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Top"
+                                      xctk:Zoombox.ViewFinderVisibility="Visible">
+                            <xctk:Zoombox.ViewStack>
+                                <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                            </xctk:Zoombox.ViewStack>
+                            <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=1}"
+                                   Stretch="None"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   RenderOptions.EdgeMode="Unspecified" />
+                        </xctk:Zoombox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Color map">
+                <xctk:Zoombox ClipToBounds="True"
+                              KeepContentInBounds="True"
+                              Background="Black"
+                              ViewStackMode="Manual"
+                              HorizontalContentAlignment="Left"
+                              VerticalContentAlignment="Top"
+                              xctk:Zoombox.ViewFinderVisibility="Visible">
+                    <xctk:Zoombox.ViewStack>
+                        <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                    </xctk:Zoombox.ViewStack>
+                    <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=0}"
+                           Stretch="None"
+                           RenderOptions.BitmapScalingMode="NearestNeighbor"
+                           RenderOptions.EdgeMode="Unspecified" />
+                </xctk:Zoombox>
+            </TabItem>
+            <TabItem Header="Alpha map"
+                     IsEnabled="{Binding OptModel.File.Textures/Value.HasAlpha}">
+                <xctk:Zoombox ClipToBounds="True"
+                              KeepContentInBounds="True"
+                              Background="Black"
+                              ViewStackMode="Manual"
+                              HorizontalContentAlignment="Left"
+                              VerticalContentAlignment="Top"
+                              xctk:Zoombox.ViewFinderVisibility="Visible">
+                    <xctk:Zoombox.ViewStack>
+                        <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                    </xctk:Zoombox.ViewStack>
+                    <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=1}"
+                           Stretch="None"
+                           RenderOptions.BitmapScalingMode="NearestNeighbor"
+                           RenderOptions.EdgeMode="Unspecified" />
+                </xctk:Zoombox>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</UserControl>

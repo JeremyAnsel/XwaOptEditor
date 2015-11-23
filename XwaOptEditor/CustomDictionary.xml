@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Words>
+    <Unrecognized>
+    </Unrecognized>
+    <Recognized>
+      <Word>ansel</Word>
+      <Word>jeremy</Word>
+      <Word>opt</Word>
+      <Word>xwa</Word>
+    </Recognized>
+    <Deprecated>
+    </Deprecated>
+    <Compound>
+    </Compound>
+    <DiscreteExceptions>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

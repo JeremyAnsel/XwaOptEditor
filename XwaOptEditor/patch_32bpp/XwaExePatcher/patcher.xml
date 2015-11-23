@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPatch>
+  <Patch Name="opt textures bpp 8 to 32">
+    <Item Offset="1964C5" From="8A028801" To="8B028901" />
+    <Item Offset="1964D1" From="01" To="04" />
+    <Item Offset="1964E0" From="01" To="04" />
+    <Item Offset="1955BE" From="8B4804" To="909090" />
+    <Item Offset="1955C1" From="898DE8FEFFFF83BDE8FEFFFF00751A" To="C785E8FEFFFF00000000909090EB1A" />
+    <Item Offset="195D30" From="755E" To="EB5E" />
+    <Item Offset="040ED9" From="8D040B" To="8D0499" />
+    <Item Offset="040F16" From="08" To="20" />
+    <Item Offset="040F1A" From="74098D140B8B4C24208911" To="C1A43CFC05000002909090" />
+    <Item Offset="041064" From="399424080B0000" To="BE03000000EB56" />
+    <Item Offset="040F25" From="8B4C243C85C9" To="E9FF00000090" />
+    <Item Offset="198A2F" From="8B484C83E120" To="8B4864C1E918" />
+    <Item Offset="198AED" From="83E108" To="83E128" />
+  </Patch>
+</ArrayOfPatch>

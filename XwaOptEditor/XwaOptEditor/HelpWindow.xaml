@@ -1,0 +1,147 @@
+﻿<Window x:Class="XwaOptEditor.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Xwa Opt Editor Help"
+        Height="500"
+        Width="800"
+        UseLayoutRounding="True"
+        ShowInTaskbar="False"
+        WindowStyle="ToolWindow">
+    <Window.Resources>
+        <Style x:Key="VertivalTab"
+               TargetType="{x:Type TabItem}">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <ContentPresenter Content="{TemplateBinding Content}">
+                            <ContentPresenter.LayoutTransform>
+                                <RotateTransform Angle="90" />
+                            </ContentPresenter.LayoutTransform>
+                        </ContentPresenter>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding"
+                    Value="1 20" />
+        </Style>
+        <Style x:Key="H1"
+               TargetType="{x:Type Paragraph}">
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="TextBlock.FontWeight"
+                    Value="Bold" />
+            <Setter Property="TextBlock.FontSize"
+                    Value="24" />
+        </Style>
+        <Style x:Key="H2"
+               TargetType="{x:Type Paragraph}">
+            <Setter Property="TextBlock.FontWeight"
+                    Value="Bold" />
+            <Setter Property="TextBlock.FontSize"
+                    Value="20" />
+        </Style>
+    </Window.Resources>
+    <TabControl TabStripPlacement="Left">
+        <TabItem Header="Commands"
+                 Style="{StaticResource VertivalTab}">
+            <FlowDocumentReader ViewingMode="Page">
+                <FlowDocument>
+                    <Paragraph BreakColumnBefore="True"
+                               Style="{DynamicResource H2}">Model Viewer Commands</Paragraph>
+                    <List>
+                        <ListItem>
+                            <Paragraph>To rotate</Paragraph>
+                            <Paragraph>with mouse: right click</Paragraph>
+                            <Paragraph>with keyboard: left, right, up, down
+                                <LineBreak /> control key to rotate slower
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>To center view</Paragraph>
+                            <Paragraph>with mouse: double right click</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>To zoom</Paragraph>
+                            <Paragraph>with mouse: wheel, control + right click,
+                                <LineBreak /> control + shift + right click (selection zoom)
+                            </Paragraph>
+                            <Paragraph>with keyboard: page up, page down
+                                <LineBreak /> control key to zoom slower
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>To move</Paragraph>
+                            <Paragraph>with mouse: shift + right click</Paragraph>
+                            <Paragraph>with keyboard: shift + left, shift + right, shift + up, shift + down
+                                <LineBreak /> control key to move slower
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>View cube:</Paragraph>
+                            <Paragraph>mouse click to select a view</Paragraph>
+                            <Paragraph>mouse double click to reverse view</Paragraph>
+                        </ListItem>
+                    </List>
+                    <Paragraph BreakColumnBefore="True"
+                               Style="{DynamicResource H2}">Texture Viewer Commands</Paragraph>
+                    <List>
+                        <ListItem>
+                            <Paragraph>To zoom:</Paragraph>
+                            <Paragraph>shift + mouse wheel</Paragraph>
+                            <Paragraph>alt + mouse left button (selection zoom)</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>To drag:</Paragraph>
+                            <Paragraph>control + mouse left button</Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentReader>
+        </TabItem>
+        <TabItem Header="Credits"
+                 Style="{StaticResource VertivalTab}">
+            <FlowDocumentReader ViewingMode="Page">
+                <FlowDocument>
+                    <Paragraph BreakColumnBefore="True"
+                               Style="{DynamicResource H2}">Credits</Paragraph>
+                    <Paragraph>Xwa Opt Editor uses the following librairies:</Paragraph>
+                    <List>
+                        <ListItem>
+                            <Paragraph>Helix 3D Toolkit</Paragraph>
+                            <Paragraph>by Oystein Bjorke</Paragraph>
+                            <Paragraph>
+                                <Hyperlink>https://github.com/helix-toolkit/helix-toolkit</Hyperlink>
+                            </Paragraph>
+                            <Paragraph />
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Extended WPF Toolkit</Paragraph>
+                            <Paragraph>by Xceed</Paragraph>
+                            <Paragraph>
+                                <Hyperlink>http://wpftoolkit.codeplex.com</Hyperlink>
+                            </Paragraph>
+                            <Paragraph />
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>JeremyAnsel.ColorQuant</Paragraph>
+                            <Paragraph>by Jérémy Ansel</Paragraph>
+                            <Paragraph>based on Xiaolin Wu's Color Quantizer</Paragraph>
+                            <Paragraph>
+                                <Hyperlink>https://github.com/JeremyAnsel/JeremyAnsel.ColorQuant</Hyperlink>
+                            </Paragraph>
+                            <Paragraph />
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Rhino3dmIO Toolkit</Paragraph>
+                            <Paragraph>by Robert McNeel &amp; Associates</Paragraph>
+                            <Paragraph>
+                                <Hyperlink>https://github.com/mcneel/rhinocommon</Hyperlink>
+                            </Paragraph>
+                            <Paragraph />
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentReader>
+        </TabItem>
+    </TabControl>
+</Window>

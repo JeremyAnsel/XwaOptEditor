@@ -1,0 +1,43 @@
+﻿<Window x:Class="OptStructure.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xwa="clr-namespace:JeremyAnsel.Xwa.Opt.Nodes;assembly=JeremyAnsel.Xwa.Opt"
+        Title="OPT Structure"
+        Width="525"
+        Height="500">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="OptFile" ObjectInstance="{x:Type xwa:OptFileNodes}" />
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Execute_Open" />
+    </Window.CommandBindings>
+    <DockPanel DataContext="{Binding Source={StaticResource OptFile}}">
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="ApplicationCommands.Open" ToolTip="Open">Open</Button>
+            <Separator />
+            <CheckBox x:Name="chkDefaultExpanded"
+                      Content="Expand"
+                      IsChecked="True" />
+        </ToolBar>
+        <StatusBar Width="Auto" DockPanel.Dock="Bottom">
+            <TextBlock Text="File Name:" />
+            <TextBlock Text="{Binding FileName}" />
+        </StatusBar>
+        <TreeView ItemsSource="{Binding Nodes}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+            <TreeView.ItemContainerStyle>
+                <Style>
+                    <Setter Property="TreeViewItem.IsExpanded" Value="{Binding ElementName=chkDefaultExpanded, Path=IsChecked}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Offset}" />
+                        <TextBlock Text=" - " />
+                        <TextBlock Text="{Binding .}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </DockPanel>
+</Window>

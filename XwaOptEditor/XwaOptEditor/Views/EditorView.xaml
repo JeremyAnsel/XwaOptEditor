@@ -1,0 +1,1000 @@
+﻿<UserControl x:Class="XwaOptEditor.Views.EditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:hx="http://helix-toolkit.org/wpf"
+             xmlns:opt="clr-namespace:JeremyAnsel.Xwa.Opt;assembly=JeremyAnsel.Xwa.Opt"
+             xmlns:mvvm="clr-namespace:XwaOptEditor.Mvvm"
+             xmlns:vm="clr-namespace:XwaOptEditor.ViewModels"
+             xmlns:vc="clr-namespace:XwaOptEditor.Converters"
+             xmlns:localControl="clr-namespace:XwaOptEditor.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="1200">
+    <UserControl.DataContext>
+        <vm:EditorViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <ContextMenu x:Key="ModelMenu">
+            <MenuItem Header="Add Hardpoint"
+                      Command="{Binding AddHardpointCommand}"
+                      CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Add Engine Glow"
+                      Command="{Binding AddEngineGlowCommand}"
+                      CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Copy Point"
+                      Command="{Binding CopyPointCommand}"
+                      CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Select Mesh"
+                      Command="{Binding SelectMeshCommand}"
+                      CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Add Mesh to selection"
+                      Command="{Binding AddMeshToSelectionCommand}"
+                      CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Merge selected Meshes"
+                      Command="{Binding MergeMeshesCommand}"
+                      CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"
+                              MinWidth="50" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="12*"
+                              MinWidth="50" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10*"
+                              MinWidth="50" />
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1"
+                      Width="5"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Column="3"
+                      Width="5"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" />
+        <DockPanel Grid.Column="0">
+            <ToolBarTray DockPanel.Dock="Bottom"
+                         IsLocked="True">
+                <ToolBar Band="0"
+                         BandIndex="0">
+                    <Button Content="Compute Hitzones"
+                            Command="{Binding ComputeHitzonesCommand}" />
+                </ToolBar>
+                <ToolBar Band="1"
+                         BandIndex="0">
+                    <Button Content="New"
+                            Command="{Binding NewMeshCommand}" />
+                    <Button Content="Delete"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding DeleteMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Up"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding UpMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Down"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding DownMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                </ToolBar>
+                <ToolBar Band="2"
+                         BandIndex="0">
+                    <Button Content="Split"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding SplitMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Merge"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding MergeMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                </ToolBar>
+            </ToolBarTray>
+            <ListView ItemsSource="{Binding CurrentMeshes}"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ContextMenu>
+                    <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.DataContext}">
+                        <MenuItem Header="Split"
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding SplitMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <MenuItem Header="Merge"
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding MergeMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <Separator />
+                        <MenuItem Header="Up"
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding UpMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <MenuItem Header="Down"
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding DownMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Mesh Type"
+                                        Width="100"
+                                        DisplayMemberBinding="{Binding Value.Descriptor.MeshType}" />
+                        <GridViewColumn Header="ID"
+                                        Width="20"
+                                        DisplayMemberBinding="{Binding Value.Descriptor.TargetId}" />
+                        <GridViewColumn Header="HP"
+                                        Width="20"
+                                        DisplayMemberBinding="{Binding Value.Hardpoints.Count}" />
+                        <GridViewColumn Header="EG"
+                                        Width="20"
+                                        DisplayMemberBinding="{Binding Value.EngineGlows.Count}" />
+                        <GridViewColumn Header="V"
+                                        Width="30"
+                                        DisplayMemberBinding="{Binding Value.Vertices.Count}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"
+                               MinHeight="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="7*"
+                               MinHeight="50" />
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Row="1"
+                          Height="5"
+                          VerticalAlignment="Stretch"
+                          HorizontalAlignment="Stretch" />
+            <DockPanel Grid.Row="0">
+                <ToolBarTray DockPanel.Dock="Left"
+                             Orientation="Vertical"
+                             IsLocked="True">
+                    <ToolBar IsEnabled="{Binding CurrentMeshes.HasSelectedItems}">
+                        <Button Content="New"
+                                Command="{Binding NewLodCommand}" />
+                        <Button Content="Delete"
+                                Command="{Binding DeleteLodsCommand}"
+                                CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                        <Button Content="Up"
+                                Command="{Binding UpLodsCommand}"
+                                CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                        <Button Content="Down"
+                                Command="{Binding DownLodsCommand}"
+                                CommandParameter="{Binding CurrentLods.SelectedItems}"></Button>
+                        <Button Content="Sort"
+                                Command="{Binding SortLodsCommand}"></Button>
+                    </ToolBar>
+                </ToolBarTray>
+                <ToolBarTray DockPanel.Dock="Right"
+                             Orientation="Vertical"
+                             IsLocked="True">
+                    <ToolBar IsEnabled="{Binding CurrentLods.HasSelectedItems}">
+                        <Button Content="Split"
+                                Command="{Binding SplitLodsCommand}"
+                                CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                        <Button Content="Merge"
+                                Command="{Binding MergeLodsCommand}"
+                                CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                    </ToolBar>
+                </ToolBarTray>
+                <ListView DockPanel.Dock="Left"
+                          ItemsSource="{Binding CurrentLods}"
+                          HorizontalContentAlignment="Stretch"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ContextMenu>
+                        <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.DataContext}">
+                            <MenuItem Header="Split"
+                                      IsEnabled="{Binding CurrentLods.HasSelectedItems}"
+                                      Command="{Binding SplitLodsCommand}"
+                                      CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                            <MenuItem Header="Merge"
+                                      IsEnabled="{Binding CurrentLods.HasSelectedItems}"
+                                      Command="{Binding MergeLodsCommand}"
+                                      CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                            <Separator />
+                            <MenuItem Header="Up"
+                                      IsEnabled="{Binding CurrentLods.HasSelectedItems}"
+                                      Command="{Binding UpLodsCommand}"
+                                      CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                            <MenuItem Header="Down"
+                                      IsEnabled="{Binding CurrentLods.HasSelectedItems}"
+                                      Command="{Binding DownLodsCommand}"
+                                      CommandParameter="{Binding CurrentLods.SelectedItems}" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Right"
+                                           Text="{Binding Value.VerticesCount, StringFormat='Vertices: {0}'}"
+                                           Width="100" />
+                                <TextBlock DockPanel.Dock="Right"
+                                           Text="{Binding Value.TrianglesCount, StringFormat='Triangles: {0}'}"
+                                           Width="100" />
+                                <TextBlock DockPanel.Dock="Left"
+                                           Text="Distance: " />
+                                <TextBox Text="{Binding Value.Distance, Converter={vc:LodDistanceConverter}}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+            <TabControl Grid.Row="2">
+                <TabItem Header="Infos">
+                    <DockPanel>
+                        <ToolBarTray DockPanel.Dock="Top"
+                                     IsLocked="True">
+                            <ToolBar>
+                                <Button Content="Compute Hitzone"
+                                        IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding ComputeHitzoneCommand}" />
+                            </ToolBar>
+                        </ToolBarTray>
+                        <Grid DataContext="{Binding CurrentMeshes.SelectedItem}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="Type: " />
+                            <localControl:EnumComboBox Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       EnumType="{x:Type opt:MeshType}"
+                                                       Text="{Binding Descriptor.MeshType}" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="Explosion Type: " />
+                            <localControl:EnumFlagsComboBox Grid.Row="1"
+                                                            Grid.Column="1"
+                                                            EnumType="{x:Type opt:ExplosionTypes}"
+                                                            Text="{Binding Descriptor.ExplosionType}" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Hitzone Span (m): " />
+                            <TextBox Grid.Row="2"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.Span, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="0"
+                                       Text="Hitzone Center (m): " />
+                            <TextBox Grid.Row="3"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.Center, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="0"
+                                       Text="Hitzone Min (m): " />
+                            <TextBox Grid.Row="4"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.Min, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="5"
+                                       Grid.Column="0"
+                                       Text="Hitzone Max (m): " />
+                            <TextBox Grid.Row="5"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.Max, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="6"
+                                       Grid.Column="0"
+                                       Text="Target Id: " />
+                            <TextBox Grid.Row="6"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.TargetId, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Grid.Row="7"
+                                       Grid.Column="0"
+                                       Text="Target (m): " />
+                            <TextBox Grid.Row="7"
+                                     Grid.Column="1"
+                                     Text="{Binding Descriptor.Target, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="8"
+                                       Grid.Column="0"
+                                       Text="Pivot (m): " />
+                            <TextBox Grid.Row="8"
+                                     Grid.Column="1"
+                                     Text="{Binding RotationScale.Pivot, Converter={vc:VectorScaleConverter}}" />
+                            <TextBlock Grid.Row="9"
+                                       Grid.Column="0"
+                                       Text="Look: " />
+                            <TextBox Grid.Row="9"
+                                     Grid.Column="1"
+                                     Text="{Binding RotationScale.Look, Converter={vc:VectorConverter}}" />
+                            <TextBlock Grid.Row="10"
+                                       Grid.Column="0"
+                                       Text="Up: " />
+                            <TextBox Grid.Row="10"
+                                     Grid.Column="1"
+                                     Text="{Binding RotationScale.Up, Converter={vc:VectorConverter}}" />
+                            <TextBlock Grid.Row="11"
+                                       Grid.Column="0"
+                                       Text="Right: " />
+                            <TextBox Grid.Row="11"
+                                     Grid.Column="1"
+                                     Text="{Binding RotationScale.Right, Converter={vc:VectorConverter}}" />
+                        </Grid>
+                    </DockPanel>
+                </TabItem>
+                <TabItem mvvm:AttachedProperties.RegisterCommandBindings="{Binding HardpointsPasteCommandBindings}">
+                    <TabItem.Header>
+                        <TextBlock DataContext="{Binding CurrentMeshes.SelectedItem}">
+                            <Run Text="Hardpoints:" />
+                            <Run Text="{Binding Hardpoints.Count, Mode=OneWay, FallbackValue=0}" />
+                        </TextBlock>
+                    </TabItem.Header>
+                    <DockPanel>
+                        <ToolBarTray DockPanel.Dock="Top"
+                                     IsLocked="True"
+                                     DataContext="{Binding ElementName=Hardpoints}">
+                            <ToolBar>
+                                <Button Content="New"
+                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding DataContext.NewHardpointCommand}" />
+                                <Button Content="Delete"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.DeleteHardpointsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Separator />
+                                <Button Content="Cut"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.CutHardpointsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Button Content="Copy"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.CopyHardpointsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Button Content="Paste"
+                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding DataContext.PasteHardpointsCommand}" />
+                            </ToolBar>
+                        </ToolBarTray>
+                        <ListView x:Name="Hardpoints"
+                                  ItemsSource="{Binding CurrentMeshes.SelectedItem.Hardpoints}"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling"
+                                  mvvm:AttachedProperties.RegisterCommandBindings="{Binding HardpointsCutCopyCommandBindings}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="Type"
+                                                        Width="150">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <localControl:EnumComboBox EnumType="{x:Type opt:HardpointType}"
+                                                                               Text="{Binding HardpointType}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Position (m)"
+                                                        Width="250">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Position, Converter={vc:VectorScaleConverter}}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+                </TabItem>
+                <TabItem mvvm:AttachedProperties.RegisterCommandBindings="{Binding EngineGlowsPasteCommandBindings}">
+                    <TabItem.Header>
+                        <TextBlock DataContext="{Binding CurrentMeshes.SelectedItem}">
+                            <Run Text="Engine Glows:" />
+                            <Run Text="{Binding EngineGlows.Count, Mode=OneWay, FallbackValue=0}" />
+                        </TextBlock>
+                    </TabItem.Header>
+                    <DockPanel>
+                        <ToolBarTray DockPanel.Dock="Top"
+                                     IsLocked="True"
+                                     DataContext="{Binding ElementName=EngineGlows}">
+                            <ToolBar>
+                                <Button Content="New"
+                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding DataContext.NewEngineGlowCommand}" />
+                                <Button Content="Delete"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.DeleteEngineGlowsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Separator />
+                                <Button Content="Cut"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.CutEngineGlowsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Button Content="Copy"
+                                        IsEnabled="{Binding HasItems}"
+                                        Command="{Binding DataContext.CopyEngineGlowsCommand}"
+                                        CommandParameter="{Binding SelectedItems}" />
+                                <Button Content="Paste"
+                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding DataContext.PasteEngineGlowsCommand}" />
+                            </ToolBar>
+                        </ToolBarTray>
+                        <ListView x:Name="EngineGlows"
+                                  ItemsSource="{Binding CurrentMeshes.SelectedItem.EngineGlows}"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling"
+                                  Grid.IsSharedSizeScope="True"
+                                  HorizontalContentAlignment="Stretch"
+                                  mvvm:AttachedProperties.RegisterCommandBindings="{Binding EngineGlowsCutCopyCommandBindings}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Text="Is Disabled: " />
+                                        <CheckBox Grid.Row="0"
+                                                  Grid.Column="1"
+                                                  IsChecked="{Binding IsDisabled}" />
+                                        <TextBlock Grid.Row="1"
+                                                   Grid.Column="0"
+                                                   Text="Core Color: " />
+                                        <xctk:ColorPicker Grid.Row="1"
+                                                          Grid.Column="1"
+                                                          SelectedColor="{Binding CoreColor, Converter={vc:ColorConverter}}"
+                                                          DisplayColorAndName="True"
+                                                          ColorMode="ColorCanvas" />
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="0"
+                                                   Text="Outer Color: " />
+                                        <xctk:ColorPicker Grid.Row="2"
+                                                          Grid.Column="1"
+                                                          SelectedColor="{Binding OuterColor, Converter={vc:ColorConverter}}"
+                                                          DisplayColorAndName="True"
+                                                          ColorMode="ColorCanvas" />
+                                        <TextBlock Grid.Row="3"
+                                                   Grid.Column="0"
+                                                   Text="Format: " />
+                                        <TextBox Grid.Row="3"
+                                                 Grid.Column="1"
+                                                 Text="{Binding Format, Converter={vc:VectorConverter}}" />
+                                        <TextBlock Grid.Row="4"
+                                                   Grid.Column="0"
+                                                   Text="Position (m): " />
+                                        <TextBox Grid.Row="4"
+                                                 Grid.Column="1"
+                                                 Text="{Binding Position, Converter={vc:VectorScaleConverter}}" />
+                                        <TextBlock Grid.Row="5"
+                                                   Grid.Column="0"
+                                                   Text="Look: " />
+                                        <TextBox Grid.Row="5"
+                                                 Grid.Column="1"
+                                                 Text="{Binding Look, Converter={vc:VectorConverter}}" />
+                                        <TextBlock Grid.Row="6"
+                                                   Grid.Column="0"
+                                                   Text="Up: " />
+                                        <TextBox Grid.Row="6"
+                                                 Grid.Column="1"
+                                                 Text="{Binding Up, Converter={vc:VectorConverter}}" />
+                                        <TextBlock Grid.Row="7"
+                                                   Grid.Column="0"
+                                                   Text="Right: " />
+                                        <TextBox Grid.Row="7"
+                                                 Grid.Column="1"
+                                                 Text="{Binding Right, Converter={vc:VectorConverter}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                </TabItem>
+                <TabItem DataContext="{Binding CurrentMeshes.SelectedItem}">
+                    <TabItem.Header>
+                        <TextBlock>
+                            <Run Text="Geometry:" />
+                            <Run Text="{Binding Vertices.Count, Mode=OneWay, FallbackValue=0}" />
+                            <Run Text="v" />
+                        </TextBlock>
+                    </TabItem.Header>
+                    <TabControl>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock>
+                                    <Run Text="Vertices:" />
+                                    <Run Text="{Binding Vertices.Count, Mode=OneWay, FallbackValue=0}" />
+                                </TextBlock>
+                            </TabItem.Header>
+                            <ListView ItemsSource="{Binding Vertices}"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling" />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock>
+                                    <Run Text="Texture Coordinates:" />
+                                    <Run Text="{Binding TextureCoordinates.Count, Mode=OneWay, FallbackValue=0}" />
+                                </TextBlock>
+                            </TabItem.Header>
+                            <ListView ItemsSource="{Binding TextureCoordinates}"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling" />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock>
+                                    <Run Text="Vertex Normals:" />
+                                    <Run Text="{Binding VertexNormals.Count, Mode=OneWay, FallbackValue=0}" />
+                                </TextBlock>
+                            </TabItem.Header>
+                            <ListView ItemsSource="{Binding VertexNormals}"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling" />
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock DataContext="{Binding CurrentLods.SelectedItem}">
+                            <Run Text="Face Groups:" />
+                            <Run Text="{Binding FaceGroups.Count, Mode=OneWay, FallbackValue=0}" />
+                        </TextBlock>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"
+                                              MinWidth="50" />
+                            <ColumnDefinition  Width="Auto" />
+                            <ColumnDefinition Width="4*"
+                                              MinWidth="50" />
+                        </Grid.ColumnDefinitions>
+                        <GridSplitter Grid.Column="1"
+                                      Width="5"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Center" />
+                        <ListView Grid.Column="0"
+                                  ItemsSource="{Binding CurrentFaceGroups}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected}" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Value.Faces.Count}" />
+                                        <TextBlock Text=" faces, " />
+                                        <TextBlock Text="{Binding Value.Textures.Count}" />
+                                        <TextBlock Text=" textures" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <TabControl Grid.Column="2">
+                            <TabItem Header="Textures">
+                                <DockPanel>
+                                    <ToolBarTray DockPanel.Dock="Top"
+                                                 IsLocked="True"
+                                                 DataContext="{Binding ElementName=LodTextures}">
+                                        <ToolBar IsEnabled="{Binding DataContext.CurrentFaceGroups.HasSelectedItems}">
+                                            <Button Content="Add..."
+                                                    Command="{Binding DataContext.AddTextureNameCommand}" />
+                                            <Button Content="Browse..."
+                                                    Command="{Binding DataContext.BrowseTextureNameCommand}" />
+                                            <Button Content="Delete"
+                                                    IsEnabled="{Binding HasItems}"
+                                                    Command="{Binding DataContext.DeleteTextureNamesCommand}"
+                                                    CommandParameter="{Binding SelectedItems}" />
+                                        </ToolBar>
+                                    </ToolBarTray>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"
+                                                           MinHeight="50" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="2*"
+                                                           MinHeight="50" />
+                                        </Grid.RowDefinitions>
+                                        <GridSplitter Grid.Row="1"
+                                                      Height="5"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Stretch" />
+                                        <ListView x:Name="LodTextures"
+                                                  Grid.Row="0"
+                                                  ItemsSource="{Binding CurrentFaceGroups.SelectedItem.Textures}"
+                                                  IsSynchronizedWithCurrentItem="True"
+                                                  SelectedIndex="{Binding ModelVersion}"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  VirtualizingPanel.IsVirtualizing="True"
+                                                  VirtualizingPanel.VirtualizationMode="Recycling" />
+                                        <Image Grid.Row="2"
+                                               ClipToBounds="True"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Top"
+                                               RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                               RenderOptions.EdgeMode="Unspecified">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{vc:TextureNameConverter}">
+                                                    <Binding Path="CurrentFaceGroups.SelectedItem.Textures/" />
+                                                    <Binding Path="OptModel.File" />
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                    </Grid>
+                                </DockPanel>
+                            </TabItem>
+                            <TabItem Header="Geometry">
+                                <ListView x:Name="Faces"
+                                          ItemsSource="{Binding CurrentFaceGroups.SelectedItem.Faces}"
+                                          HorizontalContentAlignment="Stretch"
+                                          VirtualizingPanel.IsVirtualizing="True"
+                                          VirtualizingPanel.VirtualizationMode="Recycling"
+                                          Grid.IsSharedSizeScope="True">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="120" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Row="0"
+                                                           Grid.Column="0"
+                                                           Text="Edges: " />
+                                                <TextBlock Grid.Row="0"
+                                                           Grid.Column="1"
+                                                           Text="{Binding EdgesIndex}" />
+                                                <TextBlock Grid.Row="1"
+                                                           Grid.Column="0"
+                                                           Text="Vertices: " />
+                                                <TextBlock Grid.Row="1"
+                                                           Grid.Column="1"
+                                                           Text="{Binding VerticesIndex}" />
+                                                <TextBlock Grid.Row="2"
+                                                           Grid.Column="0"
+                                                           Text="Texture Coordinates: " />
+                                                <TextBlock Grid.Row="2"
+                                                           Grid.Column="1"
+                                                           Text="{Binding TextureCoordinatesIndex}" />
+                                                <TextBlock Grid.Row="3"
+                                                           Grid.Column="0"
+                                                           Text="Vertex Normals: " />
+                                                <TextBlock Grid.Row="3"
+                                                           Grid.Column="1"
+                                                           Text="{Binding VertexNormalsIndex}" />
+                                                <TextBlock Grid.Row="4"
+                                                           Grid.Column="0"
+                                                           Text="Normal: " />
+                                                <TextBlock Grid.Row="4"
+                                                           Grid.Column="1"
+                                                           Text="{Binding Normal}" />
+                                                <TextBlock Grid.Row="5"
+                                                           Grid.Column="0"
+                                                           Text="Texturing Direction: " />
+                                                <TextBlock Grid.Row="5"
+                                                           Grid.Column="1"
+                                                           Text="{Binding TexturingDirection}" />
+                                                <TextBlock Grid.Row="6"
+                                                           Grid.Column="0"
+                                                           Text="Texturing Magnitude: " />
+                                                <TextBlock Grid.Row="6"
+                                                           Grid.Column="1"
+                                                           Text="{Binding TexturingMagniture}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <DockPanel Grid.Column="4">
+            <Expander DockPanel.Dock="Right"
+                      ExpandDirection="Left">
+                <Expander.Header>
+                    <TextBlock Text="Legend">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <ListBox ItemsSource="{x:Static vc:OptHardpointsConverter.HardpointsColors}"
+                         SelectionMode="Single"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="     ">
+                                    <Run.Background>
+                                    <SolidColorBrush Color="{Binding Value, Mode=OneWay}" />
+                                    </Run.Background>
+                                </Run>
+                                <Run Text="{Binding Key, Mode=OneWay}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+            <ToolBarTray DockPanel.Dock="Bottom"
+                         IsLocked="True">
+                <ToolBar>
+                    <CheckBox IsChecked="{Binding ShowHitzones}">Hitzones</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowHardpoints}">Hardpoints</CheckBox>
+                    <CheckBox IsEnabled="{Binding ShowHardpoints}"
+                              IsChecked="{Binding ShowHardpointsText}">Hardpoints Text</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowEngineGlows}">Engine Glows</CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <CheckBox IsChecked="{Binding ModelShowSolid}">Solid</CheckBox>
+                    <CheckBox IsChecked="{Binding ModelShowWireframe}">Wireframe</CheckBox>
+                </ToolBar>
+            </ToolBarTray>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"
+                                      MinWidth="50" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1*"
+                                      MinWidth="50" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"
+                                   MinHeight="50" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*"
+                                   MinHeight="50" />
+                </Grid.RowDefinitions>
+                <GridSplitter Grid.Row="1"
+                              Grid.ColumnSpan="3"
+                              Height="3"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Center" />
+                <GridSplitter Grid.Column="1"
+                              Grid.Row="2"
+                              Width="3"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+                <DockPanel Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3">
+                    <TextBox DockPanel.Dock="Top"
+                             Text="{Binding ModelDistance, Mode=TwoWay, Converter={vc:LodDistanceConverter}}" />
+                    <Slider DockPanel.Dock="Top"
+                            Minimum="0.0"
+                            Maximum="0.001"
+                            Value="{Binding ModelDistance}" />
+                    <localControl:CustomHelixViewport3D ClipToBounds="False"
+                                                        CameraMode="Inspect"
+                                                        CameraRotationMode="Trackball"
+                                                        IsChangeFieldOfViewEnabled="False"
+                                                        IsMoveEnabled="False"
+                                                        Background="Black"
+                                                        IsHeadLightEnabled="True"
+                                                        MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
+                        <hx:DefaultLights />
+                        <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
+                                                        Distance="{Binding ModelDistance}"
+                                                        Version="{Binding ModelVersion}"
+                                                        IsSolid="{Binding ModelShowSolid}"
+                                                        IsWireframe="{Binding ModelShowWireframe}" />
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptHitzonesConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="ShowHitzones" />
+                                    <Binding Path="CurrentMeshes.SelectedItems" />
+                                    <Binding Path="CurrentMeshes.SelectedItems.Count" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptHardpointsConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="ShowHardpoints" />
+                                    <Binding Path="ShowHardpointsText" />
+                                    <Binding Path="SelectedItem"
+                                             ElementName="Hardpoints" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptEngineGlowsConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="ShowEngineGlows" />
+                                    <Binding Path="SelectedItem"
+                                             ElementName="EngineGlows" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
+                                    <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Position" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                    </localControl:CustomHelixViewport3D>
+                </DockPanel>
+                <localControl:CustomHelixViewport3D Grid.Row="2"
+                                                    Grid.Column="2"
+                                                    ClipToBounds="False"
+                                                    CameraMode="Inspect"
+                                                    CameraRotationMode="Trackball"
+                                                    IsChangeFieldOfViewEnabled="False"
+                                                    IsMoveEnabled="False"
+                                                    Background="Black"
+                                                    IsHeadLightEnabled="True"
+                                                    MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
+                    <hx:DefaultLights />
+                    <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
+                                                    Mesh="{Binding CurrentMeshes.SelectedItem}"
+                                                    Version="{Binding ModelVersion}"
+                                                    IsSolid="{Binding ModelShowSolid}"
+                                                    IsWireframe="{Binding ModelShowWireframe}" />
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptHitzonesConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowHitzones" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptHardpointsConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowHardpoints" />
+                                <Binding Path="ShowHardpointsText" />
+                                <Binding Path="SelectedItem"
+                                         ElementName="Hardpoints" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptEngineGlowsConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowEngineGlows" />
+                                <Binding Path="SelectedItem"
+                                         ElementName="EngineGlows" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Position" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </localControl:CustomHelixViewport3D>
+                <localControl:CustomHelixViewport3D Grid.Row="2"
+                                                    Grid.Column="0"
+                                                    ClipToBounds="False"
+                                                    CameraMode="Inspect"
+                                                    CameraRotationMode="Trackball"
+                                                    IsChangeFieldOfViewEnabled="False"
+                                                    IsMoveEnabled="False"
+                                                    Background="Black"
+                                                    IsHeadLightEnabled="True"
+                                                    MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
+                    <hx:DefaultLights />
+                    <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
+                                                    Mesh="{Binding CurrentMeshes.SelectedItem}"
+                                                    Lod="{Binding CurrentLods.SelectedItem}"
+                                                    Version="{Binding ModelVersion}"
+                                                    IsSolid="{Binding ModelShowSolid}"
+                                                    IsWireframe="{Binding ModelShowWireframe}" />
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptHitzonesConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowHitzones" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptHardpointsConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowHardpoints" />
+                                <Binding Path="ShowHardpointsText" />
+                                <Binding Path="SelectedItem"
+                                         ElementName="Hardpoints" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
+                                <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{vc:OptEngineGlowsConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="ShowEngineGlows" />
+                                <Binding Path="SelectedItem"
+                                         ElementName="EngineGlows" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
+                                <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Position" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </localControl:CustomHelixViewport3D>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>

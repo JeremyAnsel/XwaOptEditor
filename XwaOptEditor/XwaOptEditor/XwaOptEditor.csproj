@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4D8AC156-B80B-44CF-8691-D1F7755FE9AB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XwaOptEditor</RootNamespace>
+    <AssemblyName>XwaOptEditor</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\sgKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HelixToolkit, Version=2015.1.629.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.2015.1.629\lib\portable-net4+sl4+wp71+win8\HelixToolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf, Version=2015.1.629.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.Wpf.2015.1.629\lib\net45\HelixToolkit.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JeremyAnsel.ColorQuant, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a5c614433db515df, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.ColorQuant.1.0.54\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JeremyAnsel.Xwa.Opt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1395c88a83619f2f, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.6\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\Components\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\CustomHelixViewport3D.cs" />
+    <Compile Include="Controls\CustomOptVisual3D.cs" />
+    <Compile Include="Controls\EnumComboBox.cs" />
+    <Compile Include="Controls\EnumFlagsComboBox.cs" />
+    <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\ColorConverter.cs" />
+    <Compile Include="Converters\LengthScaleConverter.cs" />
+    <Compile Include="Converters\LodDistanceConverter.cs" />
+    <Compile Include="Converters\MaximumValueConverter.cs" />
+    <Compile Include="Converters\OptEngineGlowsConverter.cs" />
+    <Compile Include="Converters\OptHardpointsConverter.cs" />
+    <Compile Include="Converters\OptHitzonesConverter.cs" />
+    <Compile Include="Converters\StringFormatConverter.cs" />
+    <Compile Include="Converters\TextureConverter.cs" />
+    <Compile Include="Converters\TextureNameConverter.cs" />
+    <Compile Include="Converters\VectorConverter.cs" />
+    <Compile Include="Converters\VectorScaleConverter.cs" />
+    <Compile Include="Helpers\ColorHelpers.cs" />
+    <Compile Include="Helpers\TextureHelpers.cs" />
+    <Compile Include="Messages\BusyIndicatorMessage.cs" />
+    <Compile Include="Messages\ChangeAxesMessage.cs" />
+    <Compile Include="Messages\MainViewSelectorMessage.cs" />
+    <Compile Include="Messages\MessageBoxMessage.cs" />
+    <Compile Include="Messages\OpenFileDialogMessage.cs" />
+    <Compile Include="Messages\SaveFileDialogMessage.cs" />
+    <Compile Include="Messages\ScaleFactorMessage.cs" />
+    <Compile Include="Messages\TextureBrowserMessage.cs" />
+    <Compile Include="Models\OptModel.cs" />
+    <Compile Include="Mvvm\AttachedProperties.cs" />
+    <Compile Include="Mvvm\CommandBindingCollectionExtensions.cs" />
+    <Compile Include="Mvvm\DelegateCommand.cs" />
+    <Compile Include="Mvvm\DelegateCommandOf.cs" />
+    <Compile Include="Mvvm\DelegateCommandOfList.cs" />
+    <Compile Include="Mvvm\Messenger.cs" />
+    <Compile Include="Mvvm\MessengerKey.cs" />
+    <Compile Include="Mvvm\ObservableObject.cs" />
+    <Compile Include="Mvvm\RelayCommandBinding.cs" />
+    <Compile Include="Mvvm\SelectableCollection.cs" />
+    <Compile Include="Mvvm\SelectableItem.cs" />
+    <Compile Include="ScaleFactorDialog.xaml.cs">
+      <DependentUpon>ScaleFactorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\BusyIndicatorService.cs" />
+    <Compile Include="Services\FileDialogService.cs" />
+    <Compile Include="TextureBrowserWindow.xaml.cs">
+      <DependentUpon>TextureBrowserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\BusyIndicatorViewModel.cs" />
+    <Compile Include="ViewModels\EditorViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\PlayabilityMessagesViewModel.cs" />
+    <Compile Include="ViewModels\TexturesViewModel.cs" />
+    <Compile Include="ViewModels\ViewerViewModel.cs" />
+    <Compile Include="Views\EditorView.xaml.cs">
+      <DependentUpon>EditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlayabilityMessagesView.xaml.cs">
+      <DependentUpon>PlayabilityMessagesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TexturesView.xaml.cs">
+      <DependentUpon>TexturesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewerView.xaml.cs">
+      <DependentUpon>ViewerView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ChangeAxesDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HelpWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ChangeAxesDialog.xaml.cs">
+      <DependentUpon>ChangeAxesDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="ResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScaleFactorDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TextureBrowserWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PlayabilityMessagesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TexturesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Properties\sgKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj">
+      <Project>{241e8f6d-6e74-4e80-9a23-bd88c44f9c17}</Project>
+      <Name>JeremyAnsel.Xwa.WpfOpt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OptAn8Converter\OptAn8Converter.csproj">
+      <Project>{6504c6be-f90d-4764-8106-7b6052e9a8a0}</Project>
+      <Name>OptAn8Converter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj">
+      <Project>{ecb5e2a2-ae45-409e-a1ae-34372b2319de}</Project>
+      <Name>OptObjConverter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OptRhinoConverter\OptRhinoConverter.csproj">
+      <Project>{2de8d6be-661e-4133-a77e-73aa8f091ea0}</Project>
+      <Name>OptRhinoConverter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /y "$(SolutionDir)..\Components\Rhino3dmIO\x86\*.*" "$(TargetDir)x86\"
+xcopy /s /y "$(SolutionDir)..\Components\Rhino3dmIO\x64\*.*" "$(TargetDir)x64\"
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

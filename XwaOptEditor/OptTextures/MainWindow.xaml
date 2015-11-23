@@ -1,0 +1,324 @@
+﻿<Window x:Class="OptTextures.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:OptTextures"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:xwa="clr-namespace:JeremyAnsel.Xwa.Opt;assembly=JeremyAnsel.Xwa.Opt"
+        Title="OPT Textures"
+        Width="900"
+        Height="600">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open"
+                        Executed="Execute_Open" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="ApplicationCommands.Open"
+                    ToolTip="Open">Open</Button>
+        </ToolBar>
+        <StatusBar Width="Auto"
+                   DockPanel.Dock="Bottom">
+            <TextBlock Text="File Name:" />
+            <TextBlock Text="{Binding FileName}" />
+        </StatusBar>
+        <TabControl>
+            <TabItem Header="Textures"
+                     Selector.IsSelected="True">
+                <DockPanel>
+                    <DataGrid AutoGenerateColumns="False"
+                              DockPanel.Dock="Left"
+                              EnableRowVirtualization="True"
+                              IsReadOnly="True"
+                              IsSynchronizedWithCurrentItem="True"
+                              ItemsSource="{Binding Textures}"
+                              SelectionMode="Single"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=Value.Name}"
+                                                Header="Name" />
+                            <DataGridTextColumn Binding="{Binding Path=Value.Width}"
+                                                Header="Width" />
+                            <DataGridTextColumn Binding="{Binding Path=Value.Height}"
+                                                Header="Height" />
+                            <DataGridTextColumn Binding="{Binding Path=Value.MipmapsCount}"
+                                                Header="Mipmaps" />
+                            <DataGridTextColumn Binding="{Binding Path=Value.BitsPerPixel}"
+                                                Header="Bpp" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DockPanel DockPanel.Dock="Left">
+                        <TextBlock DockPanel.Dock="Top">Palette:</TextBlock>
+                        <ListView x:Name="texturePaletteSelector"
+                                  SelectedIndex="0"
+                                  SelectionMode="Single"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <system:String>Default</system:String>
+                            <system:String>0</system:String>
+                            <system:String>1</system:String>
+                            <system:String>2</system:String>
+                            <system:String>3</system:String>
+                            <system:String>4</system:String>
+                            <system:String>5</system:String>
+                            <system:String>6</system:String>
+                            <system:String>7</system:String>
+                            <system:String>8</system:String>
+                            <system:String>9</system:String>
+                            <system:String>10</system:String>
+                            <system:String>11</system:String>
+                            <system:String>12</system:String>
+                            <system:String>13</system:String>
+                            <system:String>14</system:String>
+                            <system:String>15</system:String>
+                        </ListView>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <TextBlock>Mipmap:</TextBlock>
+                        <Slider x:Name="textureMipmapSelector"
+                                Minimum="1"
+                                Maximum="{Binding Textures/Value.MipmapsCount}"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" />
+                    </DockPanel>
+                    <Image RenderOptions.BitmapScalingMode="NearestNeighbor"
+                           RenderOptions.EdgeMode="Aliased">
+                        <Image.Source>
+                            <MultiBinding Converter="{local:PalletizedTextureConverter}">
+                                <Binding Path="Textures/Value" />
+                                <Binding ElementName="texturePaletteSelector"
+                                         Path="SelectedItem" />
+                                <Binding ElementName="textureMipmapSelector"
+                                         Path="Value" />
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Meshes">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.RowSpan="2"
+                               Grid.Column="0">
+                        <Label Content="Meshes"
+                               DockPanel.Dock="Top" />
+                        <ListView DisplayMemberPath="Descriptor.MeshType"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding Meshes}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling" />
+                    </DockPanel>
+                    <DockPanel Grid.Column="1">
+                        <Label Content="Lods"
+                               DockPanel.Dock="Top" />
+                        <ListView IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding Path=Meshes/Lods}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Distance, Converter={local:LodDistanceConverter}}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                    <DockPanel Grid.Column="2">
+                        <Label Content="FaceGroups"
+                               DockPanel.Dock="Top" />
+                        <ListView IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding Path=Meshes/Lods/FaceGroups}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Faces.Count}" />
+                                        <TextBlock Text=" faces, " />
+                                        <TextBlock Text="{Binding Textures.Count}" />
+                                        <TextBlock Text=" textures" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                    <DockPanel Grid.Column="3">
+                        <Label Content="Textures"
+                               DockPanel.Dock="Top" />
+                        <ListView IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding Path=Meshes/Lods/FaceGroups/Textures}"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling" />
+                    </DockPanel>
+                    <DockPanel Grid.RowSpan="2"
+                               Grid.Column="4"
+                               Grid.ColumnSpan="4">
+                        <Label Content="Texture"
+                               DockPanel.Dock="Top" />
+                        <Image>
+                            <Image.Source>
+                                <MultiBinding Converter="{local:TextureNameConverter}">
+                                    <Binding Path="Meshes/Lods/FaceGroups/Textures/" />
+                                    <Binding Path="." />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </DockPanel>
+                    <TabControl Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="3">
+                        <TabItem Header="Infos">
+                            <Grid TextBlock.FontSize="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0"
+                                           Text="Mesh Type:" />
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.MeshType}" />
+                                <TextBlock Grid.Row="1"
+                                           Text="Explosion Type:" />
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.ExplosionType,
+                                                  StringFormat=G}" />
+                                <TextBlock Grid.Row="2"
+                                           Text="Span:" />
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.Span}" />
+                                <TextBlock Grid.Row="3"
+                                           Text="Center:" />
+                                <TextBlock Grid.Row="3"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.Center}" />
+                                <TextBlock Grid.Row="4"
+                                           Text="Min:" />
+                                <TextBlock Grid.Row="4"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.Min}" />
+                                <TextBlock Grid.Row="5"
+                                           Text="Max:" />
+                                <TextBlock Grid.Row="5"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.Max}" />
+                                <TextBlock Grid.Row="6"
+                                           Text="Target Id:" />
+                                <TextBlock Grid.Row="6"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.TargetId}" />
+                                <TextBlock Grid.Row="7"
+                                           Text="Target:" />
+                                <TextBlock Grid.Row="7"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/Descriptor.Target}" />
+                                <TextBlock Grid.Row="8"
+                                           Text="Pivot:" />
+                                <TextBlock Grid.Row="8"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/RotationScale.Pivot}" />
+                                <TextBlock Grid.Row="9"
+                                           Text="Look:" />
+                                <TextBlock Grid.Row="9"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/RotationScale.Look}" />
+                                <TextBlock Grid.Row="10"
+                                           Text="Up:" />
+                                <TextBlock Grid.Row="10"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/RotationScale.Up}" />
+                                <TextBlock Grid.Row="11"
+                                           Text="Right:" />
+                                <TextBlock Grid.Row="11"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Meshes/RotationScale.Right}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="HardPoints">
+                            <ListView ItemsSource="{Binding Meshes/Hardpoints}"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Type"
+                                                        DisplayMemberBinding="{Binding HardpointType}" />
+                                        <GridViewColumn Header="Position"
+                                                        DisplayMemberBinding="{Binding Position}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </TabItem>
+                        <TabItem Header="Engine Glows">
+                            <ListView ItemsSource="{Binding Meshes/EngineGlows}"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding IsDisabled, StringFormat='IsDisabled: {0}'}" />
+                                            <TextBlock Text="{Binding CoreColor, StringFormat='Core Color: {0:X8}'}" />
+                                            <TextBlock Text="{Binding OuterColor, StringFormat='Outer Color: {0:X8}'}" />
+                                            <TextBlock Text="{Binding Format, StringFormat='Format: {0}'}" />
+                                            <TextBlock Text="{Binding Position, StringFormat='Position: {0}'}" />
+                                            <TextBlock Text="{Binding Look, StringFormat='Look: {0}'}" />
+                                            <TextBlock Text="{Binding Up, StringFormat='Up: {0}'}" />
+                                            <TextBlock Text="{Binding Right, StringFormat='Right: {0}'}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

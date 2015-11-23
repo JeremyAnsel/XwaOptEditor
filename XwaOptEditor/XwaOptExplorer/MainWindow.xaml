@@ -1,0 +1,78 @@
+﻿<Window x:Class="XwaOptExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:wpfOpt="clr-namespace:JeremyAnsel.Xwa.WpfOpt;assembly=JeremyAnsel.Xwa.WpfOpt"
+        xmlns:vc="clr-namespace:XwaOptExplorer.Converters"
+        Title="Xwa Opt Explorer"
+        Height="500"
+        Width="800"
+        UseLayoutRounding="True">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open"
+                        Executed="ExecuteOpen" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top"
+                 ToolBarTray.IsLocked="True">
+            <Button Command="ApplicationCommands.Open">Open...</Button>
+        </ToolBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1"
+                          Width="5"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch" />
+            <ListBox Grid.Column="0"
+                     ItemsSource="{Binding}"
+                     DisplayMemberPath="FileName"
+                     IsSynchronizedWithCurrentItem="True"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.VirtualizationMode="Recycling" />
+            <DockPanel Grid.Column="2">
+                <TextBlock DockPanel.Dock="Bottom"
+                           Text="{Binding ElementName=optVisual, Path=File.FileName}" />
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal">
+                    <TextBlock Text="Size (m): " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.Size, Converter={vc:LengthScaleConverter}}" />
+                    <TextBlock Text="  Span (m): " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.SpanSize, Converter={vc:VectorScaleConverter}}" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal">
+                    <TextBlock Text="Versions: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.MaxTextureVersion}" />
+                    <TextBlock Text="  Textures: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.Textures.Count}" />
+                    <TextBlock Text="  Bpp: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.TexturesBitsPerPixel}" />
+                    <TextBlock Text="  Meshes: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.Meshes.Count}" />
+                    <TextBlock Text="  Hardpoints: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.HardpointsCount}" />
+                    <TextBlock Text="  Engine Glows: " />
+                    <TextBlock Text="{Binding ElementName=optVisual, Path=File.EngineGlowsCount}" />
+                </StackPanel>
+                <hx:HelixViewport3D x:Name="viewport"
+                                    Grid.Column="2"
+                                    ClipToBounds="False"
+                                    CameraMode="Inspect"
+                                    CameraRotationMode="Trackball"
+                                    IsChangeFieldOfViewEnabled="False"
+                                    IsMoveEnabled="False"
+                                    Background="Black"
+                                    IsHeadLightEnabled="True">
+                    <hx:DefaultLights />
+                    <wpfOpt:OptVisual3D x:Name="optVisual"
+                                        FileName="{Binding /FilePath, Mode=OneWay}"
+                                        ModelChanged="OptVisual_ModelChanged" />
+                </hx:HelixViewport3D>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>

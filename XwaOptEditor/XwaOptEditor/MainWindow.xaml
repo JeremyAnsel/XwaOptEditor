@@ -1,0 +1,129 @@
+﻿<Window x:Class="XwaOptEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:mvvm="clr-namespace:XwaOptEditor.Mvvm"
+        xmlns:vm="clr-namespace:XwaOptEditor.ViewModels"
+        xmlns:v="clr-namespace:XwaOptEditor.Views"
+        xmlns:vc="clr-namespace:XwaOptEditor.Converters"
+        Title="{Binding OptModel.File.FileName, StringFormat='Xwa Opt Editor {0}', FallbackValue='Xwa Opt Editor'}"
+        Height="700"
+        Width="1150"
+        UseLayoutRounding="True"
+        mvvm:AttachedProperties.RegisterCommandBindings="{Binding CommandBindings}">
+    <Window.Resources>
+        <vm:MainWindowViewModel x:Key="MainViewModel" />
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource MainViewModel}" />
+    </Window.DataContext>
+    <xctk:BusyIndicator IsBusy="{Binding Busy.IsBusy}"
+                        BusyContent="{Binding Busy.BusyContent}">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom"
+                       Text="{Binding OptModel.File.FileName}" />
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal">
+                <TextBlock Text="Versions: " />
+                <TextBlock Text="{Binding OptModel.File.MaxTextureVersion}" />
+                <TextBlock Text="  Textures: " />
+                <TextBlock Text="{Binding OptModel.File.Textures.Count}" />
+                <TextBlock Text="  Bpp: " />
+                <TextBlock Text="{Binding OptModel.File.TexturesBitsPerPixel}" />
+                <TextBlock Text="  Meshes: " />
+                <TextBlock Text="{Binding OptModel.File.Meshes.Count}" />
+                <TextBlock Text="  Hardpoints: " />
+                <TextBlock Text="{Binding OptModel.File.HardpointsCount}" />
+                <TextBlock Text="  Engine Glows: " />
+                <TextBlock Text="{Binding OptModel.File.EngineGlowsCount}" />
+                <TextBlock Text="  Size (m): " />
+                <TextBlock Text="{Binding OptModel.File.Size, Converter={vc:LengthScaleConverter}}" />
+                <TextBlock Text="  Span (m): " />
+                <TextBlock Text="{Binding OptModel.File.SpanSize, Converter={vc:VectorScaleConverter}}" />
+            </StackPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Right"
+                             ToolBarTray.IsLocked="True">
+                        <Button Content="Help..."
+                                Command="{Binding HelpCommand}" />
+                    </ToolBar>
+                    <ToolBar DockPanel.Dock="Right"
+                             ToolBarTray.IsLocked="True">
+                        <Menu>
+                            <MenuItem Header="Tools">
+                                <MenuItem Header="Convert all Opt Textures to 32 bits"
+                                          Command="{Binding ConvertAllTexturesTo32BppCommand}" />
+                                <MenuItem Header="Convert all Opt Textures to 8 bits"
+                                          Command="{Binding ConvertAllTexturesTo8BppCommand}" />
+                            </MenuItem>
+                        </Menu>
+                    </ToolBar>
+                    <ToolBar ToolBarTray.IsLocked="True">
+                        <Button Content="New"
+                                Command="{Binding NewCommand}" />
+                        <Button Content="Open..."
+                                Command="{Binding OpenCommand}" />
+                        <Button Content="Save"
+                                Command="{Binding SaveCommand}" />
+                        <Button Content="Save As..."
+                                Command="{Binding SaveAsCommand}" />
+                        <Separator />
+                        <Button Content="Check Opt"
+                                Command="{Binding CheckOptCommand}" />
+                        <Separator />
+                        <TextBlock Text="Import " />
+                        <Button Content="Opt..."
+                                Command="{Binding ImportOptCommand}" />
+                        <Button Content="Obj..."
+                                Command="{Binding ImportObjCommand}" />
+                        <Button Content="3dm..."
+                                Command="{Binding ImportRhinoCommand}" />
+                        <Button Content="An8..."
+                                Command="{Binding ImportAn8Command}" />
+                        <Separator />
+                        <TextBlock Text="Export " />
+                        <Button Content="Obj..."
+                                Command="{Binding ExportObjCommand}" />
+                        <Button Content="3dm..."
+                                Command="{Binding ExportRhinoCommand}" />
+                        <Button Content="An8..."
+                                Command="{Binding ExportAn8Command}" />
+                        <Separator />
+                        <CheckBox Content="Scale from/to m"
+                                  IsChecked="{Binding IsImportExportScaleEnabled}" />
+                        <Separator />
+                        <Button Content="Scale..."
+                                Command="{Binding ScaleCommand}" />
+                        <Button Content="Axes..."
+                                Command="{Binding ChangeAxesCommand}" />
+                    </ToolBar>
+                </DockPanel>
+            </DockPanel>
+            <TabControl x:Name="Tabs"
+                        TabStripPlacement="Left">
+                <TabItem x:Name="EditorTab"
+                         Header="Edit"
+                         Style="{StaticResource VertivalTab}">
+                    <v:EditorView OptModel="{Binding Source={StaticResource MainViewModel}, Path=OptModel}" />
+                </TabItem>
+                <TabItem x:Name="TexturesTab"
+                         Header="Textures"
+                         Style="{StaticResource VertivalTab}">
+                    <v:TexturesView OptModel="{Binding Source={StaticResource MainViewModel}, Path=OptModel}" />
+                </TabItem>
+                <TabItem x:Name="ViewerTab"
+                         Header="View"
+                         Style="{StaticResource VertivalTab}">
+                    <v:ViewerView OptModel="{Binding Source={StaticResource MainViewModel}, Path=OptModel}" />
+                </TabItem>
+                <TabItem x:Name="PlayabilityMessagesTab"
+                         Header="Check"
+                         Style="{StaticResource VertivalTab}">
+                    <v:PlayabilityMessagesView OptModel="{Binding Source={StaticResource MainViewModel}, Path=OptModel}" />
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </xctk:BusyIndicator>
+</Window>
