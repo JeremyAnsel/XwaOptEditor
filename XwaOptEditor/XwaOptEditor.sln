@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obj", "Obj\Obj.csproj", "{02FA7A77-E737-40A7-AD49-4E5FE5B93F59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavefrontObj", "WavefrontObj\WavefrontObj.csproj", "{02FA7A77-E737-40A7-AD49-4E5FE5B93F59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptObjConverter", "OptObjConverter\OptObjConverter.csproj", "{ECB5E2A2-AE45-409E-A1AE-34372B2319DE}"
 EndProject

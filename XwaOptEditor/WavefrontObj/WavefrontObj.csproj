@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ECB5E2A2-AE45-409E-A1AE-34372B2319DE}</ProjectGuid>
+    <ProjectGuid>{02FA7A77-E737-40A7-AD49-4E5FE5B93F59}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OptObjConverter</RootNamespace>
-    <AssemblyName>OptObjConverter</AssemblyName>
+    <RootNamespace>WavefrontObj</RootNamespace>
+    <AssemblyName>WavefrontObj</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,6 @@
     <AssemblyOriginatorKeyFile>Properties\sgKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JeremyAnsel.ColorQuant, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a5c614433db515df, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.ColorQuant.1.0.54\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JeremyAnsel.Xwa.Opt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1395c88a83619f2f, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.6\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,18 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converter.cs" />
+    <Compile Include="ObjFace.cs" />
+    <Compile Include="ObjFaceGroup.cs" />
+    <Compile Include="ObjFile.cs" />
+    <Compile Include="ObjIndex.cs" />
+    <Compile Include="ObjMaterial.cs" />
+    <Compile Include="ObjMaterialDictionary.cs" />
+    <Compile Include="ObjMesh.cs" />
+    <Compile Include="ObjVector2.cs" />
+    <Compile Include="ObjVector3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Properties\sgKey.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WavefrontObj\WavefrontObj.csproj">
-      <Project>{02fa7a77-e737-40a7-ad49-4e5fe5b93f59}</Project>
-      <Name>WavefrontObj</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
