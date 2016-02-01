@@ -25,9 +25,11 @@ namespace XwaOptEditor.ViewModels
             this.ReplaceMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceMapCommand);
             this.ReplaceAlphaMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceAlphaMapCommand);
 
-            this.GenerateAllMipmapsCommand = new DelegateCommand(this.GenerateAllMipmaps);
-            this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ConvertAllTo8Bits);
-            this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ConvertAllTo32Bits);
+            this.GenerateAllMipmapsCommand = new DelegateCommand(this.ExecuteGenerateAllMipmapsCommand);
+            this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
+            this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo32BitsCommand);
+            this.CompactCommand = new DelegateCommand(this.ExecuteCompactCommand);
+            this.GenerateNamesCommand = new DelegateCommand(this.ExecuteGenerateNamesCommand);
         }
 
         public OptModel OptModel
@@ -62,6 +64,10 @@ namespace XwaOptEditor.ViewModels
         public ICommand ConvertAllTo8BitsCommand { get; private set; }
 
         public ICommand ConvertAllTo32BitsCommand { get; private set; }
+
+        public ICommand CompactCommand { get; private set; }
+
+        public ICommand GenerateNamesCommand { get; private set; }
 
         private void ExecuteSaveAsCommand(Texture texture)
         {
@@ -213,7 +219,7 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
-        private void GenerateAllMipmaps()
+        private void ExecuteGenerateAllMipmapsCommand()
         {
             BusyIndicatorService.Run(dispatcher =>
             {
@@ -232,7 +238,7 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
-        private void ConvertAllTo8Bits()
+        private void ExecuteConvertAllTo8BitsCommand()
         {
             BusyIndicatorService.Run(dispatcher =>
             {
@@ -269,7 +275,7 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
-        private void ConvertAllTo32Bits()
+        private void ExecuteConvertAllTo32BitsCommand()
         {
             BusyIndicatorService.Run(dispatcher =>
             {
@@ -284,6 +290,44 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage("Convert textures to 32 bits.", ex));
+                }
+            });
+        }
+
+        private void ExecuteCompactCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Compacting textures...");
+
+                    this.OptModel.File.CompactTextures();
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Compact textures.", ex));
+                }
+            });
+        }
+
+        private void ExecuteGenerateNamesCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Generating textures names...");
+
+                    this.OptModel.File.GenerateTexturesNames();
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Generate textures names.", ex));
                 }
             });
         }
