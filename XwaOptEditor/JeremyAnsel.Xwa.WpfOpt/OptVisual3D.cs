@@ -483,7 +483,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
             {
                 new LinesVisual3D
                 {
-                    Points = cache.meshesWireframes[meshIndex][lodIndex],
+                    Points = new Point3DCollection(cache.meshesWireframes[meshIndex][lodIndex]),
                     DepthOffset = 0.0001,
                     Color = Colors.White
                 }

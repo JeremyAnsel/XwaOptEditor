@@ -126,7 +126,7 @@ namespace XwaOptEditor.Converters
 
                 visuals.Add(new PointsVisual3D()
                 {
-                    Points = point.Select(t => t.Position).ToList(),
+                    Points = new Point3DCollection(point.Select(t => t.Position).ToList()),
                     Color = color,
                     Size = 5
                 });
@@ -158,7 +158,7 @@ namespace XwaOptEditor.Converters
 
                 visuals.Add(new PointsVisual3D()
                 {
-                    Points = new List<Point3D>() { position },
+                    Points = new Point3DCollection(new List<Point3D>() { position }),
                     Color = color,
                     Size = 5
                 });
