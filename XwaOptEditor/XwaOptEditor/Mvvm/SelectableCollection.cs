@@ -126,6 +126,11 @@ namespace XwaOptEditor.Mvvm
 
         public void AddToSelection(T value)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             this.Where(t => t.Value == value)
                 .First()
                 .IsSelected = true;
