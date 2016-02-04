@@ -92,6 +92,11 @@
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding MergeMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Separator />
+                    <Button Content="Move..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding MoveMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                 </ToolBar>
             </ToolBarTray>
             <ListView ItemsSource="{Binding CurrentMeshes}"

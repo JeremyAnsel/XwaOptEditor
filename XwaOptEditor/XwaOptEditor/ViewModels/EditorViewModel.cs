@@ -77,6 +77,7 @@ namespace XwaOptEditor.ViewModels
             this.DownMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteDownMeshesCommand);
             this.SplitMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteSplitMeshesCommand);
             this.MergeMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMergeMeshesCommand);
+            this.MoveMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMoveMeshesCommand);
             this.ComputeHitzonesCommand = new DelegateCommand(this.ExecuteComputeHitzonesCommand);
 
             this.NewLodCommand = new DelegateCommand(this.ExecuteNewLodCommand);
@@ -137,6 +138,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand SplitMeshesCommand { get; private set; }
 
         public ICommand MergeMeshesCommand { get; private set; }
+
+        public ICommand MoveMeshesCommand { get; private set; }
 
         public ICommand ComputeHitzonesCommand { get; private set; }
 
@@ -555,6 +558,29 @@ namespace XwaOptEditor.ViewModels
                     dispatcher(() => this.UpdateModel());
                     dispatcher(() => this.CurrentMeshes.SetSelection(merge));
                 }
+            });
+        }
+
+        private void ExecuteMoveMeshesCommand(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var message = Messenger.Instance.Notify(new MoveFactorMessage());
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify("Moving ...");
+
+                foreach (var mesh in meshes)
+                {
+                    mesh.Move(message.MoveX, message.MoveY, message.MoveZ);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
             });
         }
 

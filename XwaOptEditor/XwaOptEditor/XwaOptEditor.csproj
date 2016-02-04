@@ -104,11 +104,15 @@
     <Compile Include="Messages\ChangeAxesMessage.cs" />
     <Compile Include="Messages\MainViewSelectorMessage.cs" />
     <Compile Include="Messages\MessageBoxMessage.cs" />
+    <Compile Include="Messages\MoveFactorMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
     <Compile Include="Messages\ScaleFactorMessage.cs" />
     <Compile Include="Messages\TextureBrowserMessage.cs" />
     <Compile Include="Models\OptModel.cs" />
+    <Compile Include="MoveFactorDialog.xaml.cs">
+      <DependentUpon>MoveFactorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Mvvm\AttachedProperties.cs" />
     <Compile Include="Mvvm\CommandBindingCollectionExtensions.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
@@ -172,6 +176,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MoveFactorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

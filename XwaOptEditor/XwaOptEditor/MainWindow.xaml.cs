@@ -38,6 +38,7 @@ namespace XwaOptEditor
                 Messenger.Instance.Register<TextureBrowserMessage>(this, this.OnTextureBrowserMessage);
                 Messenger.Instance.Register<ScaleFactorMessage>(this, this.OnScaleFactorMessage);
                 Messenger.Instance.Register<ChangeAxesMessage>(this, this.OnChangeAxesMessage);
+                Messenger.Instance.Register<MoveFactorMessage>(this, this.OnMoveFactorMessage);
             };
 
             this.Unloaded += (sender, args) =>
@@ -205,6 +206,28 @@ namespace XwaOptEditor
                     message.AxisX = dialog.AxisX;
                     message.AxisY = dialog.AxisY;
                     message.AxisZ = dialog.AxisZ;
+                    message.Changed = true;
+                }
+                else
+                {
+                    message.Changed = false;
+                }
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
+
+        private void OnMoveFactorMessage(MoveFactorMessage message)
+        {
+            Action action = () =>
+            {
+                var dialog = new MoveFactorDialog(this);
+
+                if (dialog.ShowDialog() == true)
+                {
+                    message.MoveX = dialog.MoveX;
+                    message.MoveY = dialog.MoveY;
+                    message.MoveZ = dialog.MoveZ;
                     message.Changed = true;
                 }
                 else

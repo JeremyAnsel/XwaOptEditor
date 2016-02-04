@@ -315,9 +315,11 @@ namespace XwaOptEditor
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
+            var handler = this.PropertyChanged;
+
+            if (handler != null)
             {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
