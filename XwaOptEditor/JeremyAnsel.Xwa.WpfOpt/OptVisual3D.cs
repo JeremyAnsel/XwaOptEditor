@@ -100,6 +100,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
         public static readonly DependencyProperty IsWireframeProperty = DependencyProperty.Register("IsWireframe", typeof(bool), typeof(OptVisual3D), new UIPropertyMetadata(false, ContentChanged));
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private static void ContentChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             var opt = (OptVisual3D)obj;
