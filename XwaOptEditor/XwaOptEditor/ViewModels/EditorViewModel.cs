@@ -384,9 +384,19 @@ namespace XwaOptEditor.ViewModels
             }
         }
 
-        public void UpdateModel()
+        public void UpdateModel(bool preserveView = false)
         {
-            this.OptModel.File = this.OptModel.File;
+            if (preserveView)
+            {
+                var items = this.CurrentMeshes.ToList();
+
+                this.CurrentMeshes.Clear();
+                items.ForEach(t => this.CurrentMeshes.Add(t));
+            }
+            else
+            {
+                this.OptModel.File = this.OptModel.File;
+            }
         }
 
         private void OnOptModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -821,7 +831,7 @@ namespace XwaOptEditor.ViewModels
 
                 mesh.Hardpoints.Add(new Hardpoint());
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
@@ -842,7 +852,7 @@ namespace XwaOptEditor.ViewModels
                     mesh.Hardpoints.Remove(hardpoint);
                 }
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
@@ -929,7 +939,7 @@ namespace XwaOptEditor.ViewModels
                         Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
                     });
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
@@ -950,7 +960,7 @@ namespace XwaOptEditor.ViewModels
                     mesh.EngineGlows.Remove(engineGlow);
                 }
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
@@ -1146,7 +1156,7 @@ namespace XwaOptEditor.ViewModels
                         Position = new JeremyAnsel.Xwa.Opt.Vector((float)-tag.Item2.Y, (float)-tag.Item2.X, (float)tag.Item2.Z)
                     });
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
@@ -1164,7 +1174,7 @@ namespace XwaOptEditor.ViewModels
                         Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
                     });
 
-                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
             });
         }
