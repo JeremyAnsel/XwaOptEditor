@@ -97,6 +97,10 @@
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding MoveMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Duplicate"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding DuplicateMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                 </ToolBar>
             </ToolBarTray>
             <ListView ItemsSource="{Binding CurrentMeshes}"
@@ -117,6 +121,14 @@
                         <MenuItem Header="Merge"
                                   IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                                   Command="{Binding MergeMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <MenuItem Header="Move..."
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding MoveMeshesCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <MenuItem Header="Duplicate"
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding DuplicateMeshesCommand}"
                                   CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                         <Separator />
                         <MenuItem Header="Up"

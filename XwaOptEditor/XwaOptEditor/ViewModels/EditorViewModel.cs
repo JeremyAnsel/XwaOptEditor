@@ -78,6 +78,7 @@ namespace XwaOptEditor.ViewModels
             this.SplitMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteSplitMeshesCommand);
             this.MergeMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMergeMeshesCommand);
             this.MoveMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMoveMeshesCommand);
+            this.DuplicateMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteDuplicateMeshesCommand);
             this.ComputeHitzonesCommand = new DelegateCommand(this.ExecuteComputeHitzonesCommand);
 
             this.NewLodCommand = new DelegateCommand(this.ExecuteNewLodCommand);
@@ -140,6 +141,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand MergeMeshesCommand { get; private set; }
 
         public ICommand MoveMeshesCommand { get; private set; }
+
+        public ICommand DuplicateMeshesCommand { get; private set; }
 
         public ICommand ComputeHitzonesCommand { get; private set; }
 
@@ -587,6 +590,22 @@ namespace XwaOptEditor.ViewModels
                 foreach (var mesh in meshes)
                 {
                     mesh.Move(message.MoveX, message.MoveY, message.MoveZ);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+            });
+        }
+
+        private void ExecuteDuplicateMeshesCommand(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                BusyIndicatorService.Notify("Duplicating ...");
+
+                foreach (var mesh in meshes)
+                {
+                    this.OptModel.File.Meshes.Add(mesh.Duplicate());
                 }
 
                 dispatcher(() => this.UpdateModel());
