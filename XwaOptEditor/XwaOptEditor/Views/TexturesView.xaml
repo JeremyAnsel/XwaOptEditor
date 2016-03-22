@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:vm="clr-namespace:XwaOptEditor.ViewModels"
              xmlns:vc="clr-namespace:XwaOptEditor.Converters"
@@ -207,6 +208,60 @@
                            RenderOptions.BitmapScalingMode="NearestNeighbor"
                            RenderOptions.EdgeMode="Unspecified" />
                 </xctk:Zoombox>
+            </TabItem>
+            <TabItem Header="Illumination"
+                     IsEnabled="{Binding OptModel.File.Textures/Value, Converter={vc:IsBpp8Converter}}">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Left">
+                        <TextBlock DockPanel.Dock="Top">Palette:</TextBlock>
+                        <ListView x:Name="texturePaletteSelector"
+                                  SelectedIndex="0"
+                                  SelectionMode="Single"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <system:String>Default</system:String>
+                            <system:String>0</system:String>
+                            <system:String>1</system:String>
+                            <system:String>2</system:String>
+                            <system:String>3</system:String>
+                            <system:String>4</system:String>
+                            <system:String>5</system:String>
+                            <system:String>6</system:String>
+                            <system:String>7</system:String>
+                            <system:String>8</system:String>
+                            <system:String>9</system:String>
+                            <system:String>10</system:String>
+                            <system:String>11</system:String>
+                            <system:String>12</system:String>
+                            <system:String>13</system:String>
+                            <system:String>14</system:String>
+                            <system:String>15</system:String>
+                        </ListView>
+                    </DockPanel>
+                    <xctk:Zoombox ClipToBounds="True"
+                              KeepContentInBounds="True"
+                              Background="Black"
+                              ViewStackMode="Manual"
+                              HorizontalContentAlignment="Left"
+                              VerticalContentAlignment="Top"
+                              xctk:Zoombox.ViewFinderVisibility="Visible">
+                        <xctk:Zoombox.ViewStack>
+                            <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                        </xctk:Zoombox.ViewStack>
+                        <Image Stretch="None"
+                               RenderOptions.BitmapScalingMode="NearestNeighbor"
+                               RenderOptions.EdgeMode="Unspecified">
+                            <Image.Source>
+                                <MultiBinding Converter="{vc:PalletizedTextureConverter}">
+                                    <Binding Path="OptModel.File.Textures/Value" />
+                                    <Binding ElementName="texturePaletteSelector"
+                                             Path="SelectedItem" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </xctk:Zoombox>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </DockPanel>

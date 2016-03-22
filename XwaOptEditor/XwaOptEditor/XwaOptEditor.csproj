@@ -87,12 +87,14 @@
     <Compile Include="Controls\EnumFlagsComboBox.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ColorConverter.cs" />
+    <Compile Include="Converters\IsBpp8Converter.cs" />
     <Compile Include="Converters\LengthScaleConverter.cs" />
     <Compile Include="Converters\LodDistanceConverter.cs" />
     <Compile Include="Converters\MaximumValueConverter.cs" />
     <Compile Include="Converters\OptEngineGlowsConverter.cs" />
     <Compile Include="Converters\OptHardpointsConverter.cs" />
     <Compile Include="Converters\OptHitzonesConverter.cs" />
+    <Compile Include="Converters\PalletizedTextureConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\TextureConverter.cs" />
     <Compile Include="Converters\TextureNameConverter.cs" />
