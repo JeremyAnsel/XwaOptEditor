@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JeremyAnsel.Xwa.Opt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,6 +53,100 @@ namespace XwaOptEditor.Views
                     view.ViewModel.OptModel = (OptModel)e.NewValue;
                     break;
             }
+        }
+
+        private void ImageIllumination_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var image = (Image)sender;
+
+            if (image == null)
+            {
+                return;
+            }
+
+            var source = image.Source as BitmapSource;
+
+            if (source == null)
+            {
+                return;
+            }
+
+            var position = e.GetPosition(image);
+
+            int x = Math.Max(Math.Min((int)(position.X * source.PixelWidth / image.ActualWidth), source.PixelWidth - 1), 0);
+            int y = Math.Max(Math.Min((int)(position.Y * source.PixelHeight / image.ActualHeight), source.PixelHeight - 1), 0);
+
+            byte[] pixel = new byte[4];
+
+            source.CopyPixels(new Int32Rect(x, y, 1, 1), pixel, source.PixelWidth * 4, 0);
+
+            var color = Color.FromRgb(pixel[2], pixel[1], pixel[0]);
+
+            this.textureIlluminationColorKey.SelectedColor = color;
+            this.textureIlluminationColorKey0.SelectedColor = color;
+            this.textureIlluminationColorKey1.SelectedColor = color;
+        }
+
+        private void SetTextureIlluminationColorKey_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Textures.SelectedItem == null)
+            {
+                return;
+            }
+
+            var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
+
+            if (texture.BitsPerPixel != 8)
+            {
+                return;
+            }
+
+            var color = this.textureIlluminationColorKey.SelectedColor;
+
+            texture.MakeColorIlluminated(color.R, color.G, color.B);
+
+            this.OptModel.File = this.OptModel.File;
+        }
+
+        private void SetTextureIlluminationColorKeyRange_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Textures.SelectedItem == null)
+            {
+                return;
+            }
+
+            var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
+
+            if (texture.BitsPerPixel != 8)
+            {
+                return;
+            }
+
+            var color0 = this.textureIlluminationColorKey0.SelectedColor;
+            var color1 = this.textureIlluminationColorKey1.SelectedColor;
+
+            texture.MakeColorIlluminated(color0.R, color0.G, color0.B, color1.R, color1.G, color1.B);
+
+            this.OptModel.File = this.OptModel.File;
+        }
+
+        private void SetTextureIlluminationReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Textures.SelectedItem == null)
+            {
+                return;
+            }
+
+            var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
+
+            if (texture.BitsPerPixel != 8)
+            {
+                return;
+            }
+
+            texture.ResetPaletteColors();
+
+            this.OptModel.File = this.OptModel.File;
         }
     }
 }

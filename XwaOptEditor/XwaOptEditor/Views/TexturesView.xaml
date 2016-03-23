@@ -239,6 +239,44 @@
                             <system:String>15</system:String>
                         </ListView>
                     </DockPanel>
+                    <ToolBarTray DockPanel.Dock="Bottom"
+                                 IsLocked="True"
+                                 IsEnabled="{Binding OptModel.File.Textures/Value, Converter={vc:IsBpp8Converter}}">
+                        <ToolBar Band="0"
+                                 BandIndex="0">
+                            <Button Click="SetTextureIlluminationColorKey_Click">Make illuminated:</Button>
+                            <xctk:ColorPicker x:Name="textureIlluminationColorKey"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              ColorMode="ColorCanvas"
+                                              SelectedColor="Black" />
+                        </ToolBar>
+                        <ToolBar Band="1"
+                                 BandIndex="0">
+                            <Button Click="SetTextureIlluminationColorKeyRange_Click">Make illuminated:</Button>
+                            <xctk:ColorPicker x:Name="textureIlluminationColorKey0"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              ColorMode="ColorCanvas"
+                                              SelectedColor="Black" />
+                            <TextBlock Text=" to " />
+                            <xctk:ColorPicker x:Name="textureIlluminationColorKey1"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              ColorMode="ColorCanvas"
+                                              SelectedColor="Black" />
+                        </ToolBar>
+                        <ToolBar Band="2"
+                                 BandIndex="0">
+                            <Button Click="SetTextureIlluminationReset_Click">Reset illumination:</Button>
+                        </ToolBar>
+                    </ToolBarTray>
                     <xctk:Zoombox ClipToBounds="True"
                               KeepContentInBounds="True"
                               Background="Black"
@@ -249,7 +287,8 @@
                         <xctk:Zoombox.ViewStack>
                             <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
                         </xctk:Zoombox.ViewStack>
-                        <Image Stretch="None"
+                        <Image MouseDown="ImageIllumination_MouseDown"
+                               Stretch="None"
                                RenderOptions.BitmapScalingMode="NearestNeighbor"
                                RenderOptions.EdgeMode="Unspecified">
                             <Image.Source>

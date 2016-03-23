@@ -47,14 +47,14 @@ namespace XwaOptEditor.Helpers
                     })
                     .ToList());
 
-                if (texture.AlphaData == null)
-                {
-                    byte[] imageData = new byte[size];
-                    Array.Copy(texture.ImageData, imageData, size);
+                //if (texture.AlphaData == null)
+                //{
+                //    byte[] imageData = new byte[size];
+                //    Array.Copy(texture.ImageData, imageData, size);
 
-                    return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Indexed8, palette, imageData, texture.Width);
-                }
-                else
+                //    return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Indexed8, palette, imageData, texture.Width);
+                //}
+                //else
                 {
                     byte[] imageData = new byte[size * 4];
 
@@ -65,7 +65,8 @@ namespace XwaOptEditor.Helpers
                         imageData[i * 4 + 0] = palette.Colors[colorIndex].B;
                         imageData[i * 4 + 1] = palette.Colors[colorIndex].G;
                         imageData[i * 4 + 2] = palette.Colors[colorIndex].R;
-                        imageData[i * 4 + 3] = texture.AlphaData[i];
+                        //imageData[i * 4 + 3] = texture.AlphaData[i];
+                        imageData[i * 4 + 3] = texture.AlphaData != null ? texture.AlphaData[i] : (byte)255;
                     }
 
                     return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Bgra32, null, imageData, texture.Width * 4);
