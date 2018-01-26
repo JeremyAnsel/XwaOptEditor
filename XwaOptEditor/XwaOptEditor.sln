@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavefrontObj", "WavefrontObj\WavefrontObj.csproj", "{02FA7A77-E737-40A7-AD49-4E5FE5B93F59}"
 EndProject
@@ -12,8 +11,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptRhinoConverter", "OptRhinoConverter\OptRhinoConverter.csproj", "{2DE8D6BE-661E-4133-A77E-73AA8F091EA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.WpfOpt", "JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj", "{241E8F6D-6E74-4E80-9A23-BD88C44F9C17}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.WpfOpt4", "JeremyAnsel.Xwa.WpfOpt4\JeremyAnsel.Xwa.WpfOpt4.csproj", "{EC3216AB-3120-4FF7-BE9B-92748CD7C9B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{922DC537-7BDC-4C33-8D57-92384369B7F4}"
 	ProjectSection(SolutionItems) = preProject
@@ -54,10 +51,6 @@ Global
 		{241E8F6D-6E74-4E80-9A23-BD88C44F9C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{241E8F6D-6E74-4E80-9A23-BD88C44F9C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{241E8F6D-6E74-4E80-9A23-BD88C44F9C17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC3216AB-3120-4FF7-BE9B-92748CD7C9B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC3216AB-3120-4FF7-BE9B-92748CD7C9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC3216AB-3120-4FF7-BE9B-92748CD7C9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC3216AB-3120-4FF7-BE9B-92748CD7C9B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3304C667-5E52-44B4-AA29-ED22A5FA106F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3304C667-5E52-44B4-AA29-ED22A5FA106F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3304C667-5E52-44B4-AA29-ED22A5FA106F}.Release|Any CPU.ActiveCfg = Release|Any CPU
