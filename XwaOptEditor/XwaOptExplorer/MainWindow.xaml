@@ -66,7 +66,8 @@
                                     IsChangeFieldOfViewEnabled="False"
                                     IsMoveEnabled="False"
                                     Background="Black"
-                                    IsHeadLightEnabled="True">
+                                    IsHeadLightEnabled="True"
+                                    IsViewCubeEdgeClicksEnabled="True">
                     <hx:DefaultLights />
                     <wpfOpt:OptVisual3D x:Name="optVisual"
                                         FileName="{Binding /FilePath, Mode=OneWay}"

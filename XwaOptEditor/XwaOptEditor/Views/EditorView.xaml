@@ -843,6 +843,7 @@
                                                         IsMoveEnabled="False"
                                                         Background="Black"
                                                         IsHeadLightEnabled="True"
+                                                        IsViewCubeEdgeClicksEnabled="True"
                                                         MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
                         <hx:DefaultLights />
                         <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
@@ -903,6 +904,7 @@
                                                     IsMoveEnabled="False"
                                                     Background="Black"
                                                     IsHeadLightEnabled="True"
+                                                    IsViewCubeEdgeClicksEnabled="True"
                                                     MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
                     <hx:DefaultLights />
                     <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
@@ -961,6 +963,7 @@
                                                     IsMoveEnabled="False"
                                                     Background="Black"
                                                     IsHeadLightEnabled="True"
+                                                    IsViewCubeEdgeClicksEnabled="True"
                                                     MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
                     <hx:DefaultLights />
                     <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"

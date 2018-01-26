@@ -37,7 +37,8 @@
                                             IsChangeFieldOfViewEnabled="False"
                                             IsMoveEnabled="False"
                                             Background="Black"
-                                            IsHeadLightEnabled="True">
+                                            IsHeadLightEnabled="True"
+                                            IsViewCubeEdgeClicksEnabled="True">
             <hx:DefaultLights />
             <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
                                             Version="{Binding ModelVersion}"
