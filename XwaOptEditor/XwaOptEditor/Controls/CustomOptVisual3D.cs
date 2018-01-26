@@ -18,60 +18,6 @@ namespace XwaOptEditor.Controls
             this.ModelChanged += CustomOptVisual3D_ModelChanged;
         }
 
-        public new OptCache Cache
-        {
-            get { return base.Cache; }
-            set { base.Cache = value; ; }
-        }
-
-        public new string FileName
-        {
-            get { return base.FileName; }
-            set { this.SetValue(FileNameProperty, value); }
-        }
-
-        public new OptFile File
-        {
-            get { return base.File; }
-            set { base.File = value; }
-        }
-
-        public new Mesh Mesh
-        {
-            get { return base.Mesh; }
-            set { base.Mesh = value; }
-        }
-
-        public new MeshLod Lod
-        {
-            get { return base.Lod; }
-            set { base.Lod = value; }
-        }
-
-        public new float? Distance
-        {
-            get { return base.Distance; }
-            set { base.Distance = value; }
-        }
-
-        public new int Version
-        {
-            get { return base.Version; }
-            set { base.Version = value; }
-        }
-
-        public new bool IsSolid
-        {
-            get { return base.IsSolid; }
-            set { base.IsSolid = value; }
-        }
-
-        public new bool IsWireframe
-        {
-            get { return base.IsWireframe; }
-            set { base.IsWireframe = value; }
-        }
-
         private HelixViewport3D GetViewport()
         {
             DependencyObject obj = this;
