@@ -358,6 +358,7 @@ namespace OptObjConverter
             foreach (var material in obj.Materials.Values)
             {
                 Texture texture;
+                int bpp;
 
                 if (material.DiffuseMapFileName == null)
                 {
@@ -384,6 +385,9 @@ namespace OptObjConverter
                     texture.Width = width;
                     texture.Height = height;
                     texture.ImageData = data;
+
+                    texture.Convert32To8();
+                    bpp = 8;
                 }
                 else
                 {
@@ -391,6 +395,8 @@ namespace OptObjConverter
 
                     texture = Texture.FromFile(colorFileName);
                     texture.Name = material.Name;
+
+                    bpp = texture.BitsPerPixel;
                 }
 
                 if (material.AlphaMapFileName != null)
@@ -417,10 +423,15 @@ namespace OptObjConverter
                     texture.AlphaData = alphaData;
                 }
 
+                texture.GenerateMipmaps();
+
+                if (bpp == 8)
+                {
+                    texture.Convert32To8();
+                }
+
                 opt.Textures.Add(texture.Name, texture);
             }
-
-            opt.GenerateTexturesMipmaps();
 
             return opt;
         }

@@ -178,6 +178,15 @@ namespace XwaOptEditor.ViewModels
                     var newTexture = Texture.FromFile(fileName);
                     newTexture.Name = texture.Name;
 
+                    int bpp = newTexture.BitsPerPixel;
+
+                    newTexture.GenerateMipmaps();
+
+                    if (bpp == 8)
+                    {
+                        newTexture.Convert32To8();
+                    }
+
                     this.OptModel.File.Textures[newTexture.Name] = newTexture;
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);

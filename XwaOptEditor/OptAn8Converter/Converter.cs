@@ -433,11 +433,12 @@ namespace OptAn8Converter
                     Alpha = t.FrontSurface.Alpha
                 }))
             {
-                Texture texture;
-
                 var an8Texture = material.Diffuse.TextureName != null ?
                     an8.Textures.FirstOrDefault(t => string.Equals(t.Name, material.Diffuse.TextureName, StringComparison.Ordinal)) :
                     null;
+
+                Texture texture;
+                int bpp;
 
                 if (an8Texture == null)
                 {
@@ -463,6 +464,9 @@ namespace OptAn8Converter
                     texture.Width = width;
                     texture.Height = height;
                     texture.ImageData = data;
+
+                    texture.Convert32To8();
+                    bpp = 8;
                 }
                 else
                 {
@@ -470,10 +474,14 @@ namespace OptAn8Converter
 
                     texture = Texture.FromFile(colorFileName);
                     texture.Name = material.Name;
+
+                    bpp = texture.BitsPerPixel;
                 }
 
                 if (material.Alpha > 0 && material.Alpha < 255)
                 {
+                    texture.Convert8To32();
+
                     byte alpha = (byte)material.Alpha;
 
                     int length = texture.Width * texture.Height;
@@ -490,10 +498,15 @@ namespace OptAn8Converter
                     texture.AlphaData = alphaData;
                 }
 
+                texture.GenerateMipmaps();
+
+                if (bpp == 8)
+                {
+                    texture.Convert32To8();
+                }
+
                 opt.Textures.Add(texture.Name, texture);
             }
-
-            opt.GenerateTexturesMipmaps();
 
             return opt;
         }

@@ -327,6 +327,7 @@ namespace OptRhinoConverter
                         }
 
                         Texture texture;
+                        int bpp;
 
                         if (colorMap == null)
                         {
@@ -353,6 +354,9 @@ namespace OptRhinoConverter
                             texture.Width = width;
                             texture.Height = height;
                             texture.ImageData = data;
+
+                            texture.Convert32To8();
+                            bpp = 8;
                         }
                         else
                         {
@@ -360,6 +364,8 @@ namespace OptRhinoConverter
 
                             texture = Texture.FromFile(colorFileName);
                             texture.Name = material.Name;
+
+                            bpp = texture.BitsPerPixel;
                         }
 
                         if (alphaMap != null)
@@ -386,11 +392,16 @@ namespace OptRhinoConverter
                             texture.AlphaData = alphaData;
                         }
 
+                        texture.GenerateMipmaps();
+
+                        if (bpp == 8)
+                        {
+                            texture.Convert32To8();
+                        }
+
                         opt.Textures.Add(texture.Name, texture);
                     }
                 }
-
-                opt.GenerateTexturesMipmaps();
             }
 
             return opt;

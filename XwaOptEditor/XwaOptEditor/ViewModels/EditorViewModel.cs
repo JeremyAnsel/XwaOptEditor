@@ -1076,6 +1076,15 @@ namespace XwaOptEditor.ViewModels
                 {
                     var texture = Texture.FromFile(fileName);
 
+                    int bpp = texture.BitsPerPixel;
+
+                    texture.GenerateMipmaps();
+
+                    if (bpp == 8)
+                    {
+                        texture.Convert32To8();
+                    }
+
                     var mesh = this.CurrentMeshes.SelectedItem;
                     var lod = this.CurrentLods.SelectedItem;
                     var faceGroup = this.CurrentFaceGroups.SelectedItem;
