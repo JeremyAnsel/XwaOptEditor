@@ -217,7 +217,21 @@ namespace XwaOptEditor.ViewModels
 
                 try
                 {
-                    this.OptModel.File.Textures[texture.Name].SetAlphaMap(fileName);
+                    int bpp = texture.BitsPerPixel;
+                    int mipmapsCount = texture.MipmapsCount;
+
+                    texture.RemoveMipmaps();
+                    texture.SetAlphaMap(fileName);
+
+                    if (mipmapsCount > 1)
+                    {
+                        texture.GenerateMipmaps();
+
+                        if (bpp == 8)
+                        {
+                            texture.Convert32To8();
+                        }
+                    }
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
                 }
