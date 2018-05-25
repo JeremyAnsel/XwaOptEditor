@@ -110,6 +110,8 @@
                                         Binding="{Binding Value.Height}" />
                     <DataGridTextColumn Header="Has Alpha"
                                         Binding="{Binding Value.HasAlpha}" />
+                    <DataGridTextColumn Header="Is Illuminated"
+                                        Binding="{Binding Value.IsIlluminated}" />
                     <DataGridTextColumn Header="Mipmaps"
                                         Binding="{Binding Value.MipmapsCount}" />
                     <DataGridTextColumn Header="Bpp"
