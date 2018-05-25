@@ -74,13 +74,12 @@ namespace XwaHangarMapEditor
 
         private void SetWorkingDirectory()
         {
-            var dlg = new System.Windows.Forms.FolderBrowserDialog();
-            dlg.Description = "Choose a working directory containing " + AppSettings.XwaExeFileName;
-            dlg.ShowNewFolderButton = false;
+            var dlg = new WPFFolderBrowser.WPFFolderBrowserDialog();
+            dlg.Title = "Choose a working directory containing " + AppSettings.XwaExeFileName;
 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog(this) == true)
             {
-                AppSettings.WorkingDirectory = dlg.SelectedPath + System.IO.Path.DirectorySeparatorChar;
+                AppSettings.WorkingDirectory = dlg.FileName + System.IO.Path.DirectorySeparatorChar;
             }
         }
 
