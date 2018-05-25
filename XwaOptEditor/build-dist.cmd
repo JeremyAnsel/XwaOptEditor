@@ -52,3 +52,11 @@ For %%a in (
 ) do (
 xcopy /s /d "%%~a" dist\patch_32bpp\
 )
+
+For %%a in (
+"XwaHangarMapEditor\bin\Release\*.dll"
+"XwaHangarMapEditor\bin\Release\*.exe"
+"XwaHangarMapEditor\bin\Release\*.config"
+) do (
+xcopy /s /d "%%~a" dist\
+)
