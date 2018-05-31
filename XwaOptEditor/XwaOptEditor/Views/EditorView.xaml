@@ -605,7 +605,7 @@
                             <ColumnDefinition Width="1*"
                                               MinWidth="50" />
                             <ColumnDefinition  Width="Auto" />
-                            <ColumnDefinition Width="4*"
+                            <ColumnDefinition Width="2*"
                                               MinWidth="50" />
                         </Grid.ColumnDefinitions>
                         <GridSplitter Grid.Column="1"
@@ -625,10 +625,12 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Value.Textures.Count}" />
+                                        <TextBlock Text=" textures, " />
                                         <TextBlock Text="{Binding Value.Faces.Count}" />
                                         <TextBlock Text=" faces, " />
-                                        <TextBlock Text="{Binding Value.Textures.Count}" />
-                                        <TextBlock Text=" textures" />
+                                        <TextBlock Text="{Binding Value.VerticesCount}" />
+                                        <TextBlock Text=" vertices" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
