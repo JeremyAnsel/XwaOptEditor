@@ -12,6 +12,8 @@ namespace XwaOptEditor.Models
 {
     public class OptModel : ObservableObject
     {
+        public const int UndoStackMaxLength = 20;
+
         private OptFile file;
 
         private OptCache cache;
@@ -21,8 +23,10 @@ namespace XwaOptEditor.Models
         public OptModel()
         {
             this.PlayabilityMessages = new ObservableCollection<PlayabilityMessage>();
+            this.UndoStack = new ObservableCollection<Tuple<string, OptFile>>();
 
             this.file = new OptFile();
+            this.UndoStackPush("new");
         }
 
         public OptFile File
@@ -79,6 +83,37 @@ namespace XwaOptEditor.Models
         }
 
         public ObservableCollection<PlayabilityMessage> PlayabilityMessages { get; private set; }
+
+        public ObservableCollection<Tuple<string, OptFile>> UndoStack { get; private set; }
+
+        public void UndoStackPush(string label)
+        {
+            this.UndoStack.Insert(0, Tuple.Create(label, this.File.Clone()));
+
+            while (this.UndoStack.Count > OptModel.UndoStackMaxLength)
+            {
+                this.UndoStack.RemoveAt(this.UndoStack.Count - 1);
+            }
+        }
+
+        public void UndoStackRestore(int index)
+        {
+            if (index == -1)
+            {
+                if (this.UndoStack.Count < 1)
+                {
+                    return;
+                }
+
+                index = 0;
+            }
+
+            var undo = this.UndoStack[index];
+            this.File = undo.Item2;
+
+            this.UndoStack.RemoveAt(index);
+            this.UndoStack.Insert(0, Tuple.Create(undo.Item1, undo.Item2.Clone()));
+        }
 
         private void CheckPlayability()
         {

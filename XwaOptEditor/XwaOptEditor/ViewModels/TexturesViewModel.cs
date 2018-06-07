@@ -76,7 +76,7 @@ namespace XwaOptEditor.ViewModels
                 return;
             }
 
-            BusyIndicatorService.Run(() =>
+            BusyIndicatorService.Run(dispatcher =>
             {
                 string fileName = FileDialogService.GetSaveTextureFileName(texture.Name);
 
@@ -88,6 +88,8 @@ namespace XwaOptEditor.ViewModels
                 try
                 {
                     texture.Save(fileName);
+
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileName(fileName)));
                 }
                 catch (Exception ex)
                 {
@@ -103,7 +105,7 @@ namespace XwaOptEditor.ViewModels
                 return;
             }
 
-            BusyIndicatorService.Run(() =>
+            BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_color";
                 string fileName = FileDialogService.GetSaveTextureFileName(name);
@@ -116,6 +118,8 @@ namespace XwaOptEditor.ViewModels
                 try
                 {
                     texture.SaveColorMap(fileName);
+
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileName(fileName)));
                 }
                 catch (Exception ex)
                 {
@@ -136,7 +140,7 @@ namespace XwaOptEditor.ViewModels
                 return;
             }
 
-            BusyIndicatorService.Run(() =>
+            BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_alpha";
                 string fileName = FileDialogService.GetSaveTextureFileName(name);
@@ -149,6 +153,8 @@ namespace XwaOptEditor.ViewModels
                 try
                 {
                     texture.SaveAlphaMap(fileName);
+
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileName(fileName)));
                 }
                 catch (Exception ex)
                 {
@@ -190,6 +196,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.Textures[newTexture.Name] = newTexture;
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name));
                 }
                 catch (Exception ex)
                 {
@@ -234,6 +241,7 @@ namespace XwaOptEditor.ViewModels
                     }
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name));
                 }
                 catch (Exception ex)
                 {
@@ -253,6 +261,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.GenerateTexturesMipmaps();
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("generate mipmaps"));
                 }
                 catch (Exception ex)
                 {
@@ -290,6 +299,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.ConvertTextures32To8();
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("convert to 8 bpp"));
                 }
                 catch (Exception ex)
                 {
@@ -309,6 +319,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.ConvertTextures8To32();
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("convert to 32 bpp"));
                 }
                 catch (Exception ex)
                 {
@@ -328,6 +339,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.CompactTextures();
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("compact textures"));
                 }
                 catch (Exception ex)
                 {
@@ -347,6 +359,7 @@ namespace XwaOptEditor.ViewModels
                     this.OptModel.File.GenerateTexturesNames();
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("generate textures names"));
                 }
                 catch (Exception ex)
                 {

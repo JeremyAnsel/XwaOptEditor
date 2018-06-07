@@ -238,5 +238,35 @@ namespace XwaOptEditor
 
             this.Dispatcher.Invoke(action);
         }
+
+        private void PushUndoStackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Action action = () =>
+            {
+                this.ViewModel.OptModel.UndoStackPush("no label");
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
+
+        private void RestoreUndoStackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Action action = () =>
+            {
+                this.ViewModel.OptModel.UndoStackRestore(this.UndoStackListBox.SelectedIndex);
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
+
+        private void ClearUndoStackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Action action = () =>
+            {
+                this.ViewModel.OptModel.UndoStack.Clear();
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
     }
 }

@@ -430,6 +430,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("new mesh"));
             });
         }
 
@@ -445,6 +446,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.OptModel.UndoStackPush("delete mesh"));
             });
         }
 
@@ -481,6 +483,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("move up mesh"));
             });
         }
 
@@ -517,6 +520,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("move down mesh"));
             });
         }
 
@@ -534,6 +538,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.OptModel.UndoStackPush("split mesh"));
             });
         }
 
@@ -570,6 +575,7 @@ namespace XwaOptEditor.ViewModels
 
                     dispatcher(() => this.UpdateModel());
                     dispatcher(() => this.CurrentMeshes.SetSelection(merge));
+                    dispatcher(() => this.OptModel.UndoStackPush("merge meshes"));
                 }
             });
         }
@@ -594,6 +600,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("move meshes"));
             });
         }
 
@@ -610,6 +617,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("duplicate meshes"));
             });
         }
 
@@ -623,6 +631,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("compute hitzones"));
             });
         }
 
@@ -643,6 +652,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.OptModel.UndoStackPush("new lod"));
             });
         }
 
@@ -668,6 +678,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("delete lod"));
             });
         }
 
@@ -710,6 +721,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lods));
+                dispatcher(() => this.OptModel.UndoStackPush("move up lod"));
             });
         }
 
@@ -752,6 +764,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lods));
+                dispatcher(() => this.OptModel.UndoStackPush("move down lod"));
             });
         }
 
@@ -772,6 +785,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("sort lods"));
             });
         }
 
@@ -795,6 +809,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("split lod"));
             });
         }
 
@@ -816,6 +831,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(mergedLod));
+                dispatcher(() => this.OptModel.UndoStackPush("merge lods"));
             });
         }
 
@@ -834,6 +850,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("compute hitzone"));
             });
         }
 
@@ -852,6 +869,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("new hardpoint"));
             });
         }
 
@@ -873,6 +891,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("delete hardpoints"));
             });
         }
 
@@ -939,6 +958,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("paste hardpoints"));
             });
         }
 
@@ -954,12 +974,13 @@ namespace XwaOptEditor.ViewModels
                 var mesh = this.CurrentMeshes.SelectedItem;
 
                 mesh.EngineGlows.Add(new EngineGlow
-                    {
-                        Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
-                    });
+                {
+                    Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
+                });
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("new engine glow"));
             });
         }
 
@@ -981,6 +1002,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("delete engine glow"));
             });
         }
 
@@ -1053,6 +1075,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("paste engine glows"));
             });
         }
 
@@ -1096,6 +1119,7 @@ namespace XwaOptEditor.ViewModels
                     dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                     dispatcher(() => this.CurrentLods.SetSelection(lod));
                     dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                    dispatcher(() => this.OptModel.UndoStackPush("add texture name " + texture.Name));
                 }
                 catch (Exception ex)
                 {
@@ -1132,6 +1156,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
                 dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                dispatcher(() => this.OptModel.UndoStackPush("add texture name " + message.TextureName));
             });
         }
 
@@ -1157,6 +1182,7 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
                 dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                dispatcher(() => this.OptModel.UndoStackPush("delete texture names"));
             });
         }
 
@@ -1186,6 +1212,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("add hardpoint"));
             });
         }
 
@@ -1204,6 +1231,7 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.UpdateModel(true));
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("add engine glow"));
             });
         }
 

@@ -129,6 +129,7 @@ namespace XwaOptEditor.ViewModels
                 var opt = new OptFile();
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("new"));
             });
         }
 
@@ -152,6 +153,7 @@ namespace XwaOptEditor.ViewModels
                     var opt = OptFile.FromFile(fileName);
 
                     dispatcher(() => this.OptModel.File = opt);
+                    dispatcher(() => this.OptModel.UndoStackPush("open " + System.IO.Path.GetFileNameWithoutExtension(fileName)));
 
                     if (!this.OptModel.IsPlayable)
                     {
@@ -190,6 +192,7 @@ namespace XwaOptEditor.ViewModels
                     opt.Save(opt.FileName);
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileNameWithoutExtension(opt.FileName)));
                 }
                 catch (Exception ex)
                 {
@@ -223,6 +226,7 @@ namespace XwaOptEditor.ViewModels
                     opt.Save(fileName);
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileNameWithoutExtension(fileName)));
 
                     if (!this.OptModel.IsPlayable)
                     {
@@ -405,6 +409,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("import " + System.IO.Path.GetFileName(fileName)));
             });
         }
 
@@ -446,6 +451,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("import " + System.IO.Path.GetFileName(fileName)));
             });
         }
 
@@ -514,6 +520,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("import " + System.IO.Path.GetFileName(fileName)));
             });
         }
 
@@ -582,6 +589,7 @@ namespace XwaOptEditor.ViewModels
                 }
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("import " + System.IO.Path.GetFileName(fileName)));
             });
         }
 
@@ -637,6 +645,7 @@ namespace XwaOptEditor.ViewModels
                 opt.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("scale"));
             });
         }
 
@@ -658,6 +667,7 @@ namespace XwaOptEditor.ViewModels
                 opt.ChangeAxes(message.AxisX, message.AxisY, message.AxisZ);
 
                 dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("change axes"));
             });
         }
     }
