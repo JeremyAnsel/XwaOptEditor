@@ -101,16 +101,27 @@
                     </ToolBar>
                 </DockPanel>
             </DockPanel>
-            <DockPanel DockPanel.Dock="Right">
-                <UniformGrid DockPanel.Dock="Top" Rows="1">
-                    <Button x:Name="PushUndoStackButton" Content="Push" Click="PushUndoStackButton_Click" />
-                    <Button x:Name="RestoreUndoStackButton" Content="Restore" Click="RestoreUndoStackButton_Click" />
-                    <Button x:Name="ClearUndoStackButton" Content="Clear" Click="ClearUndoStackButton_Click" />
-                </UniformGrid>
-                <ListBox x:Name="UndoStackListBox" Width="150"
+            <Expander DockPanel.Dock="Right"
+                      ExpandDirection="Left"
+                      IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="History">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <DockPanel>
+                    <UniformGrid DockPanel.Dock="Top" Rows="1">
+                        <Button x:Name="PushUndoStackButton" Content="Push" Click="PushUndoStackButton_Click" />
+                        <Button x:Name="RestoreUndoStackButton" Content="Restore" Click="RestoreUndoStackButton_Click" />
+                        <Button x:Name="ClearUndoStackButton" Content="Clear" Click="ClearUndoStackButton_Click" />
+                    </UniformGrid>
+                    <ListBox x:Name="UndoStackListBox" Width="150"
                          ItemsSource="{Binding Source={StaticResource MainViewModel}, Path=OptModel.UndoStack}"
                          DisplayMemberPath="Item1" />
-            </DockPanel>
+                </DockPanel>
+            </Expander>
             <TabControl x:Name="Tabs"
                         TabStripPlacement="Left">
                 <TabItem x:Name="EditorTab"
