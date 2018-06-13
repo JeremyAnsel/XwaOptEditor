@@ -101,7 +101,7 @@
                     </ToolBar>
                 </DockPanel>
             </DockPanel>
-            <DockPanel DockPanel.Dock="Left">
+            <DockPanel DockPanel.Dock="Right">
                 <UniformGrid DockPanel.Dock="Top" Rows="1">
                     <Button x:Name="PushUndoStackButton" Content="Push" Click="PushUndoStackButton_Click" />
                     <Button x:Name="RestoreUndoStackButton" Content="Restore" Click="RestoreUndoStackButton_Click" />
