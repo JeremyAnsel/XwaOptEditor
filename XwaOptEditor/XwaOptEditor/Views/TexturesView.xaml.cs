@@ -106,6 +106,7 @@ namespace XwaOptEditor.Views
             texture.MakeColorIlluminated(color.R, color.G, color.B);
 
             this.OptModel.File = this.OptModel.File;
+            this.OptModel.UndoStackPush("set illumination");
         }
 
         private void SetTextureIlluminationColorKeyRange_Click(object sender, RoutedEventArgs e)
@@ -128,6 +129,7 @@ namespace XwaOptEditor.Views
             texture.MakeColorIlluminated(color0.R, color0.G, color0.B, color1.R, color1.G, color1.B);
 
             this.OptModel.File = this.OptModel.File;
+            this.OptModel.UndoStackPush("set illumination");
         }
 
         private void SetTextureIlluminationReset_Click(object sender, RoutedEventArgs e)
@@ -147,6 +149,7 @@ namespace XwaOptEditor.Views
             texture.ResetPaletteColors();
 
             this.OptModel.File = this.OptModel.File;
+            this.OptModel.UndoStackPush("reset illumination");
         }
     }
 }
