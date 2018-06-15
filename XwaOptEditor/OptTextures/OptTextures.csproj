@@ -72,6 +72,7 @@
     </ApplicationDefinition>
     <Compile Include="TextureConverter.cs" />
     <Compile Include="TextureNameConverter.cs" />
+    <Compile Include="TexturePaletteConverter.cs" />
     <Compile Include="TextureUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

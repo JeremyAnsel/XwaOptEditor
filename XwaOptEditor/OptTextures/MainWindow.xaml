@@ -25,8 +25,8 @@
             <TabItem Header="Textures"
                      Selector.IsSelected="True">
                 <DockPanel>
-                    <DataGrid AutoGenerateColumns="False"
-                              DockPanel.Dock="Left"
+                    <DataGrid DockPanel.Dock="Left"
+                              AutoGenerateColumns="False"
                               EnableRowVirtualization="True"
                               IsReadOnly="True"
                               IsSynchronizedWithCurrentItem="True"
@@ -47,53 +47,67 @@
                                                 Header="Bpp" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DockPanel DockPanel.Dock="Left">
-                        <TextBlock DockPanel.Dock="Top">Palette:</TextBlock>
-                        <ListView x:Name="texturePaletteSelector"
-                                  SelectedIndex="0"
-                                  SelectionMode="Single"
-                                  IsSynchronizedWithCurrentItem="True"
-                                  VirtualizingPanel.IsVirtualizing="True"
-                                  VirtualizingPanel.VirtualizationMode="Recycling">
-                            <system:String>Default</system:String>
-                            <system:String>0</system:String>
-                            <system:String>1</system:String>
-                            <system:String>2</system:String>
-                            <system:String>3</system:String>
-                            <system:String>4</system:String>
-                            <system:String>5</system:String>
-                            <system:String>6</system:String>
-                            <system:String>7</system:String>
-                            <system:String>8</system:String>
-                            <system:String>9</system:String>
-                            <system:String>10</system:String>
-                            <system:String>11</system:String>
-                            <system:String>12</system:String>
-                            <system:String>13</system:String>
-                            <system:String>14</system:String>
-                            <system:String>15</system:String>
-                        </ListView>
-                    </DockPanel>
-                    <DockPanel DockPanel.Dock="Top">
-                        <TextBlock>Mipmap:</TextBlock>
-                        <Slider x:Name="textureMipmapSelector"
-                                Minimum="1"
-                                Maximum="{Binding Textures/Value.MipmapsCount}"
-                                IsSnapToTickEnabled="True"
-                                TickFrequency="1" />
-                    </DockPanel>
-                    <Image RenderOptions.BitmapScalingMode="NearestNeighbor"
-                           RenderOptions.EdgeMode="Aliased">
-                        <Image.Source>
-                            <MultiBinding Converter="{local:PalletizedTextureConverter}">
-                                <Binding Path="Textures/Value" />
-                                <Binding ElementName="texturePaletteSelector"
-                                         Path="SelectedItem" />
-                                <Binding ElementName="textureMipmapSelector"
-                                         Path="Value" />
-                            </MultiBinding>
-                        </Image.Source>
-                    </Image>
+                    <TabControl>
+                        <TabItem Header="Texture">
+                            <DockPanel>
+                                <DockPanel DockPanel.Dock="Left">
+                                    <TextBlock DockPanel.Dock="Top">Palette:</TextBlock>
+                                    <ListView x:Name="texturePaletteSelector"
+                                              SelectedIndex="0"
+                                              SelectionMode="Single"
+                                              IsSynchronizedWithCurrentItem="True"
+                                              VirtualizingPanel.IsVirtualizing="True"
+                                              VirtualizingPanel.VirtualizationMode="Recycling">
+                                        <system:String>Default</system:String>
+                                        <system:String>0</system:String>
+                                        <system:String>1</system:String>
+                                        <system:String>2</system:String>
+                                        <system:String>3</system:String>
+                                        <system:String>4</system:String>
+                                        <system:String>5</system:String>
+                                        <system:String>6</system:String>
+                                        <system:String>7</system:String>
+                                        <system:String>8</system:String>
+                                        <system:String>9</system:String>
+                                        <system:String>10</system:String>
+                                        <system:String>11</system:String>
+                                        <system:String>12</system:String>
+                                        <system:String>13</system:String>
+                                        <system:String>14</system:String>
+                                        <system:String>15</system:String>
+                                    </ListView>
+                                </DockPanel>
+                                <DockPanel DockPanel.Dock="Top">
+                                    <TextBlock>Mipmap:</TextBlock>
+                                    <Slider x:Name="textureMipmapSelector"
+                                            Minimum="1"
+                                            Maximum="{Binding Textures/Value.MipmapsCount}"
+                                            IsSnapToTickEnabled="True"
+                                            TickFrequency="1" />
+                                </DockPanel>
+                                <Image RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                       RenderOptions.EdgeMode="Aliased">
+                                    <Image.Source>
+                                        <MultiBinding Converter="{local:PalletizedTextureConverter}">
+                                            <Binding Path="Textures/Value" />
+                                            <Binding ElementName="texturePaletteSelector"
+                                                     Path="SelectedItem" />
+                                            <Binding ElementName="textureMipmapSelector"
+                                                     Path="Value" />
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
+                            </DockPanel>
+                        </TabItem>
+                        <TabItem Header="Palette">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                <Image RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                       RenderOptions.EdgeMode="Aliased"
+                                       Height="128"
+                                       Source="{Binding Textures/Value, Converter={local:TexturePaletteConverter}}" />
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Meshes">

@@ -68,5 +68,40 @@ namespace OptTextures
                 return null;
             }
         }
+
+        public static BitmapSource BuildOptPalette(Texture texture)
+        {
+            if (texture == null)
+                return null;
+
+            const int width = 256;
+            const int height = 16;
+
+            byte[] imageData = new byte[width * height * 4];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    ushort c = BitConverter.ToUInt16(texture.Palette, y * width * 2 + x * 2);
+
+                    byte r = (byte)((c & 0xF800) >> 11);
+                    byte g = (byte)((c & 0x7E0) >> 5);
+                    byte b = (byte)(c & 0x1F);
+
+                    r = (byte)((r * (0xffU * 2) + 0x1fU) / (0x1fU * 2));
+                    g = (byte)((g * (0xffU * 2) + 0x3fU) / (0x3fU * 2));
+                    b = (byte)((b * (0xffU * 2) + 0x1fU) / (0x1fU * 2));
+
+                    int index = y * width * 4 + x * 4;
+                    imageData[index + 0] = b;
+                    imageData[index + 1] = g;
+                    imageData[index + 2] = r;
+                    imageData[index + 3] = 255;
+                }
+            }
+
+            return BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, imageData, width * 4);
+        }
     }
 }
