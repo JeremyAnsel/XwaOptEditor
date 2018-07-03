@@ -18,6 +18,8 @@ namespace XwaOptEditor.ViewModels
 
         private bool modelShowWireframe = false;
 
+        private float modelDistance = 0.001f;
+
         public ViewerViewModel()
         {
         }
@@ -97,6 +99,23 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.modelShowWireframe = value;
                     this.RaisePropertyChangedEvent("ModelShowWireframe");
+                }
+            }
+        }
+
+        public float ModelDistance
+        {
+            get
+            {
+                return this.modelDistance;
+            }
+
+            set
+            {
+                if (this.modelDistance != value)
+                {
+                    this.modelDistance = value;
+                    this.RaisePropertyChangedEvent("ModelDistance");
                 }
             }
         }

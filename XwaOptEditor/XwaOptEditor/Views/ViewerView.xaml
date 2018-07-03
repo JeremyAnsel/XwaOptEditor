@@ -19,6 +19,11 @@
                      IsLocked="True"
                      HorizontalAlignment="Right">
             <ToolBar>
+                <TextBlock Text="Distance: " />
+                <TextBox Width="80" Text="{Binding ModelDistance, Mode=TwoWay, Converter={vc:LodDistanceConverter}}" />
+                <Slider Width="100" Minimum="0.0" Maximum="0.001" Value="{Binding ModelDistance}" />
+            </ToolBar>
+            <ToolBar>
                 <TextBlock Text="Version: " />
                 <xctk:IntegerUpDown ToolTip="Version"
                                     Minimum="0"
@@ -42,6 +47,7 @@
             <hx:DefaultLights />
             <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
                                             Version="{Binding ModelVersion}"
+                                            Distance="{Binding ModelDistance}"
                                             IsSolid="{Binding ModelShowSolid}"
                                             IsWireframe="{Binding ModelShowWireframe}" />
         </localControl:CustomHelixViewport3D>
