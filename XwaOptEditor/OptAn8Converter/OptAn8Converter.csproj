@@ -49,7 +49,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="JeremyAnsel.Xwa.Opt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1395c88a83619f2f, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.17\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.18\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
