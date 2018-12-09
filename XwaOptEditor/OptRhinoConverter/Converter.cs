@@ -188,6 +188,7 @@ namespace OptRhinoConverter
             return Converter.RhinoToOpt(rhinoPath, true);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed")]
         public static OptFile RhinoToOpt(string rhinoPath, bool scale)

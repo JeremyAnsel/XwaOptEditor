@@ -180,6 +180,7 @@ namespace OptObjConverter
             return Converter.ObjToOpt(objPath, true);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
         public static OptFile ObjToOpt(string objPath, bool scale)
         {

@@ -238,6 +238,7 @@ namespace OptAn8Converter
             return Converter.An8ToOpt(an8Path, true);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
