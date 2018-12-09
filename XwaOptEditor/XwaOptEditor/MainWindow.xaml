@@ -73,6 +73,9 @@
                         <Button Content="Check Opt"
                                 Command="{Binding CheckOptCommand}" />
                         <Separator />
+                        <Button Content="Check Flat Textures"
+                                Command="{Binding CheckFlatTexturesCommand}" />
+                        <Separator />
                         <TextBlock Text="Import " />
                         <Button Content="Opt..."
                                 Command="{Binding ImportOptCommand}" />

@@ -35,6 +35,7 @@ namespace XwaOptEditor.ViewModels
             this.ConvertAllTexturesTo8BppCommand = new DelegateCommand(this.ExecuteConvertAllTexturesTo8BppCommand);
 
             this.CheckOptCommand = new DelegateCommand(this.ExecuteCheckOptCommand);
+            this.CheckFlatTexturesCommand = new DelegateCommand(this.ExecuteCheckFlatTexturesCommand);
 
             this.ImportOptCommand = new DelegateCommand(this.ExecuteImportOptCommand);
             this.ImportObjCommand = new DelegateCommand(this.ExecuteImportObjCommand);
@@ -86,6 +87,7 @@ namespace XwaOptEditor.ViewModels
         public ICommand ConvertAllTexturesTo8BppCommand { get; private set; }
 
         public ICommand CheckOptCommand { get; private set; }
+        public ICommand CheckFlatTexturesCommand { get; private set; }
 
         public ICommand ImportOptCommand { get; private set; }
         public ICommand ImportObjCommand { get; private set; }
@@ -353,6 +355,46 @@ namespace XwaOptEditor.ViewModels
             {
                 Messenger.Instance.Notify(new MessageBoxMessage("This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
             }
+        }
+
+        private void ExecuteCheckFlatTexturesCommand()
+        {
+            var flatTextures = this.OptModel.File.CheckFlatTextures(false);
+
+            if (flatTextures.Count == 0)
+            {
+                return;
+            }
+
+            string text = string.Join("\n", flatTextures);
+
+            var message = Messenger.Instance.Notify(new MessageBoxMessage("This opt contains flat textures.\nDo you want to remove them?\n\n" + text, "Check Flat Textures", MessageBoxButton.YesNo, MessageBoxImage.Warning));
+
+            if (message.Result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                BusyIndicatorService.Notify("Removing flat textures ...");
+
+                var opt = this.OptModel.File;
+
+                try
+                {
+                    dispatcher(() => this.OptModel.File = null);
+
+                    opt.CheckFlatTextures(true);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(ex));
+                }
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("remove flat textures"));
+            });
         }
 
         private void ExecuteImportOptCommand()
