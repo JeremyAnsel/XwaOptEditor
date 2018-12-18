@@ -72,6 +72,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\Components\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -88,6 +91,8 @@
     </Compile>
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\LengthScaleConverter.cs" />
+    <Compile Include="Converters\LodDistanceConverter.cs" />
+    <Compile Include="Converters\MaximumValueConverter.cs" />
     <Compile Include="Converters\VectorScaleConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿<Window x:Class="XwaOptExplorer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:hx="http://helix-toolkit.org/wpf"
         xmlns:wpfOpt="clr-namespace:JeremyAnsel.Xwa.WpfOpt;assembly=JeremyAnsel.Xwa.WpfOpt"
         xmlns:vc="clr-namespace:XwaOptExplorer.Converters"
@@ -58,6 +59,27 @@
                     <TextBlock Text="  Engine Glows: " />
                     <TextBlock Text="{Binding ElementName=optVisual, Path=File.EngineGlowsCount}" />
                 </StackPanel>
+                <ToolBarTray DockPanel.Dock="Bottom"
+                     IsLocked="True"
+                     HorizontalAlignment="Right">
+                    <ToolBar>
+                        <TextBlock Text="Distance: " />
+                        <TextBox Width="80" Text="{Binding ElementName=optVisual, Path=Distance, Mode=TwoWay, Converter={vc:LodDistanceConverter}}" />
+                        <Slider Width="100" Minimum="0.0" Maximum="0.001" Value="{Binding ElementName=optVisual, Path=Distance, FallbackValue=0.001}" />
+                    </ToolBar>
+                    <ToolBar>
+                        <TextBlock Text="Version: " />
+                        <xctk:IntegerUpDown ToolTip="Version"
+                                            Minimum="0"
+                                            Maximum="{Binding ElementName=optVisual, Path=File.MaxTextureVersion, Converter={vc:MaximumValueConverter}}"
+                                            DefaultValue="0"
+                                            Value="{Binding ElementName=optVisual, Path=Version}" />
+                    </ToolBar>
+                    <ToolBar>
+                        <CheckBox IsChecked="{Binding ElementName=optVisual, Path=IsSolid}">Solid</CheckBox>
+                        <CheckBox IsChecked="{Binding ElementName=optVisual, Path=IsWireframe}">Wireframe</CheckBox>
+                    </ToolBar>
+                </ToolBarTray>
                 <hx:HelixViewport3D x:Name="viewport"
                                     Grid.Column="2"
                                     ClipToBounds="False"
