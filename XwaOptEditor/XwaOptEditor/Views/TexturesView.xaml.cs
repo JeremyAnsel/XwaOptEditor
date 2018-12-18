@@ -1,6 +1,7 @@
 ﻿using JeremyAnsel.Xwa.Opt;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,8 +103,14 @@ namespace XwaOptEditor.Views
             }
 
             var color = this.textureIlluminationColorKey.SelectedColor;
+            byte tolerance = 0;
+            byte.TryParse(this.textureIlluminationTolerance.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out tolerance);
+            this.textureIlluminationTolerance.Text = tolerance.ToString(CultureInfo.InvariantCulture);
 
-            texture.MakeColorIlluminated(color.R, color.G, color.B);
+            Color color0 = Color.FromRgb((byte)Math.Max(color.R - tolerance, 0), (byte)Math.Max(color.G - tolerance, 0), (byte)Math.Max(color.B - tolerance, 0));
+            Color color1 = Color.FromRgb((byte)Math.Min(color.R + tolerance, 255), (byte)Math.Min(color.G + tolerance, 255), (byte)Math.Min(color.B + tolerance, 255));
+
+            texture.MakeColorIlluminated(color0.R, color0.G, color0.B, color1.R, color1.G, color1.B);
 
             this.OptModel.File = this.OptModel.File;
             this.OptModel.UndoStackPush("set illumination");

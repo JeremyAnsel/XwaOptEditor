@@ -254,6 +254,10 @@
                                               AvailableColorsSortingMode="HueSaturationBrightness"
                                               ColorMode="ColorCanvas"
                                               SelectedColor="Black" />
+                            <TextBlock Text=" Tolerance: " />
+                            <TextBox x:Name="textureIlluminationTolerance"
+                                     Width="40"
+                                     Text="5" />
                         </ToolBar>
                         <ToolBar Band="1"
                                  BandIndex="0">
@@ -272,7 +276,7 @@
                                               ShowStandardColors="False"
                                               AvailableColorsSortingMode="HueSaturationBrightness"
                                               ColorMode="ColorCanvas"
-                                              SelectedColor="Black" />
+                                              SelectedColor="White" />
                         </ToolBar>
                         <ToolBar Band="2"
                                  BandIndex="0">
