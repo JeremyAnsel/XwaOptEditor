@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using JeremyAnsel.Xwa.Opt;
 using JeremyAnsel.Xwa.WpfOpt;
+using XwaOptEditor.Extensions;
 using XwaOptEditor.Messages;
 using XwaOptEditor.Models;
 using XwaOptEditor.Mvvm;
@@ -78,6 +79,7 @@ namespace XwaOptEditor.ViewModels
             this.SplitMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteSplitMeshesCommand);
             this.MergeMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMergeMeshesCommand);
             this.MoveMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMoveMeshesCommand);
+            this.RotateMeshCommand = new DelegateCommandOf<Mesh>(this.ExecuteRotateMeshCommand);
             this.DuplicateMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteDuplicateMeshesCommand);
             this.ComputeHitzonesCommand = new DelegateCommand(this.ExecuteComputeHitzonesCommand);
 
@@ -141,6 +143,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand MergeMeshesCommand { get; private set; }
 
         public ICommand MoveMeshesCommand { get; private set; }
+
+        public ICommand RotateMeshCommand { get; private set; }
 
         public ICommand DuplicateMeshesCommand { get; private set; }
 
@@ -601,6 +605,35 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
                 dispatcher(() => this.OptModel.UndoStackPush("move meshes"));
+            });
+        }
+
+        private void ExecuteRotateMeshCommand(Mesh mesh)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var message = new RotateFactorMessage();
+                if (mesh.Descriptor != null)
+                {
+                    var center = mesh.Descriptor.Center;
+                    message.CenterX = center.X;
+                    message.CenterY = center.Y;
+                }
+
+                Messenger.Instance.Notify(message);
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify("Rotating ...");
+
+                mesh.RotateXY(message.Angle, message.CenterX, message.CenterY);
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("rotate mesh"));
             });
         }
 

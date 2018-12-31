@@ -92,11 +92,17 @@
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding MergeMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
-                    <Separator />
+                </ToolBar>
+                <ToolBar Band="3"
+                         BandIndex="0">
                     <Button Content="Move..."
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding MoveMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Rotate..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding RotateMeshCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
                     <Button Content="Duplicate"
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding DuplicateMeshesCommand}"
@@ -126,6 +132,10 @@
                                   IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                                   Command="{Binding MoveMeshesCommand}"
                                   CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                        <MenuItem Header="Rotate..."
+                                  IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                  Command="{Binding RotateMeshCommand}"
+                                  CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
                         <MenuItem Header="Duplicate"
                                   IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                                   Command="{Binding DuplicateMeshesCommand}"

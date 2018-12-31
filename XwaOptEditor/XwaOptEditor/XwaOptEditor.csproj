@@ -100,6 +100,8 @@
     <Compile Include="Converters\TextureNameConverter.cs" />
     <Compile Include="Converters\VectorConverter.cs" />
     <Compile Include="Converters\VectorScaleConverter.cs" />
+    <Compile Include="Extensions\MeshExtensions.cs" />
+    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Helpers\ColorHelpers.cs" />
     <Compile Include="Helpers\TextureHelpers.cs" />
     <Compile Include="Messages\BusyIndicatorMessage.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Messages\MessageBoxMessage.cs" />
     <Compile Include="Messages\MoveFactorMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
+    <Compile Include="Messages\RotateFactorMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
     <Compile Include="Messages\ScaleFactorMessage.cs" />
     <Compile Include="Messages\TextureBrowserMessage.cs" />
@@ -126,6 +129,9 @@
     <Compile Include="Mvvm\RelayCommandBinding.cs" />
     <Compile Include="Mvvm\SelectableCollection.cs" />
     <Compile Include="Mvvm\SelectableItem.cs" />
+    <Compile Include="RotateFactorDialog.xaml.cs">
+      <DependentUpon>RotateFactorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScaleFactorDialog.xaml.cs">
       <DependentUpon>ScaleFactorDialog.xaml</DependentUpon>
     </Compile>
@@ -185,6 +191,10 @@
     <Page Include="ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RotateFactorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ScaleFactorDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
