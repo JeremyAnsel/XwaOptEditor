@@ -1143,15 +1143,20 @@ namespace XwaOptEditor.ViewModels
 
                     var mesh = this.CurrentMeshes.SelectedItem;
                     var lod = this.CurrentLods.SelectedItem;
-                    var faceGroup = this.CurrentFaceGroups.SelectedItem;
+                    var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                    var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
 
                     this.OptModel.File.Textures[texture.Name] = texture;
-                    faceGroup.Textures.Add(texture.Name);
+
+                    foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
+                    {
+                        faceGroup.Textures.Add(texture.Name);
+                    }
 
                     dispatcher(() => this.UpdateModel());
                     dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                     dispatcher(() => this.CurrentLods.SetSelection(lod));
-                    dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                    dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
                     dispatcher(() => this.OptModel.UndoStackPush("add texture name " + texture.Name));
                 }
                 catch (Exception ex)
@@ -1181,14 +1186,18 @@ namespace XwaOptEditor.ViewModels
 
                 var mesh = this.CurrentMeshes.SelectedItem;
                 var lod = this.CurrentLods.SelectedItem;
-                var faceGroup = this.CurrentFaceGroups.SelectedItem;
+                var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
 
-                faceGroup.Textures.Add(message.TextureName);
+                foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
+                {
+                    faceGroup.Textures.Add(message.TextureName);
+                }
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
-                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
                 dispatcher(() => this.OptModel.UndoStackPush("add texture name " + message.TextureName));
             });
         }
@@ -1204,17 +1213,21 @@ namespace XwaOptEditor.ViewModels
             {
                 var mesh = this.CurrentMeshes.SelectedItem;
                 var lod = this.CurrentLods.SelectedItem;
-                var faceGroup = this.CurrentFaceGroups.SelectedItem;
+                var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
 
-                foreach (var textureName in textureNames)
+                foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
                 {
-                    faceGroup.Textures.Remove(textureName);
+                    foreach (var textureName in textureNames)
+                    {
+                        faceGroup.Textures.Remove(textureName);
+                    }
                 }
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
-                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroup));
+                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
                 dispatcher(() => this.OptModel.UndoStackPush("delete texture names"));
             });
         }
