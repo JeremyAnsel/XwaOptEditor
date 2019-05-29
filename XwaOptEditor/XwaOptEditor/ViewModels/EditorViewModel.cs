@@ -40,6 +40,8 @@ namespace XwaOptEditor.ViewModels
 
         private bool showEngineGlows = true;
 
+        private bool showNormals = false;
+
         public EditorViewModel()
         {
             this.CurrentMeshes = new SelectableCollection<Mesh>();
@@ -387,6 +389,23 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.showEngineGlows = value;
                     this.RaisePropertyChangedEvent("ShowEngineGlows");
+                }
+            }
+        }
+
+        public bool ShowNormals
+        {
+            get
+            {
+                return this.showNormals;
+            }
+
+            set
+            {
+                if (this.showNormals != value)
+                {
+                    this.showNormals = value;
+                    this.RaisePropertyChangedEvent("ShowNormals");
                 }
             }
         }

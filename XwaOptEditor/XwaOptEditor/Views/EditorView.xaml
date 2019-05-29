@@ -803,15 +803,23 @@
             <ToolBarTray DockPanel.Dock="Bottom"
                          IsLocked="True">
                 <ToolBar>
-                    <CheckBox IsChecked="{Binding ShowHitzones}">Hitzones</CheckBox>
-                    <CheckBox IsChecked="{Binding ShowHardpoints}">Hardpoints</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowHitzones}"
+                              ToolTip="Show Hitzones">Hitzones</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowHardpoints}"
+                              ToolTip="Show Hardpoints">HPs</CheckBox>
                     <CheckBox IsEnabled="{Binding ShowHardpoints}"
-                              IsChecked="{Binding ShowHardpointsText}">Hardpoints Text</CheckBox>
-                    <CheckBox IsChecked="{Binding ShowEngineGlows}">Engine Glows</CheckBox>
+                              IsChecked="{Binding ShowHardpointsText}"
+                              ToolTip="Show Hardpoints Text">HPs Text</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowEngineGlows}"
+                              ToolTip="Show Engine Glows">EGs</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowNormals}"
+                              ToolTip="Show Normals">Normals</CheckBox>
                 </ToolBar>
                 <ToolBar>
-                    <CheckBox IsChecked="{Binding ModelShowSolid}">Solid</CheckBox>
-                    <CheckBox IsChecked="{Binding ModelShowWireframe}">Wireframe</CheckBox>
+                    <CheckBox IsChecked="{Binding ModelShowSolid}"
+                              ToolTip="Show Solid">Solid</CheckBox>
+                    <CheckBox IsChecked="{Binding ModelShowWireframe}"
+                              ToolTip="Show Wireframe">Wireframe</CheckBox>
                 </ToolBar>
             </ToolBarTray>
             <Grid>
@@ -902,6 +910,16 @@
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Position" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptNormalsConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="ShowNormals" />
+                                    <Binding Path="ModelDistance" />
                                 </MultiBinding>
                             </ModelVisual3D.Content>
                         </ModelVisual3D>

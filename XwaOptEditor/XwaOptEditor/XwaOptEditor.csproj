@@ -94,6 +94,7 @@
     <Compile Include="Converters\OptEngineGlowsConverter.cs" />
     <Compile Include="Converters\OptHardpointsConverter.cs" />
     <Compile Include="Converters\OptHitzonesConverter.cs" />
+    <Compile Include="Converters\OptNormalsConverter.cs" />
     <Compile Include="Converters\PalletizedTextureConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\TextureConverter.cs" />
