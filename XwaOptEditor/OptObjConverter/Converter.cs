@@ -97,7 +97,7 @@ namespace OptObjConverter
 
                     foreach (var v in mesh.TextureCoordinates)
                     {
-                        obj.VertexTexCoords.Add(new ObjVector2(v.U, -v.V));
+                        obj.VertexTexCoords.Add(new ObjVector2(v.U, v.V));
                     }
 
                     foreach (var v in mesh.VertexNormals)
@@ -211,7 +211,7 @@ namespace OptObjConverter
 
                 foreach (var v in obj.VertexTexCoords)
                 {
-                    optMesh.TextureCoordinates.Add(new TextureCoordinates(v.U, -v.V));
+                    optMesh.TextureCoordinates.Add(new TextureCoordinates(v.U, v.V));
                 }
 
                 foreach (var v in obj.VertexNormals)

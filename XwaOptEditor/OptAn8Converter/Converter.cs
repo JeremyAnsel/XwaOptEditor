@@ -127,7 +127,7 @@ namespace OptAn8Converter
                         an8Mesh.TexCoords.Add(new An8TexCoord
                         {
                             U = v.U,
-                            V = -v.V
+                            V = v.V
                         });
                     }
 
@@ -273,7 +273,7 @@ namespace OptAn8Converter
 
                 foreach (var v in mesh.TexCoords)
                 {
-                    optMesh.TextureCoordinates.Add(new TextureCoordinates(v.U, -v.V));
+                    optMesh.TextureCoordinates.Add(new TextureCoordinates(v.U, v.V));
                 }
 
                 foreach (var v in mesh.Normals)

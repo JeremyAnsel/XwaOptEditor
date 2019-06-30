@@ -95,7 +95,7 @@ namespace OptRhinoConverter
                                     addVertex = vertex => rhinoMesh.Vertices.Add(vertex.X, vertex.Y, vertex.Z);
                                 }
 
-                                Action<TextureCoordinates> addTexCoords = texCoords => rhinoMesh.TextureCoordinates.Add(texCoords.U, -texCoords.V);
+                                Action<TextureCoordinates> addTexCoords = texCoords => rhinoMesh.TextureCoordinates.Add(texCoords.U, texCoords.V);
 
                                 Action<Vector> addNormal = normal => rhinoMesh.Normals.Add(normal.X, normal.Y, normal.Z);
 
@@ -258,7 +258,7 @@ namespace OptRhinoConverter
 
                             foreach (var texCoords in geometry.TextureCoordinates)
                             {
-                                mesh.TextureCoordinates.Add(new TextureCoordinates(texCoords.X, -texCoords.Y));
+                                mesh.TextureCoordinates.Add(new TextureCoordinates(texCoords.X, texCoords.Y));
                             }
 
                             foreach (var normal in geometry.Normals)
