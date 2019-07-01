@@ -183,7 +183,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
                 var textureCoordinates = new PointCollection(
                     mesh.TextureCoordinates
-                    .Select(t => new Point(t.U, t.V)));
+                    .Select(t => new Point(t.U, -t.V)));
 
                 this.meshes[meshIndex] = new MeshGeometry3D[mesh.Lods.Count][][];
 
