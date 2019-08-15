@@ -97,11 +97,6 @@ namespace XwaOptEditor.Views
 
             var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
 
-            if (texture.BitsPerPixel != 8)
-            {
-                return;
-            }
-
             var color = this.textureIlluminationColorKey.SelectedColor;
             byte tolerance = 0;
             byte.TryParse(this.textureIlluminationTolerance.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out tolerance);
@@ -125,11 +120,6 @@ namespace XwaOptEditor.Views
 
             var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
 
-            if (texture.BitsPerPixel != 8)
-            {
-                return;
-            }
-
             var color0 = this.textureIlluminationColorKey0.SelectedColor;
             var color1 = this.textureIlluminationColorKey1.SelectedColor;
 
@@ -147,11 +137,6 @@ namespace XwaOptEditor.Views
             }
 
             var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
-
-            if (texture.BitsPerPixel != 8)
-            {
-                return;
-            }
 
             texture.ResetPaletteColors();
 

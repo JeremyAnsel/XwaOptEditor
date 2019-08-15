@@ -46,6 +46,11 @@ namespace OptObjConverter
                     texture.SaveAlphaMap(Path.Combine(objDirectory, material.AlphaMapFileName));
                 }
 
+                if (texture.IsIlluminated)
+                {
+                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_illum.png", texture.Name)));
+                }
+
                 objMaterials.Add(texture.Name, material);
             }
 
@@ -408,20 +413,20 @@ namespace OptObjConverter
                 }
                 else if (material.DissolveFactor > 0.0f && material.DissolveFactor < 1.0f)
                 {
+                    texture.Convert8To32();
+
                     byte alpha = (byte)(material.DissolveFactor * 255.0f);
 
                     int length = texture.Width * texture.Height;
 
-                    byte[] alphaData = new byte[length];
                     var data = texture.ImageData;
 
                     for (int i = 0; i < length; i++)
                     {
-                        alphaData[i] = alpha;
                         data[i * 4 + 3] = alpha;
                     }
 
-                    texture.AlphaData = alphaData;
+                    texture.Palette[2] = 0xff;
                 }
 
                 texture.GenerateMipmaps();

@@ -32,6 +32,11 @@ namespace OptAn8Converter
             foreach (var texture in opt.Textures.Values)
             {
                 texture.Save(Path.Combine(an8Directory, string.Concat(texture.Name, ".png")));
+
+                if (texture.IsIlluminated)
+                {
+                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Concat(texture.Name, "_illum.png")));
+                }
             }
 
             var distances = opt.Meshes
@@ -487,16 +492,14 @@ namespace OptAn8Converter
 
                     int length = texture.Width * texture.Height;
 
-                    byte[] alphaData = new byte[length];
                     var data = texture.ImageData;
 
                     for (int i = 0; i < length; i++)
                     {
-                        alphaData[i] = alpha;
                         data[i * 4 + 3] = alpha;
                     }
 
-                    texture.AlphaData = alphaData;
+                    texture.Palette[2] = 0xff;
                 }
 
                 texture.GenerateMipmaps();

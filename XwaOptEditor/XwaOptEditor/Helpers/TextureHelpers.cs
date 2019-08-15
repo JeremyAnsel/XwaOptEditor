@@ -47,7 +47,7 @@ namespace XwaOptEditor.Helpers
                     })
                     .ToList());
 
-                //if (texture.AlphaData == null)
+                //if (texture.AlphaIllumData == null)
                 //{
                 //    byte[] imageData = new byte[size];
                 //    Array.Copy(texture.ImageData, imageData, size);
@@ -65,8 +65,8 @@ namespace XwaOptEditor.Helpers
                         imageData[i * 4 + 0] = palette.Colors[colorIndex].B;
                         imageData[i * 4 + 1] = palette.Colors[colorIndex].G;
                         imageData[i * 4 + 2] = palette.Colors[colorIndex].R;
-                        //imageData[i * 4 + 3] = texture.AlphaData[i];
-                        imageData[i * 4 + 3] = texture.AlphaData != null ? texture.AlphaData[i] : (byte)255;
+                        //imageData[i * 4 + 3] = texture.AlphaIllumData[i];
+                        imageData[i * 4 + 3] = texture.AlphaIllumData != null ? texture.AlphaIllumData[i] : (byte)255;
                     }
 
                     return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Bgra32, null, imageData, texture.Width * 4);
@@ -76,6 +76,16 @@ namespace XwaOptEditor.Helpers
             {
                 byte[] imageData = new byte[size * 4];
                 Array.Copy(texture.ImageData, imageData, size * 4);
+
+                if (paletteIndex != TextureHelpers.DefaultPalette)
+                {
+                    bool isIllum = texture.IsIlluminated;
+
+                    for (int i = 0; i < size; i++)
+                    {
+                        imageData[i * 4 + 3] = isIllum && texture.AlphaIllumData[i] != 0 ? (byte)255 : (byte)0;
+                    }
+                }
 
                 return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Bgra32, null, imageData, texture.Width * 4);
             }
@@ -92,10 +102,7 @@ namespace XwaOptEditor.Helpers
                 return null;
             }
 
-            int size = texture.Width * texture.Height;
-
-            byte[] imageData = new byte[size];
-            Array.Copy(texture.AlphaData, imageData, size);
+            byte[] imageData = texture.GetAlphaMap();
 
             return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Gray8, null, imageData, texture.Width);
         }

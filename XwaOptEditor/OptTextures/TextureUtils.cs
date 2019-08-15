@@ -50,7 +50,7 @@ namespace OptTextures
                     imageData[i * 4 + 0] = palette.Colors[colorIndex].B;
                     imageData[i * 4 + 1] = palette.Colors[colorIndex].G;
                     imageData[i * 4 + 2] = palette.Colors[colorIndex].R;
-                    imageData[i * 4 + 3] = texture.AlphaData == null ? (byte)255 : texture.AlphaData[i];
+                    imageData[i * 4 + 3] = texture.AlphaIllumData == null ? (byte)255 : texture.AlphaIllumData[i];
                 }
 
                 return BitmapSource.Create(texWidth, texHeight, 96, 96, PixelFormats.Bgra32, null, imageData, texWidth * 4);

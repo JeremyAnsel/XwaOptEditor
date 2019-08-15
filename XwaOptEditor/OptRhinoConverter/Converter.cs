@@ -172,6 +172,11 @@ namespace OptRhinoConverter
                                     texture.SaveAlphaMap(Path.Combine(rhinoDirectory, textureName + "_alpha.png"));
                                     material.SetTransparencyTexture(textureName + "_alpha.png");
                                 }
+
+                                if (texture.IsIlluminated)
+                                {
+                                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, textureName + "_illum.png"));
+                                }
                             }
 
                             file.Materials.Add(material);
@@ -377,20 +382,20 @@ namespace OptRhinoConverter
                         }
                         else if (material.Transparency > 0.0 && material.Transparency < 1.0)
                         {
+                            texture.Convert8To32();
+
                             byte alpha = (byte)(material.Transparency * 255.0f);
 
                             int length = texture.Width * texture.Height;
 
-                            byte[] alphaData = new byte[length];
                             var data = texture.ImageData;
 
                             for (int i = 0; i < length; i++)
                             {
-                                alphaData[i] = alpha;
                                 data[i * 4 + 3] = alpha;
                             }
 
-                            texture.AlphaData = alphaData;
+                            texture.Palette[2] = 0xff;
                         }
 
                         texture.GenerateMipmaps();

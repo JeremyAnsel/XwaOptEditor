@@ -211,8 +211,7 @@
                            RenderOptions.EdgeMode="Unspecified" />
                 </xctk:Zoombox>
             </TabItem>
-            <TabItem Header="Illumination"
-                     IsEnabled="{Binding OptModel.File.Textures/Value, Converter={vc:IsBpp8Converter}}">
+            <TabItem Header="Illumination">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Left">
                         <TextBlock DockPanel.Dock="Top">Palette:</TextBlock>
@@ -242,8 +241,7 @@
                         </ListView>
                     </DockPanel>
                     <ToolBarTray DockPanel.Dock="Bottom"
-                                 IsLocked="True"
-                                 IsEnabled="{Binding OptModel.File.Textures/Value, Converter={vc:IsBpp8Converter}}">
+                                 IsLocked="True">
                         <ToolBar Band="0"
                                  BandIndex="0">
                             <Button Click="SetTextureIlluminationColorKey_Click">Make illuminated:</Button>

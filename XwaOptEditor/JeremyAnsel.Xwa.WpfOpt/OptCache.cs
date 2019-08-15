@@ -60,7 +60,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                     })
                     .ToList());
 
-                if (texture.AlphaData == null)
+                if (texture.AlphaIllumData == null)
                 {
                     byte[] imageData = new byte[size];
                     Array.Copy(texture.ImageData, imageData, size);
@@ -78,7 +78,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                         imageData[i * 4 + 0] = palette.Colors[colorIndex].B;
                         imageData[i * 4 + 1] = palette.Colors[colorIndex].G;
                         imageData[i * 4 + 2] = palette.Colors[colorIndex].R;
-                        imageData[i * 4 + 3] = texture.AlphaData[i];
+                        imageData[i * 4 + 3] = texture.AlphaIllumData[i];
                     }
 
                     return BitmapSource.Create(texture.Width, texture.Height, 96, 96, PixelFormats.Bgra32, null, imageData, texture.Width * 4);
