@@ -33,25 +33,25 @@ namespace OptObjConverter
             {
                 var material = new ObjMaterial
                 {
-                    Name = texture.Name,
-                    DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}.png", texture.Name)
+                    Name = objName + "_" + texture.Name,
+                    DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)
                 };
 
                 texture.Save(Path.Combine(objDirectory, material.DiffuseMapFileName));
 
                 if (texture.HasAlpha)
                 {
-                    material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_alpha.png", texture.Name);
+                    material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name);
 
                     texture.SaveAlphaMap(Path.Combine(objDirectory, material.AlphaMapFileName));
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_illum.png", texture.Name)));
+                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name)));
                 }
 
-                objMaterials.Add(texture.Name, material);
+                objMaterials.Add(material.Name, material);
             }
 
             objMaterials.Save(Path.ChangeExtension(objPath, "mtl"));
@@ -116,7 +116,7 @@ namespace OptObjConverter
 
                         if (faceGroup.Textures.Count > 0)
                         {
-                            objFaceGroup.MaterialName = faceGroup.Textures[0];
+                            objFaceGroup.MaterialName = objName + "_" + faceGroup.Textures[0];
                         }
 
                         objMesh.FaceGroups.Add(objFaceGroup);

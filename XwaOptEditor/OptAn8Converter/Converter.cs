@@ -31,11 +31,11 @@ namespace OptAn8Converter
 
             foreach (var texture in opt.Textures.Values)
             {
-                texture.Save(Path.Combine(an8Directory, string.Concat(texture.Name, ".png")));
+                texture.Save(Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, ".png")));
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Concat(texture.Name, "_illum.png")));
+                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_illum.png")));
                 }
             }
 
@@ -53,16 +53,16 @@ namespace OptAn8Converter
                 foreach (var texture in opt.Textures.Values)
                 {
                     var an8Texture = new An8Texture();
-                    an8Texture.Name = texture.Name;
-                    an8Texture.Files.Add(string.Concat(texture.Name, ".png"));
+                    an8Texture.Name = an8Name + "_" + texture.Name;
+                    an8Texture.Files.Add(string.Concat(an8Name, "_", texture.Name, ".png"));
                     an8.Textures.Add(an8Texture);
 
                     var an8Material = new An8Material();
-                    an8Material.Name = texture.Name;
+                    an8Material.Name = an8Name + "_" + texture.Name;
                     an8Material.FrontSurface = new An8Surface();
                     an8Material.FrontSurface.Diffuse = new An8MaterialColor
                     {
-                        TextureName = texture.Name,
+                        TextureName = an8Name + "_" + texture.Name,
                         TextureParams = new An8TextureParams
                         {
                             AlphaMode = texture.HasAlpha ? An8AlphaMode.Final : An8AlphaMode.None,
@@ -98,7 +98,7 @@ namespace OptAn8Converter
                         .SelectMany(t => t.Textures)
                         .Distinct())
                     {
-                        an8Mesh.MaterialList.Add(texture);
+                        an8Mesh.MaterialList.Add(an8Name + "_" + texture);
                     }
 
                     if (scale)
@@ -156,7 +156,7 @@ namespace OptAn8Converter
 
                         if (faceGroup.Textures.Count > 0)
                         {
-                            materialIndex = an8Mesh.MaterialList.IndexOf(faceGroup.Textures[0]);
+                            materialIndex = an8Mesh.MaterialList.IndexOf(an8Name + "_" + faceGroup.Textures[0]);
                         }
 
                         foreach (var face in faceGroup.Faces)

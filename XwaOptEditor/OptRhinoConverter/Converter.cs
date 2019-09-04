@@ -156,7 +156,7 @@ namespace OptRhinoConverter
 
                         using (var material = new Rhino.DocObjects.Material())
                         {
-                            material.Name = textureName;
+                            material.Name = rhinoName + "_" + textureName;
 
                             if (texture == null)
                             {
@@ -164,18 +164,18 @@ namespace OptRhinoConverter
                             }
                             else
                             {
-                                texture.Save(Path.Combine(rhinoDirectory, textureName + ".png"));
-                                material.SetBitmapTexture(textureName + ".png");
+                                texture.Save(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + ".png"));
+                                material.SetBitmapTexture(rhinoName + "_" + textureName + ".png");
 
                                 if (texture.HasAlpha)
                                 {
-                                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, textureName + "_alpha.png"));
-                                    material.SetTransparencyTexture(textureName + "_alpha.png");
+                                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_alpha.png"));
+                                    material.SetTransparencyTexture(rhinoName + "_" + textureName + "_alpha.png");
                                 }
 
                                 if (texture.IsIlluminated)
                                 {
-                                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, textureName + "_illum.png"));
+                                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_illum.png"));
                                 }
                             }
 
