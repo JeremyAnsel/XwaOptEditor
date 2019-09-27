@@ -1,0 +1,207 @@
+﻿<Window x:Class="XwaSFoilsEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:local="clr-namespace:XwaSFoilsEditor"
+        mc:Ignorable="d"
+        Title="Xwa S-Foils Editor" Height="500" Width="1000"
+        UseLayoutRounding="True"
+        ContentRendered="Window_ContentRendered">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
+            <ToolBar>
+                <Button x:Name="openButton" Content="Open..." Click="openButton_Click" />
+                <Button x:Name="saveButton" Content="Save" Click="saveButton_Click" />
+                <Button x:Name="getSFoilsButton" Content="Get S-Foils txt..." Click="getSFoilsButton_Click" />
+            </ToolBar>
+        </ToolBarTray>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding OptFile.FileName}" />
+        </StatusBar>
+        <ListBox x:Name="meshesList" DockPanel.Dock="Left" Width="200" ItemsSource="{Binding Meshes}" IsSynchronizedWithCurrentItem="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding MeshIndex}" />
+                        <Run Text="-" />
+                        <Run Text="{Binding Name}" />
+                        <Run Text="-" />
+                        <Run Text="{Binding Angle}" />
+                        <Run Text="-" />
+                        <Run Text="{Binding RealAngle, Mode=OneWay, StringFormat='\{0:F2\}'}" />
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid DockPanel.Dock="Left" Width="300" DataContext="{Binding Meshes/}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Pivot (m): " />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Pivot, Converter={x:Static local:VectorScaleConverter.Default}, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Pivot: " />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Pivot, Converter={x:Static local:VectorConverter.Default}, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Look: " />
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Look, Converter={x:Static local:VectorConverter.Default}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding LookLength}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding LookLengthFactor}" />
+            </Grid>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Up: " />
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Up, Converter={x:Static local:VectorConverter.Default}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding UpLength}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding UpLengthFactor}" />
+            </Grid>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Right: " />
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Right, Converter={x:Static local:VectorConverter.Default}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding RightLength}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RightLengthFactor}" />
+            </Grid>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Angle: " />
+            <Grid Grid.Row="5" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Angle, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RealAngle}" />
+            </Grid>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Closing Speed: " />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ClosingSpeed, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Opening Speed: " />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OpeningSpeed, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        <DockPanel>
+            <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+                <ToolBar>
+                    <CheckBox x:Name="showSFoils"
+                              IsChecked="True"
+                              ToolTip="Show S-Foils opened">S-Foils</CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <CheckBox x:Name="showPivotAxis"
+                              IsChecked="True"
+                              ToolTip="Show Pivot Axis">Pivot Axis</CheckBox>
+                    <CheckBox x:Name="showHitzones"
+                              IsChecked="True"
+                              ToolTip="Show Hitzones">Hitzones</CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <CheckBox x:Name="modelShowSolid"
+                              IsChecked="True"
+                              ToolTip="Show Solid">Solid</CheckBox>
+                    <CheckBox x:Name="modelShowWireframe"
+                              IsChecked="False"
+                              ToolTip="Show Wireframe">Wireframe</CheckBox>
+                </ToolBar>
+            </ToolBarTray>
+            <hx:HelixViewport3D x:Name="viewport3D"
+                                Background="Black"
+                                ClipToBounds="False"
+                                IsHeadLightEnabled="True"
+                                IsViewCubeEdgeClicksEnabled="True"
+                                CameraMode="Inspect"
+                                CameraRotationMode="Trackball"
+                                IsChangeFieldOfViewEnabled="False"
+                                IsMoveEnabled="False"
+                                CameraChanged="viewport3D_CameraChanged">
+                <hx:DefaultLights/>
+                <ModelVisual3D x:Name="modelVisual3D">
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptMeshesConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="OptCache" />
+                            <Binding Path="Meshes" />
+                            <Binding Path="IsChecked" ElementName="showSFoils" />
+                            <Binding Path="IsChecked" ElementName="modelShowSolid" />
+                            <Binding Path="IsChecked" ElementName="modelShowWireframe" />
+                            <Binding Path="Meshes/Pivot" />
+                            <Binding Path="Meshes/Look" />
+                            <Binding Path="Meshes/Up" />
+                            <Binding Path="Meshes/Right" />
+                            <Binding Path="Meshes/Angle" />
+                            <Binding Path="Meshes/ClosingSpeed" />
+                            <Binding Path="Meshes/OpeningSpeed" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+                <ModelVisual3D x:Name="hitzonesVisual3D">
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptHitzonesConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="IsChecked" ElementName="showHitzones" />
+                            <Binding Path="SelectedItem" ElementName="meshesList" />
+                            <Binding Path="Meshes" />
+                            <Binding Path="IsChecked" ElementName="showSFoils" />
+                            <Binding Path="Meshes/Pivot" />
+                            <Binding Path="Meshes/Look" />
+                            <Binding Path="Meshes/Up" />
+                            <Binding Path="Meshes/Right" />
+                            <Binding Path="Meshes/Angle" />
+                            <Binding Path="Meshes/ClosingSpeed" />
+                            <Binding Path="Meshes/OpeningSpeed" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+                <ModelVisual3D x:Name="pivotAxisVisual3D" Transform="{Binding Transform, ElementName=modelVisual3D}">
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptPivotAxisConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="IsChecked" ElementName="showPivotAxis" />
+                            <Binding Path="SelectedItem" ElementName="meshesList" />
+                            <Binding Path="Meshes/Pivot" />
+                            <Binding Path="Meshes/Look" />
+                            <Binding Path="Meshes/Up" />
+                            <Binding Path="Meshes/Right" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+            </hx:HelixViewport3D>
+        </DockPanel>
+    </DockPanel>
+</Window>

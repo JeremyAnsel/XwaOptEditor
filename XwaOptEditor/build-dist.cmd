@@ -60,3 +60,11 @@ For %%a in (
 ) do (
 xcopy /s /d "%%~a" dist\
 )
+
+For %%a in (
+"XwaSFoilsEditor\bin\Release\*.dll"
+"XwaSFoilsEditor\bin\Release\*.exe"
+"XwaSFoilsEditor\bin\Release\*.config"
+) do (
+xcopy /s /d "%%~a" dist\
+)

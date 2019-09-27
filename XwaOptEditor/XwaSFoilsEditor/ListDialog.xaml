@@ -1,0 +1,22 @@
+﻿<Window x:Class="XwaSFoilsEditor.ListDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XwaSFoilsEditor"
+        mc:Ignorable="d"
+        Title="Text" Height="668" Width="437"
+        UseLayoutRounding="True"
+        ResizeMode="NoResize"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+    <Canvas>
+        <TextBox x:Name="text"
+                 Canvas.Left="0" Canvas.Top="0"
+                 Height="638" Width="422"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto" />
+    </Canvas>
+</Window>
