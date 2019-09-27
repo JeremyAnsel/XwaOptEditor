@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptEditor", "XwaOptEdito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaHangarMapEditor", "XwaHangarMapEditor\XwaHangarMapEditor.csproj", "{FEC908D3-3B63-4CE2-A463-8CB8E9ECCAEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.HooksConfig", "JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj", "{61895DCB-0D15-47E1-A4E5-1A09636FCC74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{FEC908D3-3B63-4CE2-A463-8CB8E9ECCAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC908D3-3B63-4CE2-A463-8CB8E9ECCAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC908D3-3B63-4CE2-A463-8CB8E9ECCAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61895DCB-0D15-47E1-A4E5-1A09636FCC74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61895DCB-0D15-47E1-A4E5-1A09636FCC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61895DCB-0D15-47E1-A4E5-1A09636FCC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61895DCB-0D15-47E1-A4E5-1A09636FCC74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
