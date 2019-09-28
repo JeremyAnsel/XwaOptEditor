@@ -1,4 +1,5 @@
 ﻿using HelixToolkit.Wpf;
+using JeremyAnsel.Xwa.HooksConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,11 +76,23 @@ namespace XwaHangarMapEditor
         private void SetWorkingDirectory()
         {
             var dlg = new WPFFolderBrowser.WPFFolderBrowserDialog();
-            dlg.Title = "Choose a working directory containing " + AppSettings.XwaExeFileName;
+            dlg.Title = "Choose a working directory containing " + AppSettings.XwaExeFileName + " or a child directory";
 
             if (dlg.ShowDialog(this) == true)
             {
-                AppSettings.WorkingDirectory = dlg.FileName + System.IO.Path.DirectorySeparatorChar;
+                string fileName = dlg.FileName;
+
+                if (!System.IO.File.Exists(System.IO.Path.Combine(fileName, "XWingAlliance.exe")))
+                {
+                    fileName = System.IO.Path.GetDirectoryName(fileName);
+
+                    if (!System.IO.File.Exists(System.IO.Path.Combine(fileName, "XWingAlliance.exe")))
+                    {
+                        return;
+                    }
+                }
+
+                AppSettings.WorkingDirectory = fileName + System.IO.Path.DirectorySeparatorChar;
             }
         }
 
@@ -107,9 +120,9 @@ namespace XwaHangarMapEditor
         private void ExecuteOpen(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".txt";
+            dialog.DefaultExt = ".ini";
             dialog.CheckFileExists = true;
-            dialog.Filter = "Hangar Map files (*.txt)|*HangarMap.txt";
+            dialog.Filter = "Hangar Map files (*.ini, *.txt)|*.ini;*HangarMap.txt";
             dialog.InitialDirectory = AppSettings.WorkingDirectory + "FLIGHTMODELS";
 
             string fileName;
@@ -125,7 +138,20 @@ namespace XwaHangarMapEditor
 
             try
             {
-                this.ViewModel.Text = System.IO.File.ReadAllText(fileName, Encoding.ASCII);
+                if (fileName.EndsWith(".ini", StringComparison.OrdinalIgnoreCase))
+                {
+                    string ship = XwaHooksConfig.GetStringWithoutExtension(fileName);
+                    var iniFile = new XwaIniFile(ship);
+                    iniFile.ParseIni();
+                    iniFile.Read("HangarMap", "HangarMap");
+
+                    this.ViewModel.Text = string.Join("\n", iniFile.Sections["HangarMap"].Lines);
+                }
+                else
+                {
+                    this.ViewModel.Text = System.IO.File.ReadAllText(fileName, Encoding.ASCII);
+                }
+
                 this.ViewModel.TextFileName = fileName;
 
                 string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
@@ -154,7 +180,7 @@ namespace XwaHangarMapEditor
 
             try
             {
-                System.IO.File.WriteAllText(this.ViewModel.TextFileName, this.ViewModel.Text, Encoding.ASCII);
+                this.WriteText(this.ViewModel.TextFileName, this.ViewModel.Text);
             }
             catch (Exception ex)
             {
@@ -166,8 +192,8 @@ namespace XwaHangarMapEditor
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.AddExtension = true;
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Hangar Map files (*.txt)|*HangarMap.txt";
+            dialog.DefaultExt = ".ini";
+            dialog.Filter = "Hangar Map files (*.ini, *.txt)|*.ini;*HangarMap.txt";
             dialog.FileName = System.IO.Path.GetFileName(this.ViewModel.TextFileName);
             dialog.InitialDirectory = AppSettings.WorkingDirectory + "FLIGHTMODELS";
 
@@ -184,13 +210,39 @@ namespace XwaHangarMapEditor
 
             try
             {
-                System.IO.File.WriteAllText(fileName, this.ViewModel.Text, Encoding.ASCII);
+                this.WriteText(fileName, this.ViewModel.Text);
                 this.ViewModel.TextFileName = fileName;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void WriteText(string fileName, string text)
+        {
+            if (fileName.EndsWith(".ini", StringComparison.OrdinalIgnoreCase))
+            {
+                string ship = XwaHooksConfig.GetStringWithoutExtension(fileName);
+                var iniFile = new XwaIniFile(ship);
+                iniFile.ParseIni();
+                iniFile.Read("HangarMap", "HangarMap");
+
+                var iniList = iniFile.RetrieveLinesList("HangarMap");
+
+                foreach (string line in text.SplitLines(false))
+                {
+                    iniList.Add(line);
+                }
+
+                iniFile.Save();
+            }
+            else
+            {
+                System.IO.File.WriteAllText(fileName, text, Encoding.ASCII);
+            }
+
+            MessageBox.Show(this, "Saved.", this.Title);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace XwaHangarMapEditor
     {
         private static readonly string[] separators = new[] { "\r\n", "\r", "\n" };
 
-        public static string[] SplitLines(this string str)
+        public static string[] SplitLines(this string str, bool removeEmptyEntries = true)
         {
-            return str.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            return str.Split(separators, removeEmptyEntries ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None);
         }
     }
 }

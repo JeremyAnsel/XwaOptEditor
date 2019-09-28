@@ -144,6 +144,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj">
+      <Project>{61895dcb-0d15-47e1-a4e5-1a09636fcc74}</Project>
+      <Name>JeremyAnsel.Xwa.HooksConfig</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj">
       <Project>{241e8f6d-6e74-4e80-9a23-bd88c44f9c17}</Project>
       <Name>JeremyAnsel.Xwa.WpfOpt</Name>

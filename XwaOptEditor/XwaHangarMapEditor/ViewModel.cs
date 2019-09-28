@@ -73,7 +73,7 @@ namespace XwaHangarMapEditor
         {
             get
             {
-                return Enumerable.Range(0, (AppSettings.Objects?.Count).Value).ToList();
+                return Enumerable.Range(0, AppSettings.Objects?.Count ?? 0).ToList();
             }
         }
 
