@@ -1,4 +1,5 @@
-﻿using JeremyAnsel.Xwa.Opt;
+﻿using JeremyAnsel.Xwa.HooksConfig;
+using JeremyAnsel.Xwa.Opt;
 using JeremyAnsel.Xwa.WpfOpt;
 using System;
 using System.Collections.Generic;
@@ -40,13 +41,12 @@ namespace XwaHangarMapEditor
             this.OnPropertyChanged(nameof(this.HangarModel3D));
         }
 
-        private SortedDictionary<string, OptFile> optFiles = new SortedDictionary<string, OptFile>();
-        private SortedDictionary<string, OptCache> optCaches = new SortedDictionary<string, OptCache>();
+        private SortedDictionary<string, OptModel> optModels = new SortedDictionary<string, OptModel>();
 
-        private Tuple<OptFile, OptCache> GetOptModel(string name)
+        private OptModel GetOptModel(string name)
         {
-            OptFile file;
-            if (!this.optFiles.TryGetValue(name, out file))
+            OptModel model;
+            if (!this.optModels.TryGetValue(name, out model))
             {
                 string fileName = AppSettings.WorkingDirectory + "FLIGHTMODELS\\" + name + ".opt";
 
@@ -55,18 +55,45 @@ namespace XwaHangarMapEditor
                     return null;
                 }
 
-                file = OptFile.FromFile(fileName);
-                this.optFiles.Add(name, file);
+                model = new OptModel();
+                model.File = OptFile.FromFile(fileName);
+                model.Cache = new OptCache(model.File);
+                model.SFoils = SFoil.GetSFoilsList(fileName);
+
+                string ship = XwaHooksConfig.GetStringWithoutExtension(fileName);
+                IList<string> lines;
+
+                lines = XwaHooksConfig.GetFileLines(ship + "Size.txt");
+                if (lines.Count == 0)
+                {
+                    lines = XwaHooksConfig.GetFileLines(ship + ".ini", "Size");
+                }
+
+                model.ClosedSFoilsElevation = XwaHooksConfig.GetFileKeyValueInt(lines, "ClosedSFoilsElevation");
+                if (model.ClosedSFoilsElevation == 0)
+                {
+                    if (string.Equals(name, "BWing", StringComparison.OrdinalIgnoreCase))
+                    {
+                        model.ClosedSFoilsElevation = 50;
+                    }
+                    else
+                    {
+                        model.ClosedSFoilsElevation = model.File.SpanSize.Z / 2;
+                    }
+                }
+
+                lines = XwaHooksConfig.GetFileLines(ship + "HangarObjects.txt");
+                if (lines.Count == 0)
+                {
+                    lines = XwaHooksConfig.GetFileLines(ship + ".ini", "HangarObjects");
+                }
+
+                model.IsHangarFloorInverted = XwaHooksConfig.GetFileKeyValueInt(lines, "IsHangarFloorInverted") != 0;
+
+                this.optModels.Add(name, model);
             }
 
-            OptCache cache;
-            if (!this.optCaches.TryGetValue(name, out cache))
-            {
-                cache = new OptCache(file);
-                this.optCaches.Add(name, cache);
-            }
-
-            return new Tuple<OptFile, OptCache>(file, cache);
+            return model;
         }
 
         public IList<int> ObjectIndices
@@ -164,6 +191,7 @@ namespace XwaHangarMapEditor
                 }
 
                 double hangarFloorZ = 0;
+                bool isHangarFloorInverted = false;
 
                 if (!string.IsNullOrWhiteSpace(this.HangarModel))
                 {
@@ -171,7 +199,7 @@ namespace XwaHangarMapEditor
 
                     if (hangar != null)
                     {
-                        Hardpoint hangarFloorHardpoint = hangar.Item1
+                        Hardpoint hangarFloorHardpoint = hangar.File
                             .Meshes
                             .SelectMany(t => t.Hardpoints)
                             .Where(t => t.HardpointType == HardpointType.InsideHangar)
@@ -181,6 +209,8 @@ namespace XwaHangarMapEditor
                         {
                             hangarFloorZ = hangarFloorHardpoint.Position.Z;
                         }
+
+                        isHangarFloorInverted = hangar.IsHangarFloorInverted;
                     }
                 }
 
@@ -190,7 +220,7 @@ namespace XwaHangarMapEditor
 
                 foreach (HangarItem item in map)
                 {
-                    Visual3D model = this.CreateModel3D(item, hangarFloorZ);
+                    Visual3D model = this.CreateModel3D(item, hangarFloorZ, isHangarFloorInverted);
 
                     if (model != null)
                     {
@@ -219,14 +249,14 @@ namespace XwaHangarMapEditor
                 }
 
                 var model3D = new OptVisual3D();
-                model3D.Cache = hangar.Item2;
+                model3D.Cache = hangar.Cache;
                 model3D.SortingFrequency = .2;
 
                 return model3D;
             }
         }
 
-        private Visual3D CreateModel3D(HangarItem item, double hangarFloorZ)
+        private Visual3D CreateModel3D(HangarItem item, double hangarFloorZ, bool isHangarFloorInverted)
         {
             string name = (string)ExeModelIndexConverter.Default.Convert(item.ModelIndex, null, null, null);
 
@@ -242,10 +272,28 @@ namespace XwaHangarMapEditor
                 return null;
             }
 
-            var model3D = new OptVisual3D();
-            model3D.Cache = model.Item2;
-            model3D.SortingFrequency = .2;
-            model3D.Version = item.Markings;
+            var modelVisual3D = new ModelVisual3D();
+
+            for (int meshIndex = 0; meshIndex < model.File.Meshes.Count; meshIndex++)
+            {
+                var mesh = model.File.Meshes[meshIndex];
+                var sfoil = model.SFoils.Where(t => t.MeshIndex == meshIndex).FirstOrDefault() ?? new SFoil();
+
+                var visual = new OptVisual3D
+                {
+                    Cache = model.Cache,
+                    Mesh = mesh,
+                    SortingFrequency = .2,
+                    Version = item.Markings
+                };
+
+                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.Look.LengthFactor();
+                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
+                transform.Freeze();
+                visual.Transform = transform;
+
+                modelVisual3D.Children.Add(visual);
+            }
 
             double offsetX = item.PositionX;
             double offsetY = item.PositionY;
@@ -253,22 +301,38 @@ namespace XwaHangarMapEditor
 
             if (item.IsOnFloor)
             {
-                offsetZ = hangarFloorZ + model.Item1.SpanSize.Z / 2;
+                if (isHangarFloorInverted)
+                {
+                    offsetZ = hangarFloorZ - model.ClosedSFoilsElevation;
+                }
+                else
+                {
+                    offsetZ = hangarFloorZ + model.ClosedSFoilsElevation;
+                }
             }
             else
             {
                 offsetZ = item.PositionZ;
             }
 
-            var transform = new Transform3DGroup();
-            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), item.HeadingZ * 360.0 / 65536)));
-            transform.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), -item.HeadingXY * 360.0 / 65536)));
-            transform.Children.Add(new TranslateTransform3D(offsetY, -offsetX, offsetZ));
-            transform.Freeze();
+            var transformGroup = new Transform3DGroup();
 
-            model3D.Transform = transform;
+            int bridgeIndex = model.File.Meshes.IndexOf(model.File.Meshes.FirstOrDefault(t => t.Descriptor.MeshType == MeshType.Bridge));
 
-            return model3D;
+            if (bridgeIndex != -1)
+            {
+                var transform = modelVisual3D.Children[bridgeIndex].Transform;
+                transformGroup.Children.Add(transform);
+            }
+
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), item.HeadingZ * 360.0 / 65536)));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), -item.HeadingXY * 360.0 / 65536)));
+            transformGroup.Children.Add(new TranslateTransform3D(offsetY, -offsetX, offsetZ));
+            transformGroup.Freeze();
+
+            modelVisual3D.Transform = transformGroup;
+
+            return modelVisual3D;
         }
     }
 }

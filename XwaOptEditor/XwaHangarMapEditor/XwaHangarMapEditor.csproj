@@ -93,8 +93,11 @@
     <Compile Include="HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OptModel.cs" />
+    <Compile Include="SFoil.cs" />
     <Compile Include="StringConverter.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="VectorExtensions.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="Visual3DConverter.cs" />
     <Page Include="HelpWindow.xaml">
