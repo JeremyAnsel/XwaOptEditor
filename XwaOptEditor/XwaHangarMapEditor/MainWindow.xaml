@@ -93,6 +93,7 @@
                         <GridView>
                             <GridViewColumn Header="Model Name" DisplayMemberBinding="{Binding ModelIndex, Converter={x:Static local:ExeModelIndexConverter.Default}}"/>
                             <GridViewColumn Header="Index" DisplayMemberBinding="{Binding ModelIndex}"/>
+                            <GridViewColumn Header="FG" DisplayMemberBinding="{Binding Markings}"/>
                             <GridViewColumn Header="PositionX" DisplayMemberBinding="{Binding PositionX}"/>
                             <GridViewColumn Header="PositionY" DisplayMemberBinding="{Binding PositionY}"/>
                             <GridViewColumn Header="PositionZ" DisplayMemberBinding="{Binding PositionZString}"/>
