@@ -144,24 +144,29 @@ namespace XwaHangarMapEditor
                     var iniFile = new XwaIniFile(ship);
                     iniFile.ParseIni();
                     iniFile.Read("HangarMap", "HangarMap");
+                    iniFile.Read("FamHangarMap", "FamHangarMap");
 
-                    this.ViewModel.Text = string.Join("\n", iniFile.Sections["HangarMap"].Lines);
+                    this.ViewModel.Text = string.Join("\n",
+                        iniFile.Sections["HangarMap"].Lines
+                        .Union(iniFile.Sections["FamHangarMap"].Lines));
+
+                    string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                    this.ViewModel.HangarModel = name + "Hangar";
                 }
                 else
                 {
                     this.ViewModel.Text = System.IO.File.ReadAllText(fileName, Encoding.ASCII);
+
+                    string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
+
+                    int index = name.LastIndexOf("Map");
+                    if (index != -1)
+                    {
+                        this.ViewModel.HangarModel = name.Substring(0, index);
+                    }
                 }
 
                 this.ViewModel.TextFileName = fileName;
-
-                string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
-
-                int index = name.LastIndexOf("Map");
-                if (index != -1)
-                {
-                    this.ViewModel.HangarModel = name.Substring(0, index);
-                }
-
                 this.viewport3D.ResetCamera();
             }
             catch (Exception ex)
@@ -227,6 +232,7 @@ namespace XwaHangarMapEditor
                 var iniFile = new XwaIniFile(ship);
                 iniFile.ParseIni();
                 iniFile.Read("HangarMap", "HangarMap");
+                iniFile.Read("FamHangarMap", "FamHangarMap");
 
                 var iniList = iniFile.RetrieveLinesList("HangarMap");
 
