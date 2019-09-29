@@ -29,7 +29,7 @@ namespace XwaHangarMapEditor
 
                 string[] parts = line.Split(',');
 
-                if (parts.Length != 6)
+                if (parts.Length < 6)
                 {
                     continue;
                 }
@@ -38,12 +38,26 @@ namespace XwaHangarMapEditor
 
                 try
                 {
-                    item.ModelIndex = StringConverter.ToUInt16(parts[0]);
-                    item.PositionX = StringConverter.ToInt32(parts[1]);
-                    item.PositionY = StringConverter.ToInt32(parts[2]);
-                    item.PositionZ = StringConverter.ToInt32(parts[3]);
-                    item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[4]);
-                    item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[5]);
+                    if (parts.Length == 7)
+                    {
+                        item.ModelIndex = StringConverter.ToUInt16(parts[0]);
+                        item.Markings = StringConverter.ToInt32(parts[1]);
+                        item.PositionX = StringConverter.ToInt32(parts[2]);
+                        item.PositionY = StringConverter.ToInt32(parts[3]);
+                        item.PositionZ = StringConverter.ToInt32(parts[4]);
+                        item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[5]);
+                        item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[6]);
+                    }
+                    else
+                    {
+                        item.ModelIndex = StringConverter.ToUInt16(parts[0]);
+                        item.Markings = 0;
+                        item.PositionX = StringConverter.ToInt32(parts[1]);
+                        item.PositionY = StringConverter.ToInt32(parts[2]);
+                        item.PositionZ = StringConverter.ToInt32(parts[3]);
+                        item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[4]);
+                        item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[5]);
+                    }
                 }
                 catch
                 {

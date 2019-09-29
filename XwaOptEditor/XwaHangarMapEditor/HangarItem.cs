@@ -10,6 +10,8 @@ namespace XwaHangarMapEditor
     {
         public ushort ModelIndex { get; set; }
 
+        public int Markings { get; set; }
+
         public int PositionX { get; set; }
 
         public int PositionY { get; set; }
@@ -43,7 +45,7 @@ namespace XwaHangarMapEditor
 
         public override string ToString()
         {
-            return this.ModelIndex + ", (" + this.PositionX + "," + this.PositionY + "," + this.PositionZString + "), (" + this.HeadingXY + "," + this.HeadingZ + ")";
+            return this.ModelIndex + ", " + this.Markings + ", (" + this.PositionX + "," + this.PositionY + "," + this.PositionZString + "), (" + this.HeadingXY + "," + this.HeadingZ + ")";
         }
     }
 }

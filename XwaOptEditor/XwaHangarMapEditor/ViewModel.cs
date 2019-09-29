@@ -245,6 +245,7 @@ namespace XwaHangarMapEditor
             var model3D = new OptVisual3D();
             model3D.Cache = model.Item2;
             model3D.SortingFrequency = .2;
+            model3D.Version = item.Markings;
 
             double offsetX = item.PositionX;
             double offsetY = item.PositionY;
