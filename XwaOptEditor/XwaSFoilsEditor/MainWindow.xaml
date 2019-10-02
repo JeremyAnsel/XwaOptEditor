@@ -116,11 +116,6 @@
         <DockPanel>
             <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
                 <ToolBar>
-                    <CheckBox x:Name="showSFoils"
-                              IsChecked="True"
-                              ToolTip="Show S-Foils opened">S-Foils</CheckBox>
-                </ToolBar>
-                <ToolBar>
                     <CheckBox x:Name="showPivotAxis"
                               IsChecked="True"
                               ToolTip="Show Pivot Axis">Pivot Axis</CheckBox>
@@ -142,6 +137,10 @@
                               ToolTip="Orthographic or Perspective camera">Orthographic</CheckBox>
                 </ToolBar>
             </ToolBarTray>
+            <DockPanel DockPanel.Dock="Bottom">
+                <TextBlock DockPanel.Dock="Left" Text="S-Foils: " />
+                <Slider x:Name="showSFoils" Minimum="0" Maximum="1" Ticks="0.01" Value="1" />
+            </DockPanel>
             <hx:HelixViewport3D x:Name="viewport3D"
                                 Background="Black"
                                 ClipToBounds="False"
@@ -161,7 +160,7 @@
                             <Binding Path="OptFile" />
                             <Binding Path="OptCache" />
                             <Binding Path="Meshes" />
-                            <Binding Path="IsChecked" ElementName="showSFoils" />
+                            <Binding Path="Value" ElementName="showSFoils" />
                             <Binding Path="IsChecked" ElementName="modelShowSolid" />
                             <Binding Path="IsChecked" ElementName="modelShowWireframe" />
                             <Binding Path="Meshes/Pivot" />
@@ -182,7 +181,7 @@
                             <Binding Path="IsChecked" ElementName="showHitzones" />
                             <Binding Path="SelectedItem" ElementName="meshesList" />
                             <Binding Path="Meshes" />
-                            <Binding Path="IsChecked" ElementName="showSFoils" />
+                            <Binding Path="Value" ElementName="showSFoils" />
                             <Binding Path="Meshes/Pivot" />
                             <Binding Path="Meshes/Look" />
                             <Binding Path="Meshes/Up" />

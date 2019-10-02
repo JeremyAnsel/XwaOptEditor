@@ -46,7 +46,7 @@ namespace XwaSFoilsEditor
             var opt = (OptFile)values[1];
             var cache = (OptCache)values[2];
             var sfoils = (IList<MeshModel>)values[3];
-            bool showSFoilsOpened = (bool)values[4];
+            double showSFoilsOpened = (double)values[4];
             bool showSolid = (bool)values[5];
             bool showWireframe = (bool)values[6];
 
@@ -71,7 +71,7 @@ namespace XwaSFoilsEditor
                 visual.Transform = Transform3D.Identity;
             }
 
-            if (showSFoilsOpened)
+            if (showSFoilsOpened != 0)
             {
                 foreach (var sfoil in sfoils)
                 {
@@ -86,6 +86,7 @@ namespace XwaSFoilsEditor
                     }
 
                     double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
+                    angle *= showSFoilsOpened;
                     var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
                     transform.Freeze();
                     model.Children[sfoil.MeshIndex].Transform = transform;

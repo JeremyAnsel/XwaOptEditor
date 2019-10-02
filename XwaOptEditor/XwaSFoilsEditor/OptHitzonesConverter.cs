@@ -46,7 +46,7 @@ namespace XwaSFoilsEditor
             var opt = (OptFile)values[1];
             var selected = (MeshModel)values[3];
             var sfoils = (IList<MeshModel>)values[4];
-            bool showSFoilsOpened = (bool)values[5];
+            double showSFoilsOpened = (double)values[5];
 
             List<Tuple<Mesh, Vector, Vector>> hitzones = opt.Meshes
                 .Select(t => new Tuple<Mesh, Vector, Vector>(t, t.Descriptor.Center, t.Descriptor.Span.Abs()))
@@ -72,7 +72,7 @@ namespace XwaSFoilsEditor
 
             visuals.ForEach(t => model.Children.Add(t));
 
-            if (showSFoilsOpened)
+            if (showSFoilsOpened != 0)
             {
                 foreach (var sfoil in sfoils)
                 {
@@ -87,6 +87,7 @@ namespace XwaSFoilsEditor
                     }
 
                     double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
+                    angle *= showSFoilsOpened;
                     var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
                     transform.Freeze();
                     model.Children[sfoil.MeshIndex].Transform = transform;
