@@ -136,6 +136,11 @@
                               IsChecked="False"
                               ToolTip="Show Wireframe">Wireframe</CheckBox>
                 </ToolBar>
+                <ToolBar>
+                    <CheckBox x:Name="cameraOrthographic"
+                              IsChecked="False"
+                              ToolTip="Orthographic or Perspective camera">Orthographic</CheckBox>
+                </ToolBar>
             </ToolBarTray>
             <hx:HelixViewport3D x:Name="viewport3D"
                                 Background="Black"
@@ -146,7 +151,8 @@
                                 CameraRotationMode="Trackball"
                                 IsChangeFieldOfViewEnabled="False"
                                 IsMoveEnabled="False"
-                                CameraChanged="viewport3D_CameraChanged">
+                                CameraChanged="viewport3D_CameraChanged"
+                                Orthographic="{Binding IsChecked, ElementName=cameraOrthographic}">
                 <hx:DefaultLights/>
                 <ModelVisual3D x:Name="modelVisual3D">
                     <ModelVisual3D.Content>

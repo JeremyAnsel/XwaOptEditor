@@ -16,6 +16,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -41,8 +42,16 @@ namespace XwaSFoilsEditor
         {
             var viewport = (HelixViewport3D)sender;
 
-            viewport.Camera.NearPlaneDistance = 10;
-            viewport.Camera.FarPlaneDistance = 4000000;
+            if (viewport.Camera is PerspectiveCamera)
+            {
+                viewport.Camera.NearPlaneDistance = 10;
+                viewport.Camera.FarPlaneDistance = 4000000;
+            }
+            else
+            {
+                viewport.Camera.NearPlaneDistance = double.NegativeInfinity;
+                viewport.Camera.FarPlaneDistance = double.PositiveInfinity;
+            }
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
