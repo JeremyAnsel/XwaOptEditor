@@ -40,17 +40,20 @@ namespace XwaSFoilsEditor
 
         private void viewport3D_CameraChanged(object sender, RoutedEventArgs e)
         {
+            const double nearDistance = 10;
+            const double farDistance = 4000000;
+
             var viewport = (HelixViewport3D)sender;
 
             if (viewport.Camera is PerspectiveCamera)
             {
-                viewport.Camera.NearPlaneDistance = 10;
-                viewport.Camera.FarPlaneDistance = 4000000;
+                viewport.Camera.NearPlaneDistance = nearDistance;
+                viewport.Camera.FarPlaneDistance = farDistance;
             }
             else
             {
-                viewport.Camera.NearPlaneDistance = double.NegativeInfinity;
-                viewport.Camera.FarPlaneDistance = double.PositiveInfinity;
+                viewport.Camera.NearPlaneDistance = -farDistance;
+                viewport.Camera.FarPlaneDistance = farDistance;
             }
         }
 

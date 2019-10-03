@@ -62,11 +62,10 @@ namespace XwaSFoilsEditor
                     Size = new Size3D(t.Item3.Y, t.Item3.X, t.Item3.Z)
                 }))
             {
-                visuals.Add(new BoundingBoxVisual3D()
+                visuals.Add(new BoundingBoxWireFrameVisual3D()
                 {
                     BoundingBox = new Rect3D(hitzone.Position, hitzone.Size),
-                    Fill = selected != null && opt.Meshes.IndexOf(hitzone.Mesh) == selected.MeshIndex ? Brushes.Orange : Brushes.YellowGreen,
-                    Diameter = 1
+                    Color = selected != null && opt.Meshes.IndexOf(hitzone.Mesh) == selected.MeshIndex ? Colors.Orange : Colors.YellowGreen
                 });
             }
 
