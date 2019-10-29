@@ -660,6 +660,14 @@
                                                     IsEnabled="{Binding HasItems}"
                                                     Command="{Binding DataContext.DeleteTextureNamesCommand}"
                                                     CommandParameter="{Binding SelectedItems}" />
+                                            <Button Content="Up"
+                                                    IsEnabled="{Binding HasItems}"
+                                                    Command="{Binding DataContext.UpTextureNamesCommand}"
+                                                    CommandParameter="{Binding SelectedIndex}" />
+                                            <Button Content="Down"
+                                                    IsEnabled="{Binding HasItems}"
+                                                    Command="{Binding DataContext.DownTextureNamesCommand}"
+                                                    CommandParameter="{Binding SelectedIndex}" />
                                         </ToolBar>
                                     </ToolBarTray>
                                     <Grid>

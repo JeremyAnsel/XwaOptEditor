@@ -110,6 +110,8 @@ namespace XwaOptEditor.ViewModels
             this.AddTextureNameCommand = new DelegateCommand(this.ExecuteAddTextureNameCommand);
             this.BrowseTextureNameCommand = new DelegateCommand(this.ExecuteBrowseTextureNameCommand);
             this.DeleteTextureNamesCommand = new DelegateCommandOfList<string>(this.ExecuteDeleteTextureNamesCommand);
+            this.UpTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteUpTextureNamesCommand);
+            this.DownTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDownTextureNamesCommand);
 
             this.SelectMeshCommand = new DelegateCommandOf<Tuple<MeshLodFace, Point3D>>(this.ExecuteSelectMeshCommand);
             this.AddMeshToSelectionCommand = new DelegateCommandOf<Tuple<MeshLodFace, Point3D>>(this.ExecuteAddMeshToSelectionCommand);
@@ -193,6 +195,10 @@ namespace XwaOptEditor.ViewModels
         public ICommand BrowseTextureNameCommand { get; private set; }
 
         public ICommand DeleteTextureNamesCommand { get; private set; }
+
+        public ICommand UpTextureNamesCommand { get; private set; }
+
+        public ICommand DownTextureNamesCommand { get; private set; }
 
         public ICommand SelectMeshCommand { get; private set; }
 
@@ -1248,6 +1254,76 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
                 dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
                 dispatcher(() => this.OptModel.UndoStackPush("delete texture names"));
+            });
+        }
+
+        private void ExecuteUpTextureNamesCommand(int textureIndex)
+        {
+            if (this.CurrentFaceGroups.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (textureIndex == -1 || textureIndex == 0)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+                var lod = this.CurrentLods.SelectedItem;
+                var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
+
+                foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
+                {
+                    string textureName = faceGroup.Textures[textureIndex];
+                    faceGroup.Textures.RemoveAt(textureIndex);
+                    faceGroup.Textures.Insert(textureIndex - 1, textureName);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
+                dispatcher(() => this.ModelVersion = textureIndex - 1);
+                dispatcher(() => this.OptModel.UndoStackPush("move up texture name"));
+            });
+        }
+
+        private void ExecuteDownTextureNamesCommand(int textureIndex)
+        {
+            if (this.CurrentFaceGroups.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (textureIndex == -1 || textureIndex == this.CurrentFaceGroups.SelectedItem.Textures.Count - 1)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+                var lod = this.CurrentLods.SelectedItem;
+                var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
+
+                foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
+                {
+                    string textureName = faceGroup.Textures[textureIndex];
+                    faceGroup.Textures.RemoveAt(textureIndex);
+                    faceGroup.Textures.Insert(textureIndex + 1, textureName);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
+                dispatcher(() => this.ModelVersion = textureIndex + 1);
+                dispatcher(() => this.OptModel.UndoStackPush("move down texture name"));
             });
         }
 
