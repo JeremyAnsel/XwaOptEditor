@@ -31,6 +31,7 @@ For %%a in (
 "XwaOptEditor\bin\Release\*.dll"
 "XwaOptEditor\bin\Release\*.exe"
 "XwaOptEditor\bin\Release\*.config"
+"XwaOptEditor\bin\Release\XwaOptEditor.pdb"
 ) do (
 xcopy /s /d "%%~a" dist\
 )

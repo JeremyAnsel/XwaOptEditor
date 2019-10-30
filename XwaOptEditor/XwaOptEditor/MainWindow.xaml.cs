@@ -28,6 +28,10 @@ namespace XwaOptEditor
         {
             InitializeComponent();
 
+#if !DEBUG
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+#endif
+
             this.Loaded += (sender, args) =>
             {
                 Messenger.Instance.Register<BusyIndicatorMessage>(this, this.OnBusyIndicatorMessage);
@@ -51,6 +55,20 @@ namespace XwaOptEditor
         private MainWindowViewModel ViewModel
         {
             get { return (MainWindowViewModel)this.DataContext; }
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+
+            var comException = e.Exception as System.Runtime.InteropServices.COMException;
+            if (comException != null && comException.ErrorCode == -2147221040) // CLIPBRD_E_CANT_OPEN
+            {
+                return;
+            }
+
+            Xceed.Wpf.Toolkit.MessageBox.Show(this, e.Exception.ToString(), "Press Ctrl+C to copy the text", MessageBoxButton.OK, MessageBoxImage.Error);
+            Application.Current.Shutdown();
         }
 
         private void OnBusyIndicatorMessage(BusyIndicatorMessage busy)
