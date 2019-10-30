@@ -109,7 +109,8 @@ namespace XwaOptEditor.ViewModels
 
             this.AddTextureNameCommand = new DelegateCommand(this.ExecuteAddTextureNameCommand);
             this.BrowseTextureNameCommand = new DelegateCommand(this.ExecuteBrowseTextureNameCommand);
-            this.DeleteTextureNamesCommand = new DelegateCommandOfList<string>(this.ExecuteDeleteTextureNamesCommand);
+            this.DeleteTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDeleteTextureNamesCommand);
+            this.ClearTextureNamesCommand = new DelegateCommand(this.ExecuteClearTextureNamesCommand);
             this.UpTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteUpTextureNamesCommand);
             this.DownTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDownTextureNamesCommand);
 
@@ -195,6 +196,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand BrowseTextureNameCommand { get; private set; }
 
         public ICommand DeleteTextureNamesCommand { get; private set; }
+
+        public ICommand ClearTextureNamesCommand { get; private set; }
 
         public ICommand UpTextureNamesCommand { get; private set; }
 
@@ -1227,7 +1230,39 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
-        private void ExecuteDeleteTextureNamesCommand(IList<string> textureNames)
+        private void ExecuteDeleteTextureNamesCommand(int textureIndex)
+        {
+            if (this.CurrentFaceGroups.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (textureIndex == -1)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+                var lod = this.CurrentLods.SelectedItem;
+                var selectedTextures = this.CurrentFaceGroups.SelectedItem.Textures.ToList();
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
+
+                foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
+                {
+                    faceGroup.Textures.RemoveAt(textureIndex);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
+                dispatcher(() => this.OptModel.UndoStackPush("delete texture names"));
+            });
+        }
+
+        private void ExecuteClearTextureNamesCommand()
         {
             if (this.CurrentFaceGroups.SelectedItem == null)
             {
@@ -1243,17 +1278,14 @@ namespace XwaOptEditor.ViewModels
 
                 foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
                 {
-                    foreach (var textureName in textureNames)
-                    {
-                        faceGroup.Textures.Remove(textureName);
-                    }
+                    faceGroup.Textures.Clear();
                 }
 
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.CurrentLods.SetSelection(lod));
                 dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
-                dispatcher(() => this.OptModel.UndoStackPush("delete texture names"));
+                dispatcher(() => this.OptModel.UndoStackPush("clear texture names"));
             });
         }
 
