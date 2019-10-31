@@ -130,6 +130,8 @@
     <Compile Include="Mvvm\RelayCommandBinding.cs" />
     <Compile Include="Mvvm\SelectableCollection.cs" />
     <Compile Include="Mvvm\SelectableItem.cs" />
+    <Compile Include="Mvvm\StringCollection.cs" />
+    <Compile Include="Mvvm\StringWrapper.cs" />
     <Compile Include="RotateFactorDialog.xaml.cs">
       <DependentUpon>RotateFactorDialog.xaml</DependentUpon>
     </Compile>

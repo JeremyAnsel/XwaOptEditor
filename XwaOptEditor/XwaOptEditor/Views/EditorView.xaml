@@ -659,7 +659,7 @@
                                             <Button Content="Delete"
                                                     IsEnabled="{Binding HasItems}"
                                                     Command="{Binding DataContext.DeleteTextureNamesCommand}"
-                                                    CommandParameter="{Binding SelectedIndex}" />
+                                                    CommandParameter="{Binding SelectedItems}" />
                                             <Button Content="Clear"
                                                     IsEnabled="{Binding HasItems}"
                                                     Command="{Binding DataContext.ClearTextureNamesCommand}" />
@@ -687,9 +687,7 @@
                                                       HorizontalAlignment="Stretch" />
                                         <ListView x:Name="LodTextures"
                                                   Grid.Row="0"
-                                                  ItemsSource="{Binding CurrentFaceGroups.SelectedItem.Textures}"
-                                                  IsSynchronizedWithCurrentItem="True"
-                                                  SelectionMode="Single"
+                                                  ItemsSource="{Binding CurrentTextureNames}"
                                                   SelectedIndex="{Binding ModelVersion}"
                                                   HorizontalContentAlignment="Stretch"
                                                   VirtualizingPanel.IsVirtualizing="True"

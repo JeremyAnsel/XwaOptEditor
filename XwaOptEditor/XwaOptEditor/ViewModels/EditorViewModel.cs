@@ -47,6 +47,7 @@ namespace XwaOptEditor.ViewModels
             this.CurrentMeshes = new SelectableCollection<Mesh>();
             this.CurrentLods = new SelectableCollection<MeshLod>();
             this.CurrentFaceGroups = new SelectableCollection<FaceGroup>();
+            this.CurrentTextureNames = new StringCollection();
 
             this.CurrentMeshes.SelectedItemChanged += (sender, e) =>
             {
@@ -69,6 +70,18 @@ namespace XwaOptEditor.ViewModels
                 else
                 {
                     this.CurrentFaceGroups.LoadItems(this.CurrentLods.SelectedItem.FaceGroups);
+                }
+            };
+
+            this.CurrentFaceGroups.SelectedItemChanged += (sender, e) =>
+            {
+                if (this.CurrentFaceGroups.SelectedItem == null)
+                {
+                    this.CurrentTextureNames.LoadItems(null);
+                }
+                else
+                {
+                    this.CurrentTextureNames.LoadItems(this.CurrentFaceGroups.SelectedItem.Textures);
                 }
             };
 
@@ -109,7 +122,7 @@ namespace XwaOptEditor.ViewModels
 
             this.AddTextureNameCommand = new DelegateCommand(this.ExecuteAddTextureNameCommand);
             this.BrowseTextureNameCommand = new DelegateCommand(this.ExecuteBrowseTextureNameCommand);
-            this.DeleteTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDeleteTextureNamesCommand);
+            this.DeleteTextureNamesCommand = new DelegateCommandOfList<StringWrapper>(this.ExecuteDeleteTextureNamesCommand);
             this.ClearTextureNamesCommand = new DelegateCommand(this.ExecuteClearTextureNamesCommand);
             this.UpTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteUpTextureNamesCommand);
             this.DownTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDownTextureNamesCommand);
@@ -226,6 +239,8 @@ namespace XwaOptEditor.ViewModels
         public SelectableCollection<MeshLod> CurrentLods { get; private set; }
 
         public SelectableCollection<FaceGroup> CurrentFaceGroups { get; private set; }
+
+        public StringCollection CurrentTextureNames { get; private set; }
 
         public OptModel OptModel
         {
@@ -1230,17 +1245,22 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
-        private void ExecuteDeleteTextureNamesCommand(int textureIndex)
+        private void ExecuteDeleteTextureNamesCommand(IList<StringWrapper> textureNames)
         {
             if (this.CurrentFaceGroups.SelectedItem == null)
             {
                 return;
             }
 
-            if (textureIndex == -1)
+            if (textureNames == null || textureNames.Count == 0)
             {
                 return;
             }
+
+            IList<int> selectedItemsIndexes = this.CurrentTextureNames
+                .GetSelectedIndexes(textureNames)
+                .Reverse()
+                .ToList();
 
             BusyIndicatorService.Run(dispatcher =>
             {
@@ -1251,7 +1271,10 @@ namespace XwaOptEditor.ViewModels
 
                 foreach (var faceGroup in faceGroups.Where(t => selectedTextures.SequenceEqual(t.Textures)))
                 {
-                    faceGroup.Textures.RemoveAt(textureIndex);
+                    foreach (int textureIndex in selectedItemsIndexes)
+                    {
+                        faceGroup.Textures.RemoveAt(textureIndex);
+                    }
                 }
 
                 dispatcher(() => this.UpdateModel());
