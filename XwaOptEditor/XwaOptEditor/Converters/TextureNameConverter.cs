@@ -19,22 +19,33 @@ namespace XwaOptEditor.Converters
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length < 2 ||
+            if (values.Length < 3 ||
                 values[0] == DependencyProperty.UnsetValue ||
-                values[1] == DependencyProperty.UnsetValue)
+                values[1] == DependencyProperty.UnsetValue ||
+                values[2] == DependencyProperty.UnsetValue)
             {
                 return null;
 
             }
 
-            OptFile optFile = values[1] as OptFile;
+            OptFile optFile = values[2] as OptFile;
 
             if (optFile == null)
             {
                 return null;
             }
 
-            Texture texture = optFile.Textures.ContainsKey((string)values[0]) ? optFile.Textures[(string)values[0]] : null;
+            IList<string> textureNames = (IList<string>)values[0];
+            int modelVersion = (int)values[1];
+
+            if (modelVersion < 0 || modelVersion >= textureNames.Count)
+            {
+                return null;
+            }
+
+            string textureName = textureNames[modelVersion];
+
+            Texture texture = optFile.Textures.ContainsKey(textureName) ? optFile.Textures[textureName] : null;
 
             return TextureHelpers.BuildOptTexture(texture);
         }

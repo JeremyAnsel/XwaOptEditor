@@ -700,7 +700,8 @@
                                                RenderOptions.EdgeMode="Unspecified">
                                             <Image.Source>
                                                 <MultiBinding Converter="{vc:TextureNameConverter}">
-                                                    <Binding Path="CurrentFaceGroups.SelectedItem.Textures/" />
+                                                    <Binding Path="CurrentFaceGroups.SelectedItem.Textures" />
+                                                    <Binding Path="ModelVersion" />
                                                     <Binding Path="OptModel.File" />
                                                 </MultiBinding>
                                             </Image.Source>
