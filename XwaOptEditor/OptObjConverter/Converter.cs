@@ -38,18 +38,33 @@ namespace OptObjConverter
                     DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)
                 };
 
-                texture.Save(Path.Combine(objDirectory, material.DiffuseMapFileName));
+                string filenameBase = Path.Combine(objDirectory, material.DiffuseMapFileName);
+
+                if (!File.Exists(filenameBase))
+                {
+                    texture.Save(filenameBase);
+                }
 
                 if (texture.HasAlpha)
                 {
                     material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name);
 
-                    texture.SaveAlphaMap(Path.Combine(objDirectory, material.AlphaMapFileName));
+                    string filenameAlpha = Path.Combine(objDirectory, material.AlphaMapFileName);
+
+                    if (!File.Exists(filenameAlpha))
+                    {
+                        texture.SaveAlphaMap(filenameAlpha);
+                    }
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name)));
+                    string filenameIllum = Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name));
+
+                    if (!File.Exists(filenameIllum))
+                    {
+                        texture.SaveIllumMap(filenameIllum);
+                    }
                 }
 
                 objMaterials.Add(material.Name, material);

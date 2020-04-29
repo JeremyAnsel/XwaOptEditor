@@ -196,18 +196,35 @@ namespace OptRhinoConverter
                             }
                             else
                             {
-                                texture.Save(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + ".png"));
+                                string filenameBase = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + ".png");
+
+                                if (!File.Exists(filenameBase))
+                                {
+                                    texture.Save(filenameBase);
+                                }
+
                                 material.SetBitmapTexture(rhinoName + "_" + textureName + ".png");
 
                                 if (texture.HasAlpha)
                                 {
-                                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_alpha.png"));
+                                    string filenameAlpha = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_alpha.png");
+
+                                    if (!File.Exists(filenameAlpha))
+                                    {
+                                        texture.SaveAlphaMap(filenameAlpha);
+                                    }
+
                                     material.SetTransparencyTexture(rhinoName + "_" + textureName + "_alpha.png");
                                 }
 
                                 if (texture.IsIlluminated)
                                 {
-                                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_illum.png"));
+                                    string filenameIllum = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_illum.png");
+
+                                    if (!File.Exists(filenameIllum))
+                                    {
+                                        texture.SaveIllumMap(filenameIllum);
+                                    }
                                 }
                             }
 

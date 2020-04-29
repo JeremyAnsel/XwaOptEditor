@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using JeremyAnsel.Media.An8;
 using JeremyAnsel.Xwa.Opt;
+using System.Threading.Tasks;
 
 namespace OptAn8Converter
 {
@@ -31,11 +32,31 @@ namespace OptAn8Converter
 
             foreach (var texture in opt.Textures.Values)
             {
-                texture.Save(Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, ".png")));
+                string filenameBase = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, ".png"));
+
+                if (!File.Exists(filenameBase))
+                {
+                    texture.Save(filenameBase);
+                }
+
+                if (texture.HasAlpha)
+                {
+                    string filenameAlpha = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_alpha.png"));
+
+                    if (!File.Exists(filenameAlpha))
+                    {
+                        texture.SaveAlphaMap(filenameAlpha);
+                    }
+                }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_illum.png")));
+                    string filenameIllum = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_illum.png"));
+
+                    if (!File.Exists(filenameIllum))
+                    {
+                        texture.SaveIllumMap(filenameIllum);
+                    }
                 }
             }
 
