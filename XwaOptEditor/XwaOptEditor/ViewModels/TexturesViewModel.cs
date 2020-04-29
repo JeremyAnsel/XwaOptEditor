@@ -22,8 +22,10 @@ namespace XwaOptEditor.ViewModels
             this.SaveAsCommand = new DelegateCommandOf<Texture>(this.ExecuteSaveAsCommand);
             this.SaveAsColorCommand = new DelegateCommandOf<Texture>(this.ExecuteSaveAsColorCommand);
             this.SaveAsAlphaCommand = new DelegateCommandOf<Texture>(this.ExecuteSaveAsAlphaCommand);
+            this.SaveAsIllumCommand = new DelegateCommandOf<Texture>(this.ExecuteSaveAsIllumCommand);
             this.ReplaceMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceMapCommand);
             this.ReplaceAlphaMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceAlphaMapCommand);
+            this.ReplaceIllumMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceIllumMapCommand);
 
             this.GenerateAllMipmapsCommand = new DelegateCommand(this.ExecuteGenerateAllMipmapsCommand);
             this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
@@ -55,9 +57,13 @@ namespace XwaOptEditor.ViewModels
 
         public ICommand SaveAsAlphaCommand { get; private set; }
 
+        public ICommand SaveAsIllumCommand { get; private set; }
+
         public ICommand ReplaceMapCommand { get; private set; }
 
         public ICommand ReplaceAlphaMapCommand { get; private set; }
+
+        public ICommand ReplaceIllumMapCommand { get; private set; }
 
         public ICommand GenerateAllMipmapsCommand { get; private set; }
 
@@ -163,6 +169,41 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
+        private void ExecuteSaveAsIllumCommand(Texture texture)
+        {
+            if (texture == null)
+            {
+                return;
+            }
+
+            if (!texture.IsIlluminated)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string name = texture.Name + "_illum";
+                string fileName = FileDialogService.GetSaveTextureFileName(name);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                try
+                {
+                    texture.SaveIllumMap(fileName);
+
+                    dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileName(fileName)));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(name, ex));
+                }
+            });
+        }
+
         private void ExecuteReplaceMapCommand(Texture texture)
         {
             if (texture == null)
@@ -229,6 +270,51 @@ namespace XwaOptEditor.ViewModels
 
                     texture.RemoveMipmaps();
                     texture.SetAlphaMap(fileName);
+
+                    if (mipmapsCount > 1)
+                    {
+                        texture.GenerateMipmaps();
+
+                        if (bpp == 8)
+                        {
+                            texture.Convert32To8();
+                        }
+                    }
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(name, ex));
+                }
+            });
+        }
+
+        private void ExecuteReplaceIllumMapCommand(Texture texture)
+        {
+            if (texture == null)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string name = texture.Name + "_illum";
+                string fileName = FileDialogService.GetOpenTextureFileName(name);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                try
+                {
+                    int bpp = texture.BitsPerPixel;
+                    int mipmapsCount = texture.MipmapsCount;
+
+                    texture.RemoveMipmaps();
+                    texture.SetIllumMap(fileName);
 
                     if (mipmapsCount > 1)
                     {

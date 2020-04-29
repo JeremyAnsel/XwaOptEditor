@@ -32,6 +32,10 @@
                             Content="Alpha Map"
                             Command="{Binding DataContext.SaveAsAlphaCommand}"
                             CommandParameter="{Binding SelectedItem.Value}" />
+                    <Button IsEnabled="{Binding SelectedItem.Value.IsIlluminated}"
+                            Content="Illum Map"
+                            Command="{Binding DataContext.SaveAsIllumCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
                 </ToolBar>
                 <ToolBar Band="1"
                          BandIndex="0"
@@ -42,6 +46,9 @@
                             CommandParameter="{Binding SelectedItem.Value}" />
                     <Button Content="Alpha Map"
                             Command="{Binding DataContext.ReplaceAlphaMapCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                    <Button Content="Illum Map"
+                            Command="{Binding DataContext.ReplaceIllumMapCommand}"
                             CommandParameter="{Binding SelectedItem.Value}" />
                 </ToolBar>
                 <ToolBar Band="2"
@@ -89,6 +96,10 @@
                                       Header="Alpha Map"
                                       Command="{Binding DataContext.SaveAsAlphaCommand}"
                                       CommandParameter="{Binding SelectedItem.Value}" />
+                            <MenuItem IsEnabled="{Binding SelectedItem.Value.IsIlluminated}"
+                                      Header="Illum Map"
+                                      Command="{Binding DataContext.SaveAsIllumCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
                         </MenuItem>
                         <MenuItem IsEnabled="{Binding HasItems}"
                                   Header="Replace With...">
@@ -97,6 +108,9 @@
                                       CommandParameter="{Binding SelectedItem.Value}" />
                             <MenuItem Header="Alpha Map"
                                       Command="{Binding DataContext.ReplaceAlphaMapCommand}"
+                                      CommandParameter="{Binding SelectedItem.Value}" />
+                            <MenuItem Header="Illum Map"
+                                      Command="{Binding DataContext.ReplaceIllumMapCommand}"
                                       CommandParameter="{Binding SelectedItem.Value}" />
                         </MenuItem>
                     </ContextMenu>
