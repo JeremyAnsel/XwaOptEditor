@@ -206,9 +206,9 @@ namespace JeremyAnsel.Xwa.WpfOpt
                             MeshGeometry3D geometry = new MeshGeometry3D();
                             int index = 0;
 
-                            Index positionsIndex = face.VerticesIndex;
-                            Index normalsIndex = face.VertexNormalsIndex;
-                            Index textureCoordinatesIndex = face.TextureCoordinatesIndex;
+                            Indices positionsIndex = face.VerticesIndex;
+                            Indices normalsIndex = face.VertexNormalsIndex;
+                            Indices textureCoordinatesIndex = face.TextureCoordinatesIndex;
 
                             geometry.Positions.Add(positions.ElementAtOrDefault(positionsIndex.A));
                             geometry.Normals.Add(normals.ElementAtOrDefault(normalsIndex.A));
@@ -306,7 +306,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                             {
                                 var face = faceGroup.Faces[faceIndex];
 
-                                Index positionsIndex = face.VerticesIndex;
+                                Indices positionsIndex = face.VerticesIndex;
 
                                 addLine(positionsIndex.A, positionsIndex.B);
                                 addLine(positionsIndex.B, positionsIndex.C);

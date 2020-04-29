@@ -29,6 +29,13 @@ namespace XwaOptEditor.Views
             InitializeComponent();
         }
 
+        private void zommbox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var zoombox = (Xceed.Wpf.Toolkit.Zoombox.Zoombox)sender;
+            zoombox.FitToBounds();
+            zoombox.SetValue(Xceed.Wpf.Toolkit.Zoombox.Zoombox.ViewFinderVisibilityProperty, Visibility.Visible);
+        }
+
         private TexturesViewModel ViewModel
         {
             get { return (TexturesViewModel)this.DataContext; }
@@ -95,9 +102,14 @@ namespace XwaOptEditor.Views
                 return;
             }
 
+            if (this.textureIlluminationColorKey.SelectedColor == null)
+            {
+                return;
+            }
+
             var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
 
-            var color = this.textureIlluminationColorKey.SelectedColor;
+            Color color = this.textureIlluminationColorKey.SelectedColor.Value;
             byte tolerance = 0;
             byte.TryParse(this.textureIlluminationTolerance.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out tolerance);
             this.textureIlluminationTolerance.Text = tolerance.ToString(CultureInfo.InvariantCulture);
@@ -118,10 +130,15 @@ namespace XwaOptEditor.Views
                 return;
             }
 
+            if (this.textureIlluminationColorKey0.SelectedColor == null || this.textureIlluminationColorKey1.SelectedColor == null)
+            {
+                return;
+            }
+
             var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
 
-            var color0 = this.textureIlluminationColorKey0.SelectedColor;
-            var color1 = this.textureIlluminationColorKey1.SelectedColor;
+            Color color0 = this.textureIlluminationColorKey0.SelectedColor.Value;
+            Color color1 = this.textureIlluminationColorKey1.SelectedColor.Value;
 
             texture.MakeColorIlluminated(color0.R, color0.G, color0.B, color1.R, color1.G, color1.B);
 

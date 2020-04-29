@@ -32,10 +32,11 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Properties\sgKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,9 +52,6 @@
     <Compile Include="XwaHooksConfig.cs" />
     <Compile Include="XwaIniFile.cs" />
     <Compile Include="XwaIniSection.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\sgKey.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

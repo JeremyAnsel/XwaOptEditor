@@ -244,7 +244,7 @@ namespace OptObjConverter
 
                     foreach (var face in faceGroup.Faces)
                     {
-                        Index verticesIndex = new Index(
+                        Indices verticesIndex = new Indices(
                                 face.VerticesIndex.A,
                                 face.VerticesIndex.B,
                                 face.VerticesIndex.C,
@@ -270,7 +270,7 @@ namespace OptObjConverter
                             verticesIndex.D = 0;
                         }
 
-                        Index textureCoordinatesIndex = new Index(
+                        Indices textureCoordinatesIndex = new Indices(
                                 face.VertexTexCoordsIndex.A,
                                 face.VertexTexCoordsIndex.B,
                                 face.VertexTexCoordsIndex.C,
@@ -296,7 +296,7 @@ namespace OptObjConverter
                             textureCoordinatesIndex.D = 0;
                         }
 
-                        Index vertexNormalsIndex = new Index(
+                        Indices vertexNormalsIndex = new Indices(
                                 face.VertexNormalsIndex.A,
                                 face.VertexNormalsIndex.B,
                                 face.VertexNormalsIndex.C,

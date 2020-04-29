@@ -313,7 +313,7 @@ namespace OptAn8Converter
                         optFaceGroup.Textures.Add(materialName);
                     }
 
-                    Index verticesIndex = new Index(
+                    Indices verticesIndex = new Indices(
                         face.PointIndexes[0],
                         face.PointIndexes[1],
                         face.PointIndexes[2],
@@ -339,7 +339,7 @@ namespace OptAn8Converter
                         verticesIndex.D = 0;
                     }
 
-                    Index textureCoordinatesIndex = new Index(
+                    Indices textureCoordinatesIndex = new Indices(
                         face.TexCoordIndexes[0],
                         face.TexCoordIndexes[1],
                         face.TexCoordIndexes[2],
@@ -365,7 +365,7 @@ namespace OptAn8Converter
                         textureCoordinatesIndex.D = 0;
                     }
 
-                    Index vertexNormalsIndex = new Index(
+                    Indices vertexNormalsIndex = new Indices(
                         face.NormalIndexes[0],
                         face.NormalIndexes[1],
                         face.NormalIndexes[2],

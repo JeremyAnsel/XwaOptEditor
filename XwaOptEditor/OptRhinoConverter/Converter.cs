@@ -276,9 +276,9 @@ namespace OptRhinoConverter
                                 var face = new Face();
                                 faceGroup.Faces.Add(face);
 
-                                Index index = geoFace.IsTriangle ?
-                                    new Index(baseIndex + geoFace.C, baseIndex + geoFace.B, baseIndex + geoFace.A) :
-                                    new Index(baseIndex + geoFace.D, baseIndex + geoFace.C, baseIndex + geoFace.B, baseIndex + geoFace.A);
+                                Indices index = geoFace.IsTriangle ?
+                                    new Indices(baseIndex + geoFace.C, baseIndex + geoFace.B, baseIndex + geoFace.A) :
+                                    new Indices(baseIndex + geoFace.D, baseIndex + geoFace.C, baseIndex + geoFace.B, baseIndex + geoFace.A);
 
                                 face.VerticesIndex = index;
                                 face.VertexNormalsIndex = index;

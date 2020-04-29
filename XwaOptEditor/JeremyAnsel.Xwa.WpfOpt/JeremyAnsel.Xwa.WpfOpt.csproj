@@ -34,26 +34,27 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Properties\sgKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HelixToolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
-      <HintPath>..\packages\HelixToolkit.2.9.0\lib\netstandard1.1\HelixToolkit.dll</HintPath>
+    <Reference Include="HelixToolkit, Version=2.11.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.2.11.0\lib\netstandard1.1\HelixToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HelixToolkit.Wpf, Version=2.9.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
-      <HintPath>..\packages\HelixToolkit.Wpf.2.9.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
+    <Reference Include="HelixToolkit.Wpf, Version=2.11.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.Wpf.2.11.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.ColorQuant, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a5c614433db515df, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.ColorQuant.1.0.55\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
+    <Reference Include="JeremyAnsel.ColorQuant, Version=2.0.63.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.63\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.Xwa.Opt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1395c88a83619f2f, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.27\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.28\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -68,6 +69,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MeshLodFace.cs" />
     <Compile Include="OptCache.cs" />
     <Compile Include="OptVisual3D.cs" />
@@ -75,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\sgKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">

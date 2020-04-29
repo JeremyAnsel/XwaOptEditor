@@ -140,10 +140,7 @@
                                       ViewStackMode="Manual"
                                       HorizontalContentAlignment="Left"
                                       VerticalContentAlignment="Top"
-                                      xctk:Zoombox.ViewFinderVisibility="Visible">
-                            <xctk:Zoombox.ViewStack>
-                                <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
-                            </xctk:Zoombox.ViewStack>
+                                      Loaded="zommbox_Loaded">
                             <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=0}"
                                    Stretch="None"
                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -164,10 +161,7 @@
                                       ViewStackMode="Manual"
                                       HorizontalContentAlignment="Left"
                                       VerticalContentAlignment="Top"
-                                      xctk:Zoombox.ViewFinderVisibility="Visible">
-                            <xctk:Zoombox.ViewStack>
-                                <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
-                            </xctk:Zoombox.ViewStack>
+                                      Loaded="zommbox_Loaded">
                             <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=1}"
                                    Stretch="None"
                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -183,10 +177,7 @@
                               ViewStackMode="Manual"
                               HorizontalContentAlignment="Left"
                               VerticalContentAlignment="Top"
-                              xctk:Zoombox.ViewFinderVisibility="Visible">
-                    <xctk:Zoombox.ViewStack>
-                        <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
-                    </xctk:Zoombox.ViewStack>
+                              Loaded="zommbox_Loaded">
                     <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=0}"
                            Stretch="None"
                            RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -201,10 +192,7 @@
                               ViewStackMode="Manual"
                               HorizontalContentAlignment="Left"
                               VerticalContentAlignment="Top"
-                              xctk:Zoombox.ViewFinderVisibility="Visible">
-                    <xctk:Zoombox.ViewStack>
-                        <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
-                    </xctk:Zoombox.ViewStack>
+                              Loaded="zommbox_Loaded">
                     <Image Source="{Binding OptModel.File.Textures/Value, Converter={vc:TextureConverter}, ConverterParameter=1}"
                            Stretch="None"
                            RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -282,15 +270,12 @@
                         </ToolBar>
                     </ToolBarTray>
                     <xctk:Zoombox ClipToBounds="True"
-                              KeepContentInBounds="True"
-                              Background="Black"
-                              ViewStackMode="Manual"
-                              HorizontalContentAlignment="Left"
-                              VerticalContentAlignment="Top"
-                              xctk:Zoombox.ViewFinderVisibility="Visible">
-                        <xctk:Zoombox.ViewStack>
-                            <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
-                        </xctk:Zoombox.ViewStack>
+                                  KeepContentInBounds="True"
+                                  Background="Black"
+                                  ViewStackMode="Manual"
+                                  HorizontalContentAlignment="Left"
+                                  VerticalContentAlignment="Top"
+                                  Loaded="zommbox_Loaded">
                         <Image MouseDown="ImageIllumination_MouseDown"
                                Stretch="None"
                                RenderOptions.BitmapScalingMode="NearestNeighbor"

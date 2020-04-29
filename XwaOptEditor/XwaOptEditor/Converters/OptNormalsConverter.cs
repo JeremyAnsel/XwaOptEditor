@@ -80,8 +80,8 @@ namespace XwaOptEditor.Converters
                         {
                             foreach (var face in faceGroup.Faces)
                             {
-                                Index verticesIndex = face.VerticesIndex;
-                                Index vertexNormalsIndex = face.VertexNormalsIndex;
+                                Indices verticesIndex = face.VerticesIndex;
+                                Indices vertexNormalsIndex = face.VertexNormalsIndex;
 
                                 normals.Add(Tuple.Create(mesh.Vertices[verticesIndex.A], mesh.VertexNormals[vertexNormalsIndex.A]));
                                 normals.Add(Tuple.Create(mesh.Vertices[verticesIndex.B], mesh.VertexNormals[vertexNormalsIndex.B]));

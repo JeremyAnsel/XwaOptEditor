@@ -37,18 +37,19 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Properties\sgKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JeremyAnsel.ColorQuant, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a5c614433db515df, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.ColorQuant.1.0.55\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
+    <Reference Include="JeremyAnsel.ColorQuant, Version=2.0.63.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.63\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.Xwa.Opt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1395c88a83619f2f, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.1.0.27\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.28\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -107,7 +108,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Properties\sgKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
