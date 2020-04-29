@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using JeremyAnsel.Xwa.Opt;
 using WavefrontObj;
+using System.Collections.Generic;
 
 namespace OptObjConverter
 {
@@ -63,8 +64,22 @@ namespace OptObjConverter
                 .OrderByDescending(t => t)
                 .ToArray();
 
+            int versions = opt.MaxTextureVersion;
+
+            var items = new List<Tuple<int, int>>();
             for (int distance = 0; distance < distances.Length; distance++)
             {
+                for (int version = 0; version < versions; version++)
+                {
+                    items.Add(Tuple.Create(distance, version));
+                }
+            }
+
+            foreach (var item in items)
+            {
+                int distance = item.Item1;
+                int version = item.Item2;
+
                 var obj = new ObjFile();
 
                 int objectsIndex = 0;
@@ -116,7 +131,14 @@ namespace OptObjConverter
 
                         if (faceGroup.Textures.Count > 0)
                         {
-                            objFaceGroup.MaterialName = objName + "_" + faceGroup.Textures[0];
+                            int currentVersion = version;
+
+                            if (version < 0 || version >= faceGroup.Textures.Count)
+                            {
+                                currentVersion = faceGroup.Textures.Count - 1;
+                            }
+
+                            objFaceGroup.MaterialName = objName + "_" + faceGroup.Textures[currentVersion];
                         }
 
                         objMesh.FaceGroups.Add(objFaceGroup);
@@ -176,7 +198,7 @@ namespace OptObjConverter
                     verticesNormalIndex += mesh.VertexNormals.Count;
                 }
 
-                obj.Save(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.obj", objName, distance)), objName);
+                obj.Save(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_{2}.obj", objName, distance, version)), objName);
             }
         }
 

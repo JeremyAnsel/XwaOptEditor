@@ -15,6 +15,7 @@ namespace OptRhinoConverter
             Converter.OptToRhino(opt, rhinoPath, true);
         }
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed")]
         public static void OptToRhino(OptFile opt, string rhinoPath, bool scale)
@@ -34,8 +35,22 @@ namespace OptRhinoConverter
                 .OrderByDescending(t => t)
                 .ToArray();
 
+            int versions = opt.MaxTextureVersion;
+
+            var items = new List<Tuple<int, int>>();
             for (int distance = 0; distance < distances.Length; distance++)
             {
+                for (int version = 0; version < versions; version++)
+                {
+                    items.Add(Tuple.Create(distance, version));
+                }
+            }
+
+            foreach (var item in items)
+            {
+                int distance = item.Item1;
+                int version = item.Item2;
+
                 using (var file = new Rhino.FileIO.File3dm())
                 {
                     file.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
@@ -54,7 +69,17 @@ namespace OptRhinoConverter
 
                         foreach (var textureName in lod.FaceGroups
                             .Where(t => t.Textures.Count > 0)
-                            .Select(t => t.Textures[0]))
+                            .Select(faceGroup =>
+                            {
+                                int currentVersion = version;
+
+                                if (version < 0 || version >= faceGroup.Textures.Count)
+                                {
+                                    currentVersion = faceGroup.Textures.Count - 1;
+                                }
+
+                                return faceGroup.Textures[currentVersion];
+                            }))
                         {
                             if (!textureNames.Contains(textureName))
                             {
@@ -81,7 +106,14 @@ namespace OptRhinoConverter
 
                                 if (faceGroup.Textures.Count > 0)
                                 {
-                                    rhinoAttributes.MaterialIndex = textureNames.IndexOf(faceGroup.Textures[0]);
+                                    int currentVersion = version;
+
+                                    if (version < 0 || version >= faceGroup.Textures.Count)
+                                    {
+                                        currentVersion = faceGroup.Textures.Count - 1;
+                                    }
+
+                                    rhinoAttributes.MaterialIndex = textureNames.IndexOf(faceGroup.Textures[currentVersion]);
                                 }
 
                                 Action<Vector> addVertex;
@@ -183,7 +215,7 @@ namespace OptRhinoConverter
                         }
                     }
 
-                    file.Write(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.3dm", rhinoName, distance)), 4);
+                    file.Write(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_{2}.3dm", rhinoName, distance, version)), 4);
                 }
             }
         }

@@ -46,8 +46,22 @@ namespace OptAn8Converter
                 .OrderByDescending(t => t)
                 .ToArray();
 
+            int versions = opt.MaxTextureVersion;
+
+            var items = new List<Tuple<int, int>>();
             for (int distance = 0; distance < distances.Length; distance++)
             {
+                for (int version = 0; version < versions; version++)
+                {
+                    items.Add(Tuple.Create(distance, version));
+                }
+            }
+
+            foreach (var item in items)
+            {
+                int distance = item.Item1;
+                int version = item.Item2;
+
                 var an8 = new An8File();
 
                 foreach (var texture in opt.Textures.Values)
@@ -156,7 +170,14 @@ namespace OptAn8Converter
 
                         if (faceGroup.Textures.Count > 0)
                         {
-                            materialIndex = an8Mesh.MaterialList.IndexOf(an8Name + "_" + faceGroup.Textures[0]);
+                            int currentVersion = version;
+
+                            if (version < 0 || version >= faceGroup.Textures.Count)
+                            {
+                                currentVersion = faceGroup.Textures.Count - 1;
+                            }
+
+                            materialIndex = an8Mesh.MaterialList.IndexOf(an8Name + "_" + faceGroup.Textures[currentVersion]);
                         }
 
                         foreach (var face in faceGroup.Faces)
@@ -234,7 +255,7 @@ namespace OptAn8Converter
                     verticesNormalIndex += mesh.VertexNormals.Count;
                 }
 
-                an8.Save(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.an8", an8Name, distance)));
+                an8.Save(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_{2}.an8", an8Name, distance, version)));
             }
         }
 
