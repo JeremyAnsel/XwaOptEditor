@@ -40,13 +40,13 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"
+            <ColumnDefinition Width="6*"
                               MinWidth="50" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="12*"
+            <ColumnDefinition Width="11*"
                               MinWidth="50" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="10*"
+            <ColumnDefinition Width="9*"
                               MinWidth="50" />
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1"
@@ -109,7 +109,8 @@
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                 </ToolBar>
             </ToolBarTray>
-            <ListView ItemsSource="{Binding CurrentMeshes}"
+            <ListView x:Name="meshesListView"
+                      ItemsSource="{Binding CurrentMeshes}"
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListView.ItemContainerStyle>
@@ -153,6 +154,22 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Header="#"
+                                        Width="25">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <Binding>
+                                                <Binding.Converter>
+                                                    <vc:ItemIndexConverter DataContext="{Binding Source={x:Reference meshesListView}, Path=ItemsSource}" />
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Mesh Type"
                                         Width="100"
                                         DisplayMemberBinding="{Binding Value.Descriptor.MeshType}" />
