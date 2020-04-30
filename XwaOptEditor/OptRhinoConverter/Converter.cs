@@ -12,13 +12,23 @@ namespace OptRhinoConverter
     {
         public static void OptToRhino(OptFile opt, string rhinoPath)
         {
-            Converter.OptToRhino(opt, rhinoPath, true);
+            Converter.OptToRhino(opt, rhinoPath, true, null);
+        }
+
+        public static void OptToRhino(OptFile opt, string rhinoPath, Action<string> notify)
+        {
+            Converter.OptToRhino(opt, rhinoPath, true, notify);
+        }
+
+        public static void OptToRhino(OptFile opt, string rhinoPath, bool scale)
+        {
+            Converter.OptToRhino(opt, rhinoPath, scale, null);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed")]
-        public static void OptToRhino(OptFile opt, string rhinoPath, bool scale)
+        public static void OptToRhino(OptFile opt, string rhinoPath, bool scale, Action<string> notify)
         {
             if (opt == null)
             {
@@ -27,6 +37,26 @@ namespace OptRhinoConverter
 
             string rhinoDirectory = Path.GetDirectoryName(rhinoPath);
             string rhinoName = Path.GetFileNameWithoutExtension(rhinoPath);
+
+            if (notify != null)
+            {
+                notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}.3dm...", rhinoName));
+            }
+
+            foreach (var texture in opt.Textures.Values)
+            {
+                texture.Save(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", rhinoName, texture.Name)));
+
+                if (texture.HasAlpha)
+                {
+                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", rhinoName, texture.Name)));
+                }
+
+                if (texture.IsIlluminated)
+                {
+                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", rhinoName, texture.Name)));
+                }
+            }
 
             var distances = opt.Meshes
                 .SelectMany(t => t.Lods)
@@ -51,6 +81,11 @@ namespace OptRhinoConverter
                 int distance = item.Item1;
                 int version = item.Item2;
 
+                if (notify != null)
+                {
+                    notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}_{1}_{2}.3dm...", rhinoName, distance, version));
+                }
+
                 using (var file = new Rhino.FileIO.File3dm())
                 {
                     file.Settings.ModelUnitSystem = Rhino.UnitSystem.Meters;
@@ -67,24 +102,11 @@ namespace OptRhinoConverter
                             continue;
                         }
 
-                        foreach (var textureName in lod.FaceGroups
-                            .Where(t => t.Textures.Count > 0)
-                            .Select(faceGroup =>
-                            {
-                                int currentVersion = version;
-
-                                if (version < 0 || version >= faceGroup.Textures.Count)
-                                {
-                                    currentVersion = faceGroup.Textures.Count - 1;
-                                }
-
-                                return faceGroup.Textures[currentVersion];
-                            }))
+                        foreach (var texture in lod.FaceGroups
+                            .SelectMany(t => t.Textures)
+                            .Distinct())
                         {
-                            if (!textureNames.Contains(textureName))
-                            {
-                                textureNames.Add(textureName);
-                            }
+                            textureNames.Add(texture);
                         }
 
                         string meshName = string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}", mesh.Descriptor.MeshType, objectsIndex);
@@ -196,35 +218,15 @@ namespace OptRhinoConverter
                             }
                             else
                             {
-                                string filenameBase = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + ".png");
-
-                                if (!File.Exists(filenameBase))
-                                {
-                                    texture.Save(filenameBase);
-                                }
-
                                 material.SetBitmapTexture(rhinoName + "_" + textureName + ".png");
 
                                 if (texture.HasAlpha)
                                 {
-                                    string filenameAlpha = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_alpha.png");
-
-                                    if (!File.Exists(filenameAlpha))
-                                    {
-                                        texture.SaveAlphaMap(filenameAlpha);
-                                    }
-
                                     material.SetTransparencyTexture(rhinoName + "_" + textureName + "_alpha.png");
                                 }
 
                                 if (texture.IsIlluminated)
                                 {
-                                    string filenameIllum = Path.Combine(rhinoDirectory, rhinoName + "_" + textureName + "_illum.png");
-
-                                    if (!File.Exists(filenameIllum))
-                                    {
-                                        texture.SaveIllumMap(filenameIllum);
-                                    }
                                 }
                             }
 

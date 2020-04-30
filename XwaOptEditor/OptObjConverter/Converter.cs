@@ -13,12 +13,23 @@ namespace OptObjConverter
     {
         public static void OptToObj(OptFile opt, string objPath)
         {
-            Converter.OptToObj(opt, objPath, true);
+            Converter.OptToObj(opt, objPath, true, null);
         }
 
+        public static void OptToObj(OptFile opt, string objPath, Action<string> notify)
+        {
+            Converter.OptToObj(opt, objPath, true, notify);
+        }
+
+        public static void OptToObj(OptFile opt, string objPath, bool scale)
+        {
+            Converter.OptToObj(opt, objPath, scale, null);
+        }
+
+        [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public static void OptToObj(OptFile opt, string objPath, bool scale)
+        public static void OptToObj(OptFile opt, string objPath, bool scale, Action<string> notify)
         {
             if (opt == null)
             {
@@ -27,6 +38,26 @@ namespace OptObjConverter
 
             string objDirectory = Path.GetDirectoryName(objPath);
             string objName = Path.GetFileNameWithoutExtension(objPath);
+
+            if (notify != null)
+            {
+                notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}.obj...", objName));
+            }
+
+            foreach (var texture in opt.Textures.Values)
+            {
+                texture.Save(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)));
+
+                if (texture.HasAlpha)
+                {
+                    texture.SaveAlphaMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name)));
+                }
+
+                if (texture.IsIlluminated)
+                {
+                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name)));
+                }
+            }
 
             var objMaterials = new ObjMaterialDictionary();
 
@@ -38,33 +69,13 @@ namespace OptObjConverter
                     DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)
                 };
 
-                string filenameBase = Path.Combine(objDirectory, material.DiffuseMapFileName);
-
-                if (!File.Exists(filenameBase))
-                {
-                    texture.Save(filenameBase);
-                }
-
                 if (texture.HasAlpha)
                 {
                     material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name);
-
-                    string filenameAlpha = Path.Combine(objDirectory, material.AlphaMapFileName);
-
-                    if (!File.Exists(filenameAlpha))
-                    {
-                        texture.SaveAlphaMap(filenameAlpha);
-                    }
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    string filenameIllum = Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name));
-
-                    if (!File.Exists(filenameIllum))
-                    {
-                        texture.SaveIllumMap(filenameIllum);
-                    }
                 }
 
                 objMaterials.Add(material.Name, material);
@@ -94,6 +105,11 @@ namespace OptObjConverter
             {
                 int distance = item.Item1;
                 int version = item.Item2;
+
+                if (notify != null)
+                {
+                    notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}_{1}_{2}.obj...", objName, distance, version));
+                }
 
                 var obj = new ObjFile();
 

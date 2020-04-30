@@ -14,13 +14,23 @@ namespace OptAn8Converter
     {
         public static void OptToAn8(OptFile opt, string an8Path)
         {
-            Converter.OptToAn8(opt, an8Path, true);
+            Converter.OptToAn8(opt, an8Path, true, null);
+        }
+
+        public static void OptToAn8(OptFile opt, string an8Path, Action<string> notify)
+        {
+            Converter.OptToAn8(opt, an8Path, true, notify);
+        }
+
+        public static void OptToAn8(OptFile opt, string an8Path, bool scale)
+        {
+            Converter.OptToAn8(opt, an8Path, scale, null);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public static void OptToAn8(OptFile opt, string an8Path, bool scale)
+        public static void OptToAn8(OptFile opt, string an8Path, bool scale, Action<string> notify)
         {
             if (opt == null)
             {
@@ -30,33 +40,23 @@ namespace OptAn8Converter
             string an8Directory = Path.GetDirectoryName(an8Path);
             string an8Name = Path.GetFileNameWithoutExtension(an8Path);
 
+            if (notify != null)
+            {
+                notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}.an8...", an8Name));
+            }
+
             foreach (var texture in opt.Textures.Values)
             {
-                string filenameBase = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, ".png"));
-
-                if (!File.Exists(filenameBase))
-                {
-                    texture.Save(filenameBase);
-                }
+                texture.Save(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", an8Name, texture.Name)));
 
                 if (texture.HasAlpha)
                 {
-                    string filenameAlpha = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_alpha.png"));
-
-                    if (!File.Exists(filenameAlpha))
-                    {
-                        texture.SaveAlphaMap(filenameAlpha);
-                    }
+                    texture.SaveAlphaMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", an8Name, texture.Name)));
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    string filenameIllum = Path.Combine(an8Directory, string.Concat(an8Name, "_", texture.Name, "_illum.png"));
-
-                    if (!File.Exists(filenameIllum))
-                    {
-                        texture.SaveIllumMap(filenameIllum);
-                    }
+                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", an8Name, texture.Name)));
                 }
             }
 
@@ -82,6 +82,11 @@ namespace OptAn8Converter
             {
                 int distance = item.Item1;
                 int version = item.Item2;
+
+                if (notify != null)
+                {
+                    notify(string.Format(CultureInfo.InvariantCulture, "Exporting {0}_{1}_{2}.an8...", an8Name, distance, version));
+                }
 
                 var an8 = new An8File();
 
@@ -128,8 +133,7 @@ namespace OptAn8Converter
                     an8Object.Components.Add(an8Mesh);
                     objectsIndex++;
 
-                    foreach (var texture in mesh.Lods
-                        .SelectMany(t => t.FaceGroups)
+                    foreach (var texture in lod.FaceGroups
                         .SelectMany(t => t.Textures)
                         .Distinct())
                     {

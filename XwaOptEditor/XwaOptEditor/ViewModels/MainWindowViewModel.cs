@@ -515,7 +515,7 @@ namespace XwaOptEditor.ViewModels
 
                 try
                 {
-                    OptObjConverter.Converter.OptToObj(opt, fileName, scale);
+                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify);
                 }
                 catch (Exception ex)
                 {
@@ -584,7 +584,7 @@ namespace XwaOptEditor.ViewModels
 
                 try
                 {
-                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale);
+                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify);
                 }
                 catch (Exception ex)
                 {
@@ -653,7 +653,7 @@ namespace XwaOptEditor.ViewModels
 
                 try
                 {
-                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale);
+                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify);
                 }
                 catch (Exception ex)
                 {
