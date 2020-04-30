@@ -45,8 +45,8 @@
       <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.63\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.Media.An8, Version=2.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Media.An8.2.0.38\lib\net40\JeremyAnsel.Media.An8.dll</HintPath>
+    <Reference Include="JeremyAnsel.Media.An8, Version=2.0.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Media.An8.2.0.39\lib\net40\JeremyAnsel.Media.An8.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.30.0, Culture=neutral, processorArchitecture=MSIL">
