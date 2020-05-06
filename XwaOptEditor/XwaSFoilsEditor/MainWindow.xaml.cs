@@ -2,6 +2,7 @@
 using JeremyAnsel.Xwa.HooksConfig;
 using JeremyAnsel.Xwa.Opt;
 using JeremyAnsel.Xwa.WpfOpt;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -269,6 +270,227 @@ namespace XwaSFoilsEditor
 
             this.DataContext = null;
             this.DataContext = this;
+        }
+
+        private void exportOptButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
+            {
+                return;
+            }
+
+            try
+            {
+                var optFile = GetTransformedOptFile();
+                string baseFilename = GetBaseOptFilename(optFile.FileName);
+
+                string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".opt");
+
+                if (string.IsNullOrEmpty(saveFilename))
+                {
+                    return;
+                }
+
+                optFile.Save(saveFilename);
+                MessageBox.Show(this, "\"" + saveFilename + "\" saved.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void exportObjButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
+            {
+                return;
+            }
+
+            try
+            {
+                var optFile = GetTransformedOptFile();
+                string baseFilename = GetBaseOptFilename(optFile.FileName);
+
+                string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".obj");
+
+                if (string.IsNullOrEmpty(saveFilename))
+                {
+                    return;
+                }
+
+                OptObjConverter.Converter.OptToObj(optFile, saveFilename, true);
+                MessageBox.Show(this, "\"" + saveFilename + "\" saved.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void exportRhinoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
+            {
+                return;
+            }
+
+            try
+            {
+                var optFile = GetTransformedOptFile();
+                string baseFilename = GetBaseOptFilename(optFile.FileName);
+
+                string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".3dm");
+
+                if (string.IsNullOrEmpty(saveFilename))
+                {
+                    return;
+                }
+
+                OptRhinoConverter.Converter.OptToRhino(optFile, saveFilename, true);
+                MessageBox.Show(this, "\"" + saveFilename + "\" saved.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void exportAn8Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
+            {
+                return;
+            }
+
+            try
+            {
+                var optFile = GetTransformedOptFile();
+                string baseFilename = GetBaseOptFilename(optFile.FileName);
+
+                string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".an8");
+
+                if (string.IsNullOrEmpty(saveFilename))
+                {
+                    return;
+                }
+
+                OptAn8Converter.Converter.OptToAn8(optFile, saveFilename, true);
+                MessageBox.Show(this, "\"" + saveFilename + "\" saved.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private OptFile GetTransformedOptFile()
+        {
+            if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
+            {
+                return null;
+            }
+
+            var optFile = this.OptFile.Clone();
+
+            foreach (MeshModel model in this.Meshes)
+            {
+                if (model.Angle == 0)
+                {
+                    continue;
+                }
+
+                var mesh = optFile.Meshes[model.MeshIndex];
+
+                mesh.RotationScale.Pivot = model.Pivot;
+                mesh.RotationScale.Look = model.Look;
+                mesh.RotationScale.Up = model.Up;
+                mesh.RotationScale.Right = model.Right;
+            }
+
+            double showSFoilsOpened = this.showSFoils.Value;
+
+            if (showSFoilsOpened != 0)
+            {
+                int bridgeIndex = -1;
+                Transform3D bridgeTransform = Transform3D.Identity;
+                Transform3D bridgeTransformRotation = Transform3D.Identity;
+
+                foreach (var sfoil in this.Meshes)
+                {
+                    if (sfoil.MeshIndex >= optFile.Meshes.Count)
+                    {
+                        continue;
+                    }
+
+                    if (sfoil.Angle == 0)
+                    {
+                        continue;
+                    }
+
+                    double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
+                    angle *= showSFoilsOpened;
+                    var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
+                    var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle));
+
+                    var mesh = optFile.Meshes[sfoil.MeshIndex];
+                    TransformMesh(mesh, transform, transformRotation);
+
+                    if (bridgeIndex == -1)
+                    {
+                        if (mesh.Descriptor.MeshType == MeshType.Bridge)
+                        {
+                            bridgeIndex = sfoil.MeshIndex;
+                            bridgeTransform = transform;
+                            bridgeTransformRotation = transformRotation;
+                        }
+                    }
+                }
+
+                if (bridgeIndex != -1)
+                {
+                    foreach (var mesh in optFile.Meshes)
+                    {
+                        TransformMesh(mesh, bridgeTransform, bridgeTransformRotation);
+                    }
+                }
+            }
+
+            return optFile;
+        }
+
+        private static void TransformMesh(Mesh mesh, Transform3D transform, Transform3D transformRotation)
+        {
+            for (int i = 0; i < mesh.Vertices.Count; i++)
+            {
+                mesh.Vertices[i] = mesh.Vertices[i].Tranform(transform);
+            }
+
+            for (int i = 0; i < mesh.VertexNormals.Count; i++)
+            {
+                mesh.VertexNormals[i] = mesh.VertexNormals[i].Tranform(transformRotation);
+            }
+
+            mesh.EngineGlows.Clear();
+            mesh.Hardpoints.Clear();
+            mesh.ComputeHitzone();
+        }
+
+        private static string GetSaveAsFile(string fileName, string ext)
+        {
+            fileName = System.IO.Path.GetFullPath(fileName);
+            var dialog = new SaveFileDialog();
+            dialog.AddExtension = true;
+            dialog.DefaultExt = ext;
+            dialog.InitialDirectory = System.IO.Path.GetDirectoryName(fileName);
+            dialog.FileName = System.IO.Path.GetFileName(fileName);
+
+            if (dialog.ShowDialog() == true)
+            {
+                return dialog.FileName;
+            }
+
+            return null;
         }
     }
 }

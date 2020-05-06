@@ -15,6 +15,12 @@
                 <Button x:Name="openButton" Content="Open..." Click="openButton_Click" />
                 <Button x:Name="saveButton" Content="Save" Click="saveButton_Click" />
                 <Button x:Name="getSFoilsButton" Content="Get S-Foils txt..." Click="getSFoilsButton_Click" />
+                <Separator/>
+                <TextBlock Text="Export " />
+                <Button Content="Opt..." Click="exportOptButton_Click" />
+                <Button Content="Obj..." Click="exportObjButton_Click" />
+                <Button Content="3dm..." Click="exportRhinoButton_Click" />
+                <Button Content="An8..." Click="exportAn8Button_Click" />
             </ToolBar>
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom">
@@ -139,6 +145,7 @@
             </ToolBarTray>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                 <TextBlock Text="S-Foils: " />
+                <TextBox Width="100" Text="{Binding ElementName=showSFoils, Path=Value, StringFormat='F3', UpdateSourceTrigger=PropertyChanged, Delay=2000, ValidatesOnExceptions=True}" />
                 <Slider x:Name="showSFoils" Width="200" Minimum="0" Maximum="1" Ticks="0.01" Value="1" />
             </StackPanel>
             <hx:HelixViewport3D x:Name="viewport3D"

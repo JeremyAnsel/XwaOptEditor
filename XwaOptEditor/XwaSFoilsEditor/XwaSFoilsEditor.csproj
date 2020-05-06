@@ -145,8 +145,25 @@
       <Project>{241e8f6d-6e74-4e80-9a23-bd88c44f9c17}</Project>
       <Name>JeremyAnsel.Xwa.WpfOpt</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OptAn8Converter\OptAn8Converter.csproj">
+      <Project>{6504c6be-f90d-4764-8106-7b6052e9a8a0}</Project>
+      <Name>OptAn8Converter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj">
+      <Project>{ecb5e2a2-ae45-409e-a1ae-34372b2319de}</Project>
+      <Name>OptObjConverter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OptRhinoConverter\OptRhinoConverter.csproj">
+      <Project>{2de8d6be-661e-4133-a77e-73aa8f091ea0}</Project>
+      <Name>OptRhinoConverter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /y "$(SolutionDir)..\Components\Rhino3dmIO\x86\*.*" "$(TargetDir)x86\"
+xcopy /s /y "$(SolutionDir)..\Components\Rhino3dmIO\x64\*.*" "$(TargetDir)x64\"
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
