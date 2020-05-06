@@ -282,7 +282,7 @@ namespace XwaOptEditor.ViewModels
                     }
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
-                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name));
+                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name + " alpha"));
                 }
                 catch (Exception ex)
                 {
@@ -313,21 +313,22 @@ namespace XwaOptEditor.ViewModels
                     int bpp = texture.BitsPerPixel;
                     int mipmapsCount = texture.MipmapsCount;
 
+                    texture.Convert8To32();
                     texture.RemoveMipmaps();
                     texture.SetIllumMap(fileName);
 
                     if (mipmapsCount > 1)
                     {
                         texture.GenerateMipmaps();
+                    }
 
-                        if (bpp == 8)
-                        {
-                            texture.Convert32To8();
-                        }
+                    if (bpp == 8)
+                    {
+                        texture.Convert32To8();
                     }
 
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
-                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name));
+                    dispatcher(() => this.OptModel.UndoStackPush("replace " + texture.Name + " illum"));
                 }
                 catch (Exception ex)
                 {
