@@ -828,6 +828,13 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
+            <xctk:ColorPicker x:Name="backgroundColorPicker"
+                              DockPanel.Dock="Bottom"
+                              ToolTip="Background Color"
+                              UsingAlphaChannel="False"
+                              ShowStandardColors="False"
+                              AvailableColorsSortingMode="HueSaturationBrightness"
+                              SelectedColor="Black" />
             <ToolBarTray DockPanel.Dock="Bottom"
                          IsLocked="True">
                 <ToolBar>
@@ -889,7 +896,7 @@
                                                         CameraRotationMode="Trackball"
                                                         IsChangeFieldOfViewEnabled="False"
                                                         IsMoveEnabled="False"
-                                                        Background="Black"
+                                                        Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                                         IsHeadLightEnabled="True"
                                                         IsViewCubeEdgeClicksEnabled="True"
                                                         MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
@@ -960,7 +967,7 @@
                                                     CameraRotationMode="Trackball"
                                                     IsChangeFieldOfViewEnabled="False"
                                                     IsMoveEnabled="False"
-                                                    Background="Black"
+                                                    Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                                     IsHeadLightEnabled="True"
                                                     IsViewCubeEdgeClicksEnabled="True"
                                                     MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
@@ -1019,7 +1026,7 @@
                                                     CameraRotationMode="Trackball"
                                                     IsChangeFieldOfViewEnabled="False"
                                                     IsMoveEnabled="False"
-                                                    Background="Black"
+                                                    Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                                     IsHeadLightEnabled="True"
                                                     IsViewCubeEdgeClicksEnabled="True"
                                                     MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">

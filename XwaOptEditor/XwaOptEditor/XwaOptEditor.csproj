@@ -88,6 +88,7 @@
     <Compile Include="Controls\EnumFlagsComboBox.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ColorConverter.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\IsBpp8Converter.cs" />
     <Compile Include="Converters\ItemIndexConverter.cs" />
     <Compile Include="Converters\LengthScaleConverter.cs" />

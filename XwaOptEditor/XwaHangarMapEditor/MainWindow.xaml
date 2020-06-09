@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:hx="http://helix-toolkit.org/wpf"
         xmlns:local="clr-namespace:XwaHangarMapEditor"
         mc:Ignorable="d"
@@ -103,21 +104,32 @@
                     </ListView.View>
                 </ListView>
             </DockPanel>
-            <hx:HelixViewport3D x:Name="viewport3D" Grid.Column="4"
-                                Background="Black" IsViewCubeEdgeClicksEnabled="True"
-                                CameraMode="Inspect" IsChangeFieldOfViewEnabled="False"
-                                CameraChanged="viewport3D_CameraChanged">
-                <hx:DefaultLights/>
-                <ModelVisual3D>
-                    <ModelVisual3D.Content>
-                        <MultiBinding Converter="{x:Static local:Visual3DConverter.Default}">
-                            <Binding RelativeSource="{RelativeSource Self}" />
-                            <Binding Path="Map3D" />
-                            <Binding Path="HangarModel3D" />
-                        </MultiBinding>
-                    </ModelVisual3D.Content>
-                </ModelVisual3D>
-            </hx:HelixViewport3D>
+            <DockPanel Grid.Column="4">
+                <xctk:ColorPicker x:Name="backgroundColorPicker"
+                                  DockPanel.Dock="Bottom"
+                                  ToolTip="Background Color"
+                                  UsingAlphaChannel="False"
+                                  ShowStandardColors="False"
+                                  AvailableColorsSortingMode="HueSaturationBrightness"
+                                  SelectedColor="Black" />
+                <hx:HelixViewport3D x:Name="viewport3D"
+                                    Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
+                                    IsViewCubeEdgeClicksEnabled="True"
+                                    IsChangeFieldOfViewEnabled="False"
+                                    CameraMode="Inspect"
+                                    CameraChanged="viewport3D_CameraChanged">
+                    <hx:DefaultLights/>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <MultiBinding Converter="{x:Static local:Visual3DConverter.Default}">
+                                <Binding RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="Map3D" />
+                                <Binding Path="HangarModel3D" />
+                            </MultiBinding>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </hx:HelixViewport3D>
+            </DockPanel>
         </Grid>
     </DockPanel>
 </Window>

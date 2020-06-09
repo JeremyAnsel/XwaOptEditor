@@ -35,6 +35,13 @@
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.VirtualizationMode="Recycling" />
             <DockPanel Grid.Column="2">
+                <xctk:ColorPicker x:Name="backgroundColorPicker"
+                                  DockPanel.Dock="Bottom"
+                                  ToolTip="Background Color"
+                                  UsingAlphaChannel="False"
+                                  ShowStandardColors="False"
+                                  AvailableColorsSortingMode="HueSaturationBrightness"
+                                  SelectedColor="Black" />
                 <TextBlock DockPanel.Dock="Bottom"
                            Text="{Binding ElementName=optVisual, Path=File.FileName}" />
                 <StackPanel DockPanel.Dock="Bottom"
@@ -87,7 +94,7 @@
                                     CameraRotationMode="Trackball"
                                     IsChangeFieldOfViewEnabled="False"
                                     IsMoveEnabled="False"
-                                    Background="Black"
+                                    Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                     IsHeadLightEnabled="True"
                                     IsViewCubeEdgeClicksEnabled="True">
                     <hx:DefaultLights />

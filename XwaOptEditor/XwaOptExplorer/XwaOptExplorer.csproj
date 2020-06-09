@@ -91,6 +91,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\LengthScaleConverter.cs" />
     <Compile Include="Converters\LodDistanceConverter.cs" />
     <Compile Include="Converters\MaximumValueConverter.cs" />
