@@ -46,5 +46,17 @@ namespace XwaHangarMapEditor
             float length = v.Length();
             return length / 32768;
         }
+
+        public static Vector Tranform(this Vector v, Transform3D t)
+        {
+            Point3D p = v.ToPoint3D();
+            p = t.Transform(p);
+            return p.ToVector();
+        }
+
+        public static Vector ToVector(this Point3D v)
+        {
+            return new Vector((float)-v.Y, (float)-v.X, (float)v.Z);
+        }
     }
 }

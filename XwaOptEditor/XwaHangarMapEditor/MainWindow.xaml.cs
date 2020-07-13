@@ -250,5 +250,71 @@ namespace XwaHangarMapEditor
 
             MessageBox.Show(this, "Saved.", this.Title);
         }
+
+        private void exportOptButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.AddExtension = true;
+            dialog.DefaultExt = ".opt";
+            dialog.Filter = "OPT files|*.opt";
+            dialog.FileName = System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(this.ViewModel.TextFileName), ".opt");
+
+            string fileName;
+
+            if (dialog.ShowDialog(this) == true)
+            {
+                fileName = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            try
+            {
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap();
+
+                optFile.Save(fileName);
+
+                MessageBox.Show(this, "Exported.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void exportObjButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.AddExtension = true;
+            dialog.DefaultExt = ".obj";
+            dialog.Filter = "OBJ files|*.obj";
+            dialog.FileName = System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(this.ViewModel.TextFileName), ".obj");
+
+            string fileName;
+
+            if (dialog.ShowDialog(this) == true)
+            {
+                fileName = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            try
+            {
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap();
+
+                OptObjConverter.Converter.OptToObj(optFile, fileName, true);
+
+                MessageBox.Show(this, "Exported.", this.Title);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

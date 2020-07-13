@@ -78,6 +78,10 @@
                     <Button Command="ApplicationCommands.Open">Open...</Button>
                     <Button Command="ApplicationCommands.Save">Save</Button>
                     <Button Command="ApplicationCommands.SaveAs">Save As...</Button>
+                    <Separator />
+                    <TextBlock Text="Export: " />
+                    <Button x:Name="exportOptButton" Click="exportOptButton_Click">Opt...</Button>
+                    <Button x:Name="exportObjButton" Click="exportObjButton_Click">Obj...</Button>
                 </ToolBar>
                 <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Delay=500}" FontFamily="Courier New"
                          TextWrapping="Wrap" AcceptsReturn="True"
