@@ -28,6 +28,8 @@ namespace XwaSFoilsEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Dictionary<string, string> _defaultDirectory = new Dictionary<string, string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -66,13 +68,28 @@ namespace XwaSFoilsEditor
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Title = "Open OPT file";
             dialog.CheckFileExists = true;
             dialog.AddExtension = true;
             dialog.DefaultExt = ".opt";
             dialog.Filter = "OPT files|*.opt";
 
+            if (dialog.Title != null)
+            {
+                string directory;
+                if (this._defaultDirectory.TryGetValue(dialog.Title, out directory))
+                {
+                    dialog.InitialDirectory = directory;
+                }
+            }
+
             if (dialog.ShowDialog(this) == true)
             {
+                if (dialog.Title != null)
+                {
+                    this._defaultDirectory[dialog.Title] = System.IO.Path.GetDirectoryName(dialog.FileName);
+                }
+
                 try
                 {
                     this.LoadOpt(dialog.FileName);
@@ -476,17 +493,33 @@ namespace XwaSFoilsEditor
             mesh.ComputeHitzone();
         }
 
-        private static string GetSaveAsFile(string fileName, string ext)
+        private string GetSaveAsFile(string fileName, string ext)
         {
             fileName = System.IO.Path.GetFullPath(fileName);
             var dialog = new SaveFileDialog();
+            dialog.Title = "Save " + ext.ToUpperInvariant() + " file";
             dialog.AddExtension = true;
             dialog.DefaultExt = ext;
-            dialog.InitialDirectory = System.IO.Path.GetDirectoryName(fileName);
+            dialog.Filter = string.Format(CultureInfo.InvariantCulture, "{0} files|*{1}", ext.ToUpperInvariant(), ext);
+            //dialog.InitialDirectory = System.IO.Path.GetDirectoryName(fileName);
             dialog.FileName = System.IO.Path.GetFileName(fileName);
+
+            if (dialog.Title != null)
+            {
+                string directory;
+                if (this._defaultDirectory.TryGetValue(dialog.Title, out directory))
+                {
+                    dialog.InitialDirectory = directory;
+                }
+            }
 
             if (dialog.ShowDialog() == true)
             {
+                if (dialog.Title != null)
+                {
+                    this._defaultDirectory[dialog.Title] = System.IO.Path.GetDirectoryName(dialog.FileName);
+                }
+
                 return dialog.FileName;
             }
 

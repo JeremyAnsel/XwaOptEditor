@@ -24,6 +24,8 @@ namespace XwaOptEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Dictionary<string, string> _defaultDirectory = new Dictionary<string, string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -98,11 +100,21 @@ namespace XwaOptEditor
             Action action = () =>
             {
                 var dialog = new OpenFileDialog();
+                dialog.Title = message.Title ?? "Open";
                 dialog.CheckFileExists = true;
                 dialog.AddExtension = true;
                 dialog.DefaultExt = message.DefaultExtension;
                 dialog.Filter = message.Filter;
                 dialog.FileName = message.FileName;
+
+                if (message.Title != null)
+                {
+                    string directory;
+                    if (this._defaultDirectory.TryGetValue(message.Title, out directory))
+                    {
+                        dialog.InitialDirectory = directory;
+                    }
+                }
 
                 if (dialog.ShowDialog(this) == true)
                 {
@@ -111,6 +123,11 @@ namespace XwaOptEditor
                 else
                 {
                     message.FileName = null;
+                }
+
+                if (message.Title != null && message.FileName != null)
+                {
+                    this._defaultDirectory[message.Title] = System.IO.Path.GetDirectoryName(message.FileName);
                 }
             };
 
@@ -122,10 +139,20 @@ namespace XwaOptEditor
             Action action = () =>
             {
                 var dialog = new SaveFileDialog();
+                dialog.Title = message.Title ?? "Save";
                 dialog.AddExtension = true;
                 dialog.DefaultExt = message.DefaultExtension;
                 dialog.Filter = message.Filter;
                 dialog.FileName = message.FileName;
+
+                if (message.Title != null)
+                {
+                    string directory;
+                    if (this._defaultDirectory.TryGetValue(message.Title, out directory))
+                    {
+                        dialog.InitialDirectory = directory;
+                    }
+                }
 
                 if (dialog.ShowDialog(this) == true)
                 {
@@ -136,6 +163,10 @@ namespace XwaOptEditor
                     message.FileName = null;
                 }
 
+                if (message.Title != null && message.FileName != null)
+                {
+                    this._defaultDirectory[message.Title] = System.IO.Path.GetDirectoryName(message.FileName);
+                }
             };
 
             this.Dispatcher.Invoke(action);

@@ -139,7 +139,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenOptFileName();
+                string fileName = FileDialogService.GetOpenOptFileName("Open OPT file", null);
 
                 if (fileName == null)
                 {
@@ -212,7 +212,7 @@ namespace XwaOptEditor.ViewModels
 
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetSaveOptFileName(this.OptModel.File.FileName);
+                string fileName = FileDialogService.GetSaveOptFileName("Save OPT file", this.OptModel.File.FileName);
 
                 if (fileName == null)
                 {
@@ -247,7 +247,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenOptFileName();
+                string fileName = FileDialogService.GetOpenOptFileName(null, null);
 
                 if (fileName == null)
                 {
@@ -299,7 +299,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenOptFileName();
+                string fileName = FileDialogService.GetOpenOptFileName(null, null);
 
                 if (fileName == null)
                 {
@@ -401,7 +401,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenOptFileName();
+                string fileName = FileDialogService.GetOpenOptFileName("Import OPT file", null);
 
                 if (fileName == null)
                 {
@@ -459,7 +459,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenObjFileName();
+                string fileName = FileDialogService.GetOpenObjFileName("Import OBJ file", null);
 
                 if (fileName == null)
                 {
@@ -501,7 +501,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetSaveObjFileName(System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "obj"));
+                string fileName = FileDialogService.GetSaveObjFileName("Export OBJ file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "obj"));
 
                 if (fileName == null)
                 {
@@ -528,7 +528,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenRhinoFileName();
+                string fileName = FileDialogService.GetOpenRhinoFileName("Import 3DM file", null);
 
                 if (fileName == null)
                 {
@@ -570,7 +570,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetSaveRhinoFileName(System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "3dm"));
+                string fileName = FileDialogService.GetSaveRhinoFileName("Export 3DM file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "3dm"));
 
                 if (fileName == null)
                 {
@@ -597,7 +597,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenAn8FileName();
+                string fileName = FileDialogService.GetOpenAn8FileName("Import AN8 file", null);
 
                 if (fileName == null)
                 {
@@ -639,7 +639,7 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetSaveAn8FileName(System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "an8"));
+                string fileName = FileDialogService.GetSaveAn8FileName("Export AN8 file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "an8"));
 
                 if (fileName == null)
                 {

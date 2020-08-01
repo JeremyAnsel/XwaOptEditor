@@ -1164,7 +1164,7 @@ namespace XwaOptEditor.ViewModels
 
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenTextureFileName();
+                string fileName = FileDialogService.GetOpenTextureFileName("Open texture", null);
 
                 if (fileName == null)
                 {

@@ -22,6 +22,8 @@ namespace XwaHangarMapEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Dictionary<string, string> _defaultDirectory = new Dictionary<string, string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -120,6 +122,7 @@ namespace XwaHangarMapEditor
         private void ExecuteOpen(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Title = "Open hangar map file";
             dialog.DefaultExt = ".ini";
             dialog.CheckFileExists = true;
             dialog.Filter = "Hangar Map files (*.ini, *.txt)|*.ini;*HangarMap.txt";
@@ -196,6 +199,7 @@ namespace XwaHangarMapEditor
         private void ExecuteSaveAs(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.Title = "Save hangar map file";
             dialog.AddExtension = true;
             dialog.DefaultExt = ".ini";
             dialog.Filter = "Hangar Map files (*.ini, *.txt)|*.ini;*HangarMap.txt";
@@ -254,15 +258,30 @@ namespace XwaHangarMapEditor
         private void exportOptButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.Title = "Export OPT file";
             dialog.AddExtension = true;
             dialog.DefaultExt = ".opt";
             dialog.Filter = "OPT files|*.opt";
             dialog.FileName = System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(this.ViewModel.TextFileName), ".opt");
 
+            if (dialog.Title != null)
+            {
+                string directory;
+                if (this._defaultDirectory.TryGetValue(dialog.Title, out directory))
+                {
+                    dialog.InitialDirectory = directory;
+                }
+            }
+
             string fileName;
 
             if (dialog.ShowDialog(this) == true)
             {
+                if (dialog.Title != null)
+                {
+                    this._defaultDirectory[dialog.Title] = System.IO.Path.GetDirectoryName(dialog.FileName);
+                }
+
                 fileName = dialog.FileName;
             }
             else
@@ -287,15 +306,30 @@ namespace XwaHangarMapEditor
         private void exportObjButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.Title = "Export OBJ file";
             dialog.AddExtension = true;
             dialog.DefaultExt = ".obj";
             dialog.Filter = "OBJ files|*.obj";
             dialog.FileName = System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(this.ViewModel.TextFileName), ".obj");
 
+            if (dialog.Title != null)
+            {
+                string directory;
+                if (this._defaultDirectory.TryGetValue(dialog.Title, out directory))
+                {
+                    dialog.InitialDirectory = directory;
+                }
+            }
+
             string fileName;
 
             if (dialog.ShowDialog(this) == true)
             {
+                if (dialog.Title != null)
+                {
+                    this._defaultDirectory[dialog.Title] = System.IO.Path.GetDirectoryName(dialog.FileName);
+                }
+
                 fileName = dialog.FileName;
             }
             else

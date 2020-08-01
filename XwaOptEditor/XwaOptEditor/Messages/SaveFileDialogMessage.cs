@@ -8,6 +8,8 @@ namespace XwaOptEditor.Messages
 {
     class SaveFileDialogMessage
     {
+        public string Title { get; set; }
+
         public string DefaultExtension { get; set; }
 
         public string Filter { get; set; }

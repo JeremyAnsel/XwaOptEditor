@@ -84,7 +84,7 @@ namespace XwaOptEditor.ViewModels
 
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetSaveTextureFileName(texture.Name);
+                string fileName = FileDialogService.GetSaveTextureFileName("Save texture", texture.Name);
 
                 if (fileName == null)
                 {
@@ -114,7 +114,7 @@ namespace XwaOptEditor.ViewModels
             BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_color";
-                string fileName = FileDialogService.GetSaveTextureFileName(name);
+                string fileName = FileDialogService.GetSaveTextureFileName("Save texture", name);
 
                 if (fileName == null)
                 {
@@ -149,7 +149,7 @@ namespace XwaOptEditor.ViewModels
             BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_alpha";
-                string fileName = FileDialogService.GetSaveTextureFileName(name);
+                string fileName = FileDialogService.GetSaveTextureFileName("Save texture", name);
 
                 if (fileName == null)
                 {
@@ -184,7 +184,7 @@ namespace XwaOptEditor.ViewModels
             BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_illum";
-                string fileName = FileDialogService.GetSaveTextureFileName(name);
+                string fileName = FileDialogService.GetSaveTextureFileName("Save texture", name);
 
                 if (fileName == null)
                 {
@@ -213,7 +213,7 @@ namespace XwaOptEditor.ViewModels
 
             BusyIndicatorService.Run(dispatcher =>
             {
-                string fileName = FileDialogService.GetOpenTextureFileName(texture.Name);
+                string fileName = FileDialogService.GetOpenTextureFileName("Open texture", texture.Name);
 
                 if (fileName == null)
                 {
@@ -256,7 +256,7 @@ namespace XwaOptEditor.ViewModels
             BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_alpha";
-                string fileName = FileDialogService.GetOpenTextureFileName(name);
+                string fileName = FileDialogService.GetOpenTextureFileName("Open texture", name);
 
                 if (fileName == null)
                 {
@@ -301,7 +301,7 @@ namespace XwaOptEditor.ViewModels
             BusyIndicatorService.Run(dispatcher =>
             {
                 string name = texture.Name + "_illum";
-                string fileName = FileDialogService.GetOpenTextureFileName(name);
+                string fileName = FileDialogService.GetOpenTextureFileName("Open texture", name);
 
                 if (fileName == null)
                 {
