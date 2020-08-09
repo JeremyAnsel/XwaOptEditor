@@ -1,6 +1,7 @@
 ﻿<Window x:Class="XwaOptEditor.ScaleFactorDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vc="clr-namespace:XwaOptEditor.Converters"
         Title="{Binding ScaleType, FallbackValue='Scale Factor', StringFormat='Scale Factor: \{0\}'}"
         Height="200"
         Width="400"
@@ -33,6 +34,9 @@
         <TextBlock Grid.Row="0"
                     Grid.Column="3"
                     Text="Meter: " />
+        <TextBlock Grid.Row="0"
+                    Grid.Column="4"
+                    Text="%: " />
         <TextBlock Grid.Row="1"
                     Grid.Column="0"
                     Text="Scale X: " />
@@ -45,6 +49,9 @@
         <TextBox Grid.Row="1"
                     Grid.Column="3"
                     Text="{Binding ScaleXMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+        <TextBox Grid.Row="1"
+                    Grid.Column="4"
+                    Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="2"
                     Grid.Column="0"
                     Text="Scale Y: " />
@@ -57,6 +64,9 @@
         <TextBox Grid.Row="2"
                     Grid.Column="3"
                     Text="{Binding ScaleYMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+        <TextBox Grid.Row="2"
+                    Grid.Column="4"
+                    Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="3"
                     Grid.Column="0"
                     Text="Scale Z: " />
@@ -69,6 +79,9 @@
         <TextBox Grid.Row="3"
                     Grid.Column="3"
                     Text="{Binding ScaleZMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+        <TextBox Grid.Row="3"
+                    Grid.Column="4"
+                    Text="{Binding ScaleZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="4"
                     Grid.Column="0"
                     Text="Scale XYZ: " />
