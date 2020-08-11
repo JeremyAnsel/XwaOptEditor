@@ -41,12 +41,12 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JeremyAnsel.ColorQuant, Version=2.0.63.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.63\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
+    <Reference Include="JeremyAnsel.ColorQuant, Version=2.0.65.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.65\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.32.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.32\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.34\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -63,13 +63,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WavefrontObj\WavefrontObj.csproj">
       <Project>{02fa7a77-e737-40a7-ad49-4e5fe5b93f59}</Project>
       <Name>WavefrontObj</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
