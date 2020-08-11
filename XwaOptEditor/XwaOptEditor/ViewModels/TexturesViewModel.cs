@@ -31,6 +31,7 @@ namespace XwaOptEditor.ViewModels
             this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
             this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo32BitsCommand);
             this.CompactCommand = new DelegateCommand(this.ExecuteCompactCommand);
+            this.RemoveUnusedCommand = new DelegateCommand(this.ExecuteRemoveUnusedCommand);
             this.GenerateNamesCommand = new DelegateCommand(this.ExecuteGenerateNamesCommand);
         }
 
@@ -72,6 +73,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand ConvertAllTo32BitsCommand { get; private set; }
 
         public ICommand CompactCommand { get; private set; }
+
+        public ICommand RemoveUnusedCommand { get; private set; }
 
         public ICommand GenerateNamesCommand { get; private set; }
 
@@ -431,6 +434,26 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage("Compact textures.", ex));
+                }
+            });
+        }
+
+        private void ExecuteRemoveUnusedCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Removing unused textures...");
+
+                    this.OptModel.File.RemoveUnusedTextures();
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("remove textures"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Remove unused textures.", ex));
                 }
             });
         }
