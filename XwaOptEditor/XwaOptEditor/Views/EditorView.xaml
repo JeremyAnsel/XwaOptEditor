@@ -108,6 +108,38 @@
                             Command="{Binding DuplicateMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                 </ToolBar>
+                <ToolBar Band="4"
+                         BandIndex="0">
+                    <TextBlock Text="Export " />
+                    <Button Content="Obj..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ExportMeshObjCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="3dm..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ExportMeshRhinoCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="An8..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ExportMeshAn8Command}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                </ToolBar>
+                <ToolBar Band="5"
+                         BandIndex="0">
+                    <TextBlock Text="Replace " />
+                    <Button Content="Obj..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ReplaceMeshObjCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
+                    <Button Content="3dm..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ReplaceMeshRhinoCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
+                    <Button Content="An8..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ReplaceMeshAn8Command}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
+                </ToolBar>
             </ToolBarTray>
             <ListView x:Name="meshesListView"
                       ItemsSource="{Binding CurrentMeshes}"

@@ -97,6 +97,12 @@ namespace XwaOptEditor.ViewModels
             this.RotateMeshCommand = new DelegateCommandOf<Mesh>(this.ExecuteRotateMeshCommand);
             this.DuplicateMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteDuplicateMeshesCommand);
             this.ComputeHitzonesCommand = new DelegateCommand(this.ExecuteComputeHitzonesCommand);
+            this.ExportMeshObjCommand = new DelegateCommandOfList<Mesh>(this.ExecuteExportMeshObjCommand);
+            this.ExportMeshRhinoCommand = new DelegateCommandOfList<Mesh>(this.ExecuteExportMeshRhinoCommand);
+            this.ExportMeshAn8Command = new DelegateCommandOfList<Mesh>(this.ExecuteExportMeshAn8Command);
+            this.ReplaceMeshObjCommand = new DelegateCommandOf<Mesh>(this.ExecuteReplaceMeshObjCommand);
+            this.ReplaceMeshRhinoCommand = new DelegateCommandOf<Mesh>(this.ExecuteReplaceMeshRhinoCommand);
+            this.ReplaceMeshAn8Command = new DelegateCommandOf<Mesh>(this.ExecuteReplaceMeshAn8Command);
 
             this.NewLodCommand = new DelegateCommand(this.ExecuteNewLodCommand);
             this.DeleteLodsCommand = new DelegateCommandOfList<MeshLod>(this.ExecuteDeleteLodsCommand);
@@ -167,6 +173,18 @@ namespace XwaOptEditor.ViewModels
         public ICommand DuplicateMeshesCommand { get; private set; }
 
         public ICommand ComputeHitzonesCommand { get; private set; }
+
+        public ICommand ExportMeshObjCommand { get; private set; }
+
+        public ICommand ExportMeshRhinoCommand { get; private set; }
+
+        public ICommand ExportMeshAn8Command { get; private set; }
+
+        public ICommand ReplaceMeshObjCommand { get; private set; }
+
+        public ICommand ReplaceMeshRhinoCommand { get; private set; }
+
+        public ICommand ReplaceMeshAn8Command { get; private set; }
 
         public ICommand NewLodCommand { get; private set; }
 
@@ -708,6 +726,262 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.OptModel.UndoStackPush("compute hitzones"));
+            });
+        }
+
+        private void ExecuteExportMeshObjCommand(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetSaveObjFileName("Export OBJ file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "obj"));
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Exporting ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File.Clone();
+                opt.Meshes.Clear();
+
+                foreach (var mesh in meshes)
+                {
+                    opt.Meshes.Add(mesh.Clone());
+                }
+
+                opt.RemoveUnusedTextures();
+
+                bool scale = true;
+
+                try
+                {
+                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+            });
+        }
+
+        private void ExecuteExportMeshRhinoCommand(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetSaveRhinoFileName("Export 3DM file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "3dm"));
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Exporting ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File.Clone();
+                opt.Meshes.Clear();
+
+                foreach (var mesh in meshes)
+                {
+                    opt.Meshes.Add(mesh.Clone());
+                }
+
+                opt.RemoveUnusedTextures();
+
+                bool scale = true;
+
+                try
+                {
+                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+            });
+        }
+
+        private void ExecuteExportMeshAn8Command(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetSaveAn8FileName("Export AN8 file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "an8"));
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Exporting ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File.Clone();
+                opt.Meshes.Clear();
+
+                foreach (var mesh in meshes)
+                {
+                    opt.Meshes.Add(mesh.Clone());
+                }
+
+                opt.RemoveUnusedTextures();
+
+                bool scale = true;
+
+                try
+                {
+                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+            });
+        }
+
+        private void ReplaceMesh(OptFile opt, Mesh mesh, OptFile import)
+        {
+            import.MergeMeshes(import.Meshes.ToList());
+
+            foreach (var texture in import.Textures.Values)
+            {
+                opt.Textures[texture.Name] = texture;
+            }
+
+            mesh.Lods.Clear();
+            mesh.Vertices.Clear();
+            mesh.TextureCoordinates.Clear();
+            mesh.VertexNormals.Clear();
+
+            if (import.Meshes.Count != 0)
+            {
+                var importMesh = import.Meshes[0];
+
+                if (importMesh.Lods.Count != 0)
+                {
+                    mesh.Lods.Add(importMesh.Lods[0]);
+                }
+
+                for (int i = 0; i < importMesh.Vertices.Count; i++)
+                {
+                    mesh.Vertices.Add(importMesh.Vertices[i]);
+                }
+
+                for (int i = 0; i < importMesh.TextureCoordinates.Count; i++)
+                {
+                    mesh.TextureCoordinates.Add(importMesh.TextureCoordinates[i]);
+                }
+
+                for (int i = 0; i < importMesh.VertexNormals.Count; i++)
+                {
+                    mesh.VertexNormals.Add(importMesh.VertexNormals[i]);
+                }
+            }
+
+            mesh.CompactBuffers();
+            mesh.ComputeHitzone();
+        }
+
+        private void ExecuteReplaceMeshObjCommand(Mesh mesh)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetOpenObjFileName("Replace OBJ file", null);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Replace ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File;
+                bool scale = true;
+
+                try
+                {
+                    dispatcher(() => this.OptModel.File = null);
+
+                    var import = OptObjConverter.Converter.ObjToOpt(fileName, scale);
+
+                    this.ReplaceMesh(opt, mesh, import);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("replace " + System.IO.Path.GetFileName(fileName)));
+            });
+        }
+
+        private void ExecuteReplaceMeshRhinoCommand(Mesh mesh)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetOpenRhinoFileName("Replace 3DM file", null);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Replace ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File;
+                bool scale = true;
+
+                try
+                {
+                    dispatcher(() => this.OptModel.File = null);
+
+                    var import = OptRhinoConverter.Converter.RhinoToOpt(fileName, scale);
+
+                    this.ReplaceMesh(opt, mesh, import);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("replace " + System.IO.Path.GetFileName(fileName)));
+            });
+        }
+
+        private void ExecuteReplaceMeshAn8Command(Mesh mesh)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetOpenAn8FileName("Replace AN8 file", null);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Replace ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File;
+                bool scale = true;
+
+                try
+                {
+                    dispatcher(() => this.OptModel.File = null);
+
+                    var import = OptAn8Converter.Converter.An8ToOpt(fileName, scale);
+
+                    this.ReplaceMesh(opt, mesh, import);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.OptModel.UndoStackPush("replace " + System.IO.Path.GetFileName(fileName)));
             });
         }
 
