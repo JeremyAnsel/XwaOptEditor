@@ -41,13 +41,35 @@ namespace XwaOptEditor.Models
                 this.file = null;
                 this.cache = null;
                 this.RaisePropertyChangedEvent("File");
+                this.RaisePropertyChangedEvent("FileCenter");
 
                 this.file = value;
                 this.RaisePropertyChangedEvent("File");
+                this.RaisePropertyChangedEvent("FileCenter");
 
                 this.Cache = new OptCache(this.file);
 
                 this.CheckPlayability();
+            }
+        }
+
+        public Vector FileCenter
+        {
+            get
+            {
+                if (this.File == null)
+                {
+                    return Vector.Empty;
+                }
+
+                Vector min = this.File.MinSize;
+                Vector max = this.File.MaxSize;
+
+                float centerX = (min.X + max.X) * 0.5f;
+                float centerY = (min.Y + max.Y) * 0.5f;
+                float centerZ = (min.Z + max.Z) * 0.5f;
+
+                return new Vector(centerX, centerY, centerZ);
             }
         }
 

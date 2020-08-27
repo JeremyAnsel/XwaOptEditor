@@ -888,6 +888,10 @@
                     <CheckBox IsChecked="{Binding ModelShowWireframe}"
                               ToolTip="Show Wireframe">Wireframe</CheckBox>
                 </ToolBar>
+                <ToolBar>
+                    <CheckBox IsChecked="{Binding ShowCenter}"
+                              ToolTip="Show Center Axis">Axis</CheckBox>
+                </ToolBar>
             </ToolBarTray>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -938,6 +942,15 @@
                                                         Version="{Binding ModelVersion}"
                                                         IsSolid="{Binding ModelShowSolid}"
                                                         IsWireframe="{Binding ModelShowWireframe}" />
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptCenterConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="ShowCenter" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
                         <ModelVisual3D>
                             <ModelVisual3D.Content>
                                 <MultiBinding Converter="{vc:OptHitzonesConverter}">

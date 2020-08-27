@@ -42,6 +42,8 @@ namespace XwaOptEditor.ViewModels
 
         private bool showNormals = false;
 
+        private bool showCenter = true;
+
         public EditorViewModel()
         {
             this.CurrentMeshes = new SelectableCollection<Mesh>();
@@ -448,6 +450,23 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.showNormals = value;
                     this.RaisePropertyChangedEvent("ShowNormals");
+                }
+            }
+        }
+
+        public bool ShowCenter
+        {
+            get
+            {
+                return this.showCenter;
+            }
+
+            set
+            {
+                if (this.showCenter != value)
+                {
+                    this.showCenter = value;
+                    this.RaisePropertyChangedEvent("ShowCenter");
                 }
             }
         }

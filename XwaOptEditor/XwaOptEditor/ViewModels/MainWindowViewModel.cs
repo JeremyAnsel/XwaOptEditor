@@ -47,6 +47,7 @@ namespace XwaOptEditor.ViewModels
 
             this.ScaleCommand = new DelegateCommand(this.ExecuteScaleCommand);
             this.ChangeAxesCommand = new DelegateCommand(this.ExecuteChangeAxesCommand);
+            this.CenterCommand = new DelegateCommand(this.ExecuteCenterCommand);
 
             this.CommandBindings = new CommandBindingCollection();
             this.CommandBindings.Add(ApplicationCommands.Help, this.HelpCommand);
@@ -99,6 +100,7 @@ namespace XwaOptEditor.ViewModels
 
         public ICommand ScaleCommand { get; private set; }
         public ICommand ChangeAxesCommand { get; private set; }
+        public ICommand CenterCommand { get; private set; }
 
         public CommandBindingCollection CommandBindings { get; private set; }
 
@@ -710,6 +712,32 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.OptModel.File = opt);
                 dispatcher(() => this.OptModel.UndoStackPush("change axes"));
+            });
+        }
+
+        private void ExecuteCenterCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var opt = this.OptModel.File;
+
+                BusyIndicatorService.Notify("Center...");
+
+                for (int i = 0; i < 2; i++)
+                {
+                    var opt2 = opt.Clone();
+                    opt2.ComputeHitzones();
+                    JeremyAnsel.Xwa.Opt.Vector min = opt2.MinSize;
+                    JeremyAnsel.Xwa.Opt.Vector max = opt2.MaxSize;
+                    float centerX = (min.X + max.X) * 0.5f;
+                    float centerY = (min.Y + max.Y) * 0.5f;
+                    float centerZ = (min.Z + max.Z) * 0.5f;
+
+                    opt.Move(-centerX, -centerY, -centerZ);
+                }
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("center"));
             });
         }
     }

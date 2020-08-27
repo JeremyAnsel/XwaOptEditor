@@ -94,6 +94,7 @@
     <Compile Include="Converters\LengthScaleConverter.cs" />
     <Compile Include="Converters\LodDistanceConverter.cs" />
     <Compile Include="Converters\MaximumValueConverter.cs" />
+    <Compile Include="Converters\OptCenterConverter.cs" />
     <Compile Include="Converters\OptEngineGlowsConverter.cs" />
     <Compile Include="Converters\OptHardpointsConverter.cs" />
     <Compile Include="Converters\OptHitzonesConverter.cs" />

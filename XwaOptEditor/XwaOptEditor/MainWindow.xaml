@@ -41,6 +41,8 @@
                 <TextBlock Text="{Binding OptModel.File.Size, Converter={vc:LengthScaleConverter}}" />
                 <TextBlock Text="  Span (m): " />
                 <TextBlock Text="{Binding OptModel.File.SpanSize, Converter={vc:VectorScaleConverter}}" />
+                <TextBlock Text="  Center (m): " />
+                <TextBlock Text="{Binding OptModel.FileCenter, Converter={vc:VectorScaleConverter}}" />
             </StackPanel>
             <DockPanel DockPanel.Dock="Top">
                 <DockPanel>
@@ -101,6 +103,8 @@
                                 Command="{Binding ScaleCommand}" />
                         <Button Content="Axes..."
                                 Command="{Binding ChangeAxesCommand}" />
+                        <Button Content="Center"
+                                Command="{Binding CenterCommand}" />
                     </ToolBar>
                 </DockPanel>
             </DockPanel>
