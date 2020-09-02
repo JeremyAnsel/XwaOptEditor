@@ -115,6 +115,7 @@
     <Compile Include="Messages\MainViewSelectorMessage.cs" />
     <Compile Include="Messages\MessageBoxMessage.cs" />
     <Compile Include="Messages\MoveFactorMessage.cs" />
+    <Compile Include="Messages\MoveFactorSingleMessage.cs" />
     <Compile Include="Messages\OpenFileDialogMessage.cs" />
     <Compile Include="Messages\RotateFactorMessage.cs" />
     <Compile Include="Messages\SaveFileDialogMessage.cs" />
@@ -123,6 +124,9 @@
     <Compile Include="Models\OptModel.cs" />
     <Compile Include="MoveFactorDialog.xaml.cs">
       <DependentUpon>MoveFactorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MoveFactorSingleDialog.xaml.cs">
+      <DependentUpon>MoveFactorSingleDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Mvvm\AttachedProperties.cs" />
     <Compile Include="Mvvm\CommandBindingCollectionExtensions.cs" />
@@ -193,6 +197,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MoveFactorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MoveFactorSingleDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

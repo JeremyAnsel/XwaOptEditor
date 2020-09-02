@@ -1,0 +1,140 @@
+﻿<Window x:Class="XwaOptEditor.MoveFactorSingleDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XwaOptEditor"
+        mc:Ignorable="d"
+        Title="Move"
+        Height="250"
+        Width="600"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        UseLayoutRounding="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Text="Center" />
+        <TextBlock Grid.Row="0"
+                   Grid.Column="3"
+                   Grid.ColumnSpan="2"
+                   Text="Position" />
+        <TextBlock Grid.Row="0"
+                   Grid.Column="5"
+                   Grid.ColumnSpan="2"
+                   Text="Move" />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   Text="Opt Unit: " />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="2"
+                   Text="Meter: " />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="3"
+                   Text="Opt Unit: " />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="4"
+                   Text="Meter: " />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="5"
+                   Text="Opt Unit: " />
+        <TextBlock Grid.Row="1"
+                   Grid.Column="6"
+                   Text="Meter: " />
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Text="X: " />
+        <TextBlock Grid.Row="2"
+                   Grid.Column="1"
+                   Text="{Binding CenterX}" />
+        <TextBlock Grid.Row="2"
+                   Grid.Column="2"
+                   Text="{Binding CenterXMeter}" />
+        <TextBox Grid.Row="2"
+                 Grid.Column="3"
+                 Text="{Binding PositionX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="2"
+                 Grid.Column="4"
+                 Text="{Binding PositionXMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="2"
+                 Grid.Column="5"
+                 Text="{Binding MoveX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="2"
+                 Grid.Column="6"
+                 Text="{Binding MoveXMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Text="Y: " />
+        <TextBlock Grid.Row="3"
+                   Grid.Column="1"
+                   Text="{Binding CenterY}" />
+        <TextBlock Grid.Row="3"
+                   Grid.Column="2"
+                   Text="{Binding CenterYMeter}" />
+        <TextBox Grid.Row="3"
+                 Grid.Column="3"
+                 Text="{Binding PositionY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="3"
+                 Grid.Column="4"
+                 Text="{Binding PositionYMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="3"
+                 Grid.Column="5"
+                 Text="{Binding MoveY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="3"
+                 Grid.Column="6"
+                 Text="{Binding MoveYMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   Text="Z: " />
+        <TextBlock Grid.Row="4"
+                   Grid.Column="1"
+                   Text="{Binding CenterZ}" />
+        <TextBlock Grid.Row="4"
+                   Grid.Column="2"
+                   Text="{Binding CenterZMeter}" />
+        <TextBox Grid.Row="4"
+                 Grid.Column="3"
+                 Text="{Binding PositionZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="4"
+                 Grid.Column="4"
+                 Text="{Binding PositionZMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="4"
+                 Grid.Column="5"
+                 Text="{Binding MoveZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <TextBox Grid.Row="4"
+                 Grid.Column="6"
+                 Text="{Binding MoveZMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+        <Button x:Name="Cancel"
+                Grid.Row="5"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Margin="30 2"
+                Click="Cancel_Click"
+                IsCancel="True">Cancel</Button>
+        <Button x:Name="Ok"
+                Grid.Row="5"
+                Grid.Column="4"
+                Grid.ColumnSpan="3"
+                Margin="30 2"
+                Click="Ok_Click"
+                IsDefault="True">OK</Button>
+    </Grid>
+</Window>

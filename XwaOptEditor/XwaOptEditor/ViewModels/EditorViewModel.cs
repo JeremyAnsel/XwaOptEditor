@@ -668,18 +668,53 @@ namespace XwaOptEditor.ViewModels
         {
             BusyIndicatorService.Run(dispatcher =>
             {
-                var message = Messenger.Instance.Notify(new MoveFactorMessage());
+                float moveX;
+                float moveY;
+                float moveZ;
 
-                if (!message.Changed)
+                if (meshes.Count == 1)
                 {
-                    return;
+                    var mesh = meshes[0];
+
+                    var message = new MoveFactorSingleMessage();
+                    if (mesh.Descriptor != null)
+                    {
+                        var center = mesh.Descriptor.Center;
+                        message.CenterX = center.X;
+                        message.CenterY = center.Y;
+                        message.CenterZ = center.Z;
+                    }
+
+                    Messenger.Instance.Notify(message);
+
+                    if (!message.Changed)
+                    {
+                        return;
+                    }
+
+                    moveX = message.MoveX;
+                    moveY = message.MoveY;
+                    moveZ = message.MoveZ;
+                }
+                else
+                {
+                    var message = Messenger.Instance.Notify(new MoveFactorMessage());
+
+                    if (!message.Changed)
+                    {
+                        return;
+                    }
+
+                    moveX = message.MoveX;
+                    moveY = message.MoveY;
+                    moveZ = message.MoveZ;
                 }
 
                 BusyIndicatorService.Notify("Moving ...");
 
                 foreach (var mesh in meshes)
                 {
-                    mesh.Move(message.MoveX, message.MoveY, message.MoveZ);
+                    mesh.Move(moveX, moveY, moveZ);
                 }
 
                 dispatcher(() => this.UpdateModel());

@@ -45,6 +45,7 @@ namespace XwaOptEditor
                 Messenger.Instance.Register<ScaleFactorMessage>(this, this.OnScaleFactorMessage);
                 Messenger.Instance.Register<ChangeAxesMessage>(this, this.OnChangeAxesMessage);
                 Messenger.Instance.Register<MoveFactorMessage>(this, this.OnMoveFactorMessage);
+                Messenger.Instance.Register<MoveFactorSingleMessage>(this, this.OnMoveFactorSingleMessage);
                 Messenger.Instance.Register<RotateFactorMessage>(this, this.OnRotateFactorMessage);
             };
 
@@ -272,6 +273,31 @@ namespace XwaOptEditor
             Action action = () =>
             {
                 var dialog = new MoveFactorDialog(this);
+
+                if (dialog.ShowDialog() == true)
+                {
+                    message.MoveX = dialog.MoveX;
+                    message.MoveY = dialog.MoveY;
+                    message.MoveZ = dialog.MoveZ;
+                    message.Changed = true;
+                }
+                else
+                {
+                    message.Changed = false;
+                }
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
+
+        private void OnMoveFactorSingleMessage(MoveFactorSingleMessage message)
+        {
+            Action action = () =>
+            {
+                var dialog = new MoveFactorSingleDialog(this);
+                dialog.CenterX = message.CenterX;
+                dialog.CenterY = message.CenterY;
+                dialog.CenterZ = message.CenterZ;
 
                 if (dialog.ShowDialog() == true)
                 {
