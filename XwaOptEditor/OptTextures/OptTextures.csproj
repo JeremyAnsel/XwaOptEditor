@@ -48,8 +48,8 @@
       <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.65\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.34\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+    <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.35.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.35\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
