@@ -143,7 +143,7 @@
             </ToolBarTray>
             <ListView x:Name="meshesListView"
                       ItemsSource="{Binding CurrentMeshes}"
-                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.IsVirtualizing="False"
                       VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
