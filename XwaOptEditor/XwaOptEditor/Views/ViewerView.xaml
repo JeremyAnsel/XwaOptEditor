@@ -10,7 +10,7 @@
              xmlns:localControl="clr-namespace:XwaOptEditor.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300"
-             d:DesignWidth="500">
+             d:DesignWidth="600">
     <UserControl.DataContext>
         <vm:ViewerViewModel />
     </UserControl.DataContext>
@@ -41,6 +41,7 @@
             <ToolBar>
                 <CheckBox IsChecked="{Binding ModelShowSolid}">Solid</CheckBox>
                 <CheckBox IsChecked="{Binding ModelShowWireframe}">Wireframe</CheckBox>
+                <CheckBox IsChecked="{Binding ModelShowBackFaces}">Back Faces</CheckBox>
             </ToolBar>
         </ToolBarTray>
         <localControl:CustomHelixViewport3D ClipToBounds="False"
@@ -56,7 +57,8 @@
                                             Version="{Binding ModelVersion}"
                                             Distance="{Binding ModelDistance}"
                                             IsSolid="{Binding ModelShowSolid}"
-                                            IsWireframe="{Binding ModelShowWireframe}" />
+                                            IsWireframe="{Binding ModelShowWireframe}"
+                                            ShowBackFaces="{Binding ModelShowBackFaces}" />
         </localControl:CustomHelixViewport3D>
     </DockPanel>
 </UserControl>

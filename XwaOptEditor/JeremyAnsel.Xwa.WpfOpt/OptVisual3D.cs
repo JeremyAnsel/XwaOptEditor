@@ -82,6 +82,12 @@ namespace JeremyAnsel.Xwa.WpfOpt
             set { this.SetValue(IsWireframeProperty, value); }
         }
 
+        public bool ShowBackFaces
+        {
+            get { return (bool)GetValue(ShowBackFacesProperty); }
+            set { SetValue(ShowBackFacesProperty, value); }
+        }
+
         public static readonly DependencyProperty CacheProperty = DependencyProperty.Register("Cache", typeof(OptCache), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
 
         public static readonly DependencyProperty FileNameProperty = DependencyProperty.Register("FileName", typeof(string), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
@@ -99,6 +105,8 @@ namespace JeremyAnsel.Xwa.WpfOpt
         public static readonly DependencyProperty IsSolidProperty = DependencyProperty.Register("IsSolid", typeof(bool), typeof(OptVisual3D), new UIPropertyMetadata(true, ContentChanged));
 
         public static readonly DependencyProperty IsWireframeProperty = DependencyProperty.Register("IsWireframe", typeof(bool), typeof(OptVisual3D), new UIPropertyMetadata(false, ContentChanged));
+
+        public static readonly DependencyProperty ShowBackFacesProperty = DependencyProperty.Register("ShowBackFaces", typeof(bool), typeof(OptVisual3D), new UIPropertyMetadata(false, ContentChanged));
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private static void ContentChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -140,6 +148,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                 case "Version":
                 case "IsSolid":
                 case "IsWireframe":
+                case "ShowBackFaces":
                     if (opt.Distance == null)
                     {
                         opt.LoadOpt(opt.Mesh, opt.Lod, opt.Version);
@@ -172,6 +181,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                 case "Version":
                 case "IsSolid":
                 case "IsWireframe":
+                case "ShowBackFaces":
                     if (opt.AppearanceChanged != null)
                     {
                         opt.AppearanceChanged(opt, EventArgs.Empty);
@@ -451,6 +461,11 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
                     model.Geometry = geometries[0];
                     model.Material = texture == null ? cache.nullTexture : texture;
+
+                    if (this.ShowBackFaces)
+                    {
+                        model.BackMaterial = texture == null ? cache.nullTexture : texture;
+                    }
 
                     model.Freeze();
 

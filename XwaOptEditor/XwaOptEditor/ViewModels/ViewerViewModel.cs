@@ -18,6 +18,8 @@ namespace XwaOptEditor.ViewModels
 
         private bool modelShowWireframe = false;
 
+        private bool modelShowBackFaces = false;
+
         private float modelDistance = 0.001f;
 
         public ViewerViewModel()
@@ -99,6 +101,23 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.modelShowWireframe = value;
                     this.RaisePropertyChangedEvent("ModelShowWireframe");
+                }
+            }
+        }
+
+        public bool ModelShowBackFaces
+        {
+            get
+            {
+                return this.modelShowBackFaces;
+            }
+
+            set
+            {
+                if (this.modelShowBackFaces != value)
+                {
+                    this.modelShowBackFaces = value;
+                    this.RaisePropertyChangedEvent("ModelShowBackFaces");
                 }
             }
         }
