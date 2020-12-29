@@ -860,13 +860,25 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
-            <xctk:ColorPicker x:Name="backgroundColorPicker"
-                              DockPanel.Dock="Bottom"
-                              ToolTip="Background Color"
-                              UsingAlphaChannel="False"
-                              ShowStandardColors="False"
-                              AvailableColorsSortingMode="HueSaturationBrightness"
-                              SelectedColor="Black" />
+            <DockPanel DockPanel.Dock="Bottom">
+                <ToolBarTray DockPanel.Dock="Right"
+                             IsLocked="True">
+                    <ToolBar>
+                        <TextBlock Text="Version: " />
+                        <xctk:IntegerUpDown ToolTip="Version"
+                                    Minimum="0"
+                                    Maximum="{Binding OptModel.File.MaxTextureVersion, Converter={vc:MaximumValueConverter}}"
+                                    DefaultValue="0"
+                                    Value="{Binding ModelVersion}" />
+                    </ToolBar>
+                </ToolBarTray>
+                <xctk:ColorPicker x:Name="backgroundColorPicker"
+                            ToolTip="Background Color"
+                            UsingAlphaChannel="False"
+                            ShowStandardColors="False"
+                            AvailableColorsSortingMode="HueSaturationBrightness"
+                            SelectedColor="Black" />
+            </DockPanel>
             <ToolBarTray DockPanel.Dock="Bottom"
                          IsLocked="True">
                 <ToolBar>
