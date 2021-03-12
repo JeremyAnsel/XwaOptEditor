@@ -27,6 +27,9 @@ namespace XwaOptEditor.ViewModels
             this.ReplaceAlphaMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceAlphaMapCommand);
             this.ReplaceIllumMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceIllumMapCommand);
 
+            this.UpCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteUpCommand);
+            this.DownCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteDownCommand);
+
             this.GenerateAllMipmapsCommand = new DelegateCommand(this.ExecuteGenerateAllMipmapsCommand);
             this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
             this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo32BitsCommand);
@@ -65,6 +68,10 @@ namespace XwaOptEditor.ViewModels
         public ICommand ReplaceAlphaMapCommand { get; private set; }
 
         public ICommand ReplaceIllumMapCommand { get; private set; }
+
+        public ICommand UpCommand { get; private set; }
+
+        public ICommand DownCommand { get; private set; }
 
         public ICommand GenerateAllMipmapsCommand { get; private set; }
 
@@ -336,6 +343,114 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage(name, ex));
+                }
+            });
+        }
+
+        private void SwitchTextures(string key1, string key2)
+        {
+            var dictionary = this.OptModel.File.Textures;
+
+            Texture tex1 = dictionary[key1];
+            dictionary[key1] = null;
+            Texture tex2 = dictionary[key2];
+            dictionary[key2] = null;
+
+            dictionary[key1] = tex2;
+            tex2.Name = key1;
+            dictionary[key2] = tex1;
+            tex1.Name = key2;
+
+            foreach (var faceGroup in this.OptModel.File.Meshes
+                .SelectMany(t => t.Lods)
+                .SelectMany(t => t.FaceGroups))
+            {
+                for (int i = 0; i < faceGroup.Textures.Count; i++)
+                {
+                    string key = faceGroup.Textures[i];
+
+                    if (key == key1)
+                    {
+                        faceGroup.Textures[i] = key2;
+                    }
+                    else if (key == key2)
+                    {
+                        faceGroup.Textures[i] = key1;
+                    }
+                }
+            }
+        }
+
+        private void ExecuteUpCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Move up textures...");
+
+                    var selectedItems = textures.ToList();
+                    var keys = this.OptModel.File.Textures.Keys.ToList();
+
+                    for (int selectedIndex = 0; selectedIndex < selectedItems.Count; selectedIndex++)
+                    {
+                        var selectedItem = selectedItems[selectedIndex];
+
+                        int index = keys.IndexOf(selectedItem.Key);
+
+                        if (index < 1)
+                        {
+                            continue;
+                        }
+
+                        string key1 = keys[index - 1];
+                        string key2 = keys[index];
+                        this.SwitchTextures(key1, key2);
+                    }
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("move up textures"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Move up textures.", ex));
+                }
+            });
+        }
+
+        private void ExecuteDownCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Move down textures...");
+
+                    var selectedItems = textures.ToList();
+                    var keys = this.OptModel.File.Textures.Keys.ToList();
+
+                    for (int selectedIndex = selectedItems.Count - 1; selectedIndex >= 0; selectedIndex--)
+                    {
+                        var selectedItem = selectedItems[selectedIndex];
+
+                        int index = keys.IndexOf(selectedItem.Key);
+
+                        if (index >= keys.Count - 1)
+                        {
+                            continue;
+                        }
+
+                        string key1 = keys[index];
+                        string key2 = keys[index + 1];
+                        this.SwitchTextures(key1, key2);
+                    }
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("move down textures"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Move down textures.", ex));
                 }
             });
         }

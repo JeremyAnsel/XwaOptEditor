@@ -54,6 +54,16 @@
                 <ToolBar Band="2"
                          BandIndex="0"
                          IsEnabled="{Binding HasItems}">
+                    <Button Content="Up"
+                            Command="{Binding DataContext.UpCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
+                    <Button Content="Down"
+                            Command="{Binding DataContext.DownCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
+                </ToolBar>
+                <ToolBar Band="3"
+                         BandIndex="0"
+                         IsEnabled="{Binding HasItems}">
                     <Button Content="Generate Mipmaps"
                             Command="{Binding DataContext.GenerateAllMipmapsCommand}" />
                     <Separator />
@@ -63,7 +73,7 @@
                     <Button Content="32 bits"
                             Command="{Binding DataContext.ConvertAllTo32BitsCommand}" />
                 </ToolBar>
-                <ToolBar Band="3"
+                <ToolBar Band="4"
                          BandIndex="0"
                          IsEnabled="{Binding HasItems}">
                     <Button Content="Compact"
@@ -81,7 +91,7 @@
                       IsReadOnly="True"
                       AutoGenerateColumns="False"
                       IsSynchronizedWithCurrentItem="True"
-                      SelectionMode="Single"
+                      SelectionMode="Extended"
                       EnableRowVirtualization="True"
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling">
@@ -116,6 +126,14 @@
                                       Command="{Binding DataContext.ReplaceIllumMapCommand}"
                                       CommandParameter="{Binding SelectedItem.Value}" />
                         </MenuItem>
+                        <MenuItem IsEnabled="{Binding HasItems}"
+                                  Header="Move Up"
+                                  Command="{Binding DataContext.UpCommand}"
+                                  CommandParameter="{Binding SelectedItems}" />
+                        <MenuItem IsEnabled="{Binding HasItems}"
+                                  Header="Move Down"
+                                  Command="{Binding DataContext.DownCommand}"
+                                  CommandParameter="{Binding SelectedItems}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
