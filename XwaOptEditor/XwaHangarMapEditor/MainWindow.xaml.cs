@@ -141,6 +141,9 @@ namespace XwaHangarMapEditor
 
             try
             {
+                string hangar;
+                string text;
+
                 if (fileName.EndsWith(".ini", StringComparison.OrdinalIgnoreCase))
                 {
                     string ship = XwaHooksConfig.GetStringWithoutExtension(fileName);
@@ -149,28 +152,31 @@ namespace XwaHangarMapEditor
                     iniFile.Read("HangarMap", "HangarMap");
                     iniFile.Read("FamHangarMap", "FamHangarMap");
 
-                    this.ViewModel.Text = string.Join("\n",
+                    text = string.Join("\n",
                         iniFile.Sections["HangarMap"].Lines
                         .Union(iniFile.Sections["FamHangarMap"].Lines));
 
                     string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
-                    this.ViewModel.HangarModel = name + "Hangar";
+                    hangar = string.IsNullOrEmpty(name) ? "Hangar" : name + "Hangar";
                 }
                 else
                 {
-                    this.ViewModel.Text = System.IO.File.ReadAllText(fileName, Encoding.ASCII);
+                    text = System.IO.File.ReadAllText(fileName, Encoding.ASCII);
 
                     string name = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
                     int index = name.LastIndexOf("Map");
-                    if (index != -1)
-                    {
-                        this.ViewModel.HangarModel = name.Substring(0, index);
-                    }
+                    hangar = index == -1 ? "Hangar" : name.Substring(0, index);
                 }
 
-                this.ViewModel.TextFileName = fileName;
+                this.ViewModel.Text = null;
+                this.ViewModel.TextFileName = null;
+
+                this.ViewModel.HangarModel = hangar;
                 this.viewport3D.ResetCamera();
+
+                this.ViewModel.Text = text;
+                this.ViewModel.TextFileName = fileName;
             }
             catch (Exception ex)
             {
