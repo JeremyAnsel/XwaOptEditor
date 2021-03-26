@@ -8,18 +8,29 @@ namespace JeremyAnsel.Xwa.HooksConfig
 {
     public sealed class XwaIniFile
     {
-        public XwaIniFile(string basePath)
+        private static readonly Encoding _encoding = Encoding.GetEncoding("iso-8859-1");
+
+        public XwaIniFile(string path)
         {
-            if (string.IsNullOrEmpty(basePath))
+            if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException(nameof(basePath));
+                throw new ArgumentNullException(nameof(path));
             }
 
-            this.BasePath = basePath;
+            if (!Path.HasExtension(path))
+            {
+                path = Path.ChangeExtension(path, ".ini");
+            }
+
+            this.BasePath = Path.ChangeExtension(path, null);
+            this.Extension = Path.GetExtension(path);
+
             this.CreateSectionIfNotExists(string.Empty);
         }
 
         public string BasePath { get; private set; }
+
+        public string Extension { get; private set; }
 
         public IDictionary<string, XwaIniSection> Sections { get; } = new SortedDictionary<string, XwaIniSection>();
 
@@ -57,22 +68,22 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
         public void ParseIni()
         {
-            string path = this.BasePath + ".ini";
+            string path = this.BasePath + this.Extension;
 
             if (!File.Exists(path))
             {
                 return;
             }
 
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(path, _encoding))
             {
                 string fileLine;
                 string section = string.Empty;
-                bool readSection = this.CreateSectionIfNotExists(section);
+                bool readSection = true;
 
                 while ((fileLine = reader.ReadLine()) != null)
                 {
-                    string line = RemoveWhitespaces(fileLine);
+                    string line = fileLine.Trim();
 
                     if (line.StartsWith("[") && line.EndsWith("]"))
                     {
@@ -104,7 +115,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
                     foreach (string fileLine in lines)
                     {
-                        string line = RemoveWhitespaces(fileLine);
+                        string line = fileLine.Trim();
 
                         if (!IsComment(line) && line.IndexOf('=') != -1)
                         {
@@ -143,7 +154,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
                 }
             }
 
-            foreach (string fileLine in ReadFileLines(this.BasePath + ".ini", iniKey))
+            foreach (string fileLine in ReadFileLines(this.BasePath + this.Extension, iniKey))
             {
                 section.Lines.Add(fileLine);
             }
@@ -171,7 +182,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
                 return;
             }
 
-            using (var writer = new StreamWriter(basePath + ".ini"))
+            using (var writer = new StreamWriter(basePath + this.Extension, false, _encoding))
             {
                 foreach (var section in this.Sections)
                 {
@@ -193,7 +204,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
                     continue;
                 }
 
-                using (var writer = new StreamWriter(basePath + txtKey + ".txt"))
+                using (var writer = new StreamWriter(basePath + txtKey + ".txt", false, _encoding))
                 {
                     WriteSection(writer, section.Value);
                 }
@@ -231,6 +242,19 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
             var section = this.Sections[iniKey];
             return section.Lines;
+        }
+
+        public bool CreateSectionIfNotExists(string section)
+        {
+            if (this.Sections.ContainsKey(section))
+            {
+                return false;
+            }
+            else
+            {
+                this.Sections[section] = new XwaIniSection();
+                return true;
+            }
         }
 
         private void RemoveDuplicatedEmptyLines()
@@ -272,7 +296,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
         private void RemoveEmptyFiles(string basePath)
         {
-            string iniPath = basePath + ".ini";
+            string iniPath = basePath + this.Extension;
 
             if (!this.HasLinesOrSettings)
             {
@@ -316,19 +340,6 @@ namespace JeremyAnsel.Xwa.HooksConfig
             }
         }
 
-        private bool CreateSectionIfNotExists(string section)
-        {
-            if (this.Sections.ContainsKey(section))
-            {
-                return false;
-            }
-            else
-            {
-                this.Sections[section] = new XwaIniSection();
-                return true;
-            }
-        }
-
         private static IList<string> ReadFileLines(string path, string section = null)
         {
             section = section ?? string.Empty;
@@ -340,14 +351,14 @@ namespace JeremyAnsel.Xwa.HooksConfig
                 return values;
             }
 
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(path, _encoding))
             {
                 string fileLine;
                 bool readSection = string.IsNullOrEmpty(section);
 
                 while ((fileLine = reader.ReadLine()) != null)
                 {
-                    string line = RemoveWhitespaces(fileLine);
+                    string line = fileLine.Trim();
 
                     if (line.StartsWith("[") && line.EndsWith("]"))
                     {
@@ -373,25 +384,6 @@ namespace JeremyAnsel.Xwa.HooksConfig
             }
 
             return values;
-        }
-
-        private static string RemoveWhitespaces(string str)
-        {
-            var sb = new StringBuilder(str.Length);
-            int c;
-
-            using (var reader = new StringReader(str))
-            {
-                while ((c = reader.Read()) != -1)
-                {
-                    if (!char.IsWhiteSpace((char)c))
-                    {
-                        sb.Append((char)c);
-                    }
-                }
-            }
-
-            return sb.ToString();
         }
 
         private static bool IsComment(string line)

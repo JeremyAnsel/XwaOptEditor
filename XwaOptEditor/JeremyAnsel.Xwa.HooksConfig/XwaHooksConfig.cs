@@ -9,25 +9,93 @@ namespace JeremyAnsel.Xwa.HooksConfig
 {
     public static class XwaHooksConfig
     {
+        private static readonly Encoding _encoding = Encoding.GetEncoding("iso-8859-1");
+
         private static readonly TypeConverter Int32Converter = TypeDescriptor.GetConverter(typeof(int));
 
         public static int ToInt32(string text)
         {
-            text = text.Trim();
+            var sb = new StringBuilder();
+            int length = text.Length;
+            int index = 0;
 
-            bool isNegative = text.StartsWith("-");
-            if (isNegative)
+            while (index < length && char.IsWhiteSpace(text, index))
             {
-                text = text.Substring(1).TrimStart();
+                index++;
             }
 
-            int index = text.IndexOf('.');
-            if (index != -1)
+            if (index == length)
             {
-                text = text.Substring(0, index);
+                return 0;
             }
 
-            int value = (int)Int32Converter.ConvertFromInvariantString(text);
+            bool isNegative = false;
+
+            if (text[index] == '+')
+            {
+                index++;
+            }
+            else if (text[index] == '-')
+            {
+                isNegative = true;
+                index++;
+            }
+
+            while (index < length && char.IsWhiteSpace(text, index))
+            {
+                index++;
+            }
+
+            if (index == length)
+            {
+                return 0;
+            }
+
+            bool isHex = false;
+
+            if (index + 2 <= length)
+            {
+                if (text[index] == '0')
+                {
+                    if (text[index + 1] == 'x' || text[index + 1] == 'X')
+                    {
+                        isHex = true;
+                        sb.Append("0x");
+                        index += 2;
+                    }
+                }
+            }
+
+            while (index < length)
+            {
+                char c = text[index];
+
+                bool isDigit;
+
+                if (isHex)
+                {
+                    isDigit = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+                }
+                else
+                {
+                    isDigit = c >= '0' && c <= '9';
+                }
+
+                if (!isDigit)
+                {
+                    break;
+                }
+
+                sb.Append(c);
+                index++;
+            }
+
+            if (sb.Length == 0)
+            {
+                return 0;
+            }
+
+            int value = (int)Int32Converter.ConvertFromInvariantString(sb.ToString());
             if (isNegative)
             {
                 value = -value;
@@ -52,14 +120,14 @@ namespace JeremyAnsel.Xwa.HooksConfig
                 return values;
             }
 
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(path, _encoding))
             {
                 string line;
                 bool readSection = string.IsNullOrEmpty(section);
 
                 while ((line = reader.ReadLine()) != null)
                 {
-                    line = RemoveWhitespaces(line);
+                    line = line.Trim();
 
                     if (line.Length == 0)
                     {
@@ -108,7 +176,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
                     continue;
                 }
 
-                string name = line.Substring(0, pos);
+                string name = line.Substring(0, pos).Trim();
 
                 if (name.Length == 0)
                 {
@@ -117,7 +185,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
                 if (string.Equals(name, key, StringComparison.OrdinalIgnoreCase))
                 {
-                    string value = line.Substring(pos + 1);
+                    string value = line.Substring(pos + 1).Trim();
                     return value;
                 }
             }
@@ -139,8 +207,23 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
         public static IList<string> Tokennize(string str)
         {
+            str = str.Trim();
+
+            if (string.IsNullOrEmpty(str))
+            {
+                return new List<string>();
+            }
+
             string[] tokens = str.Split(',', ';');
-            return tokens.ToList();
+            var values = new List<string>(tokens.Length);
+
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                string value = tokens[i].Trim();
+                values.Add(value);
+            }
+
+            return values;
         }
 
         public static IList<IList<string>> GetFileListValues(IList<string> lines)
@@ -161,7 +244,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
             foreach (string line in lines)
             {
-                int value = int.Parse(line);
+                int value = ToInt32(line.Trim());
                 values.Add(value);
             }
 
@@ -174,30 +257,11 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
             foreach (string line in lines)
             {
-                ushort value = ushort.Parse(line);
+                ushort value = (ushort)ToInt32(line.Trim());
                 values.Add(value);
             }
 
             return values;
-        }
-
-        private static string RemoveWhitespaces(string str)
-        {
-            var sb = new StringBuilder(str.Length);
-            int c;
-
-            using (var reader = new StringReader(str))
-            {
-                while ((c = reader.Read()) != -1)
-                {
-                    if (!char.IsWhiteSpace((char)c))
-                    {
-                        sb.Append((char)c);
-                    }
-                }
-            }
-
-            return sb.ToString();
         }
     }
 }
