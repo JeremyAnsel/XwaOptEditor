@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.HooksConfig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaSFoilsEditor", "XwaSFoilsEditor\XwaSFoilsEditor.csproj", "{3F31A4E5-56B4-41E4-BF11-8D1BCF986895}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptProfilesViewer", "XwaOptProfilesViewer\XwaOptProfilesViewer.csproj", "{7099FA72-B599-40A2-A01E-379AF3A7B17F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{3F31A4E5-56B4-41E4-BF11-8D1BCF986895}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F31A4E5-56B4-41E4-BF11-8D1BCF986895}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F31A4E5-56B4-41E4-BF11-8D1BCF986895}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7099FA72-B599-40A2-A01E-379AF3A7B17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7099FA72-B599-40A2-A01E-379AF3A7B17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7099FA72-B599-40A2-A01E-379AF3A7B17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7099FA72-B599-40A2-A01E-379AF3A7B17F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

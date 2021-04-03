@@ -1,0 +1,99 @@
+﻿<Window x:Class="XwaOptProfilesViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:local="clr-namespace:XwaOptProfilesViewer"
+        mc:Ignorable="d"
+        Title="Xwa Opt Profiles Viewer"
+        Height="500" Width="700"
+        UseLayoutRounding="True"
+        ContentRendered="Window_ContentRendered">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
+            <ToolBar>
+                <Button x:Name="openButton" Content="Open..." Click="openButton_Click" />
+                <Separator/>
+                <TextBlock Text="Export " />
+                <Button Content="Opt..." Click="exportOptButton_Click" />
+                <Button Content="Obj..." Click="exportObjButton_Click" />
+            </ToolBar>
+        </ToolBarTray>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding OptFile.FileName}" />
+        </StatusBar>
+        <DockPanel>
+            <xctk:ColorPicker x:Name="backgroundColorPicker"
+                              DockPanel.Dock="Bottom"
+                              ToolTip="Background Color"
+                              UsingAlphaChannel="False"
+                              ShowStandardColors="False"
+                              AvailableColorsSortingMode="HueSaturationBrightness"
+                              SelectedColor="Black" />
+            <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+                <ToolBar>
+                    <CheckBox x:Name="modelShowSolid"
+                              IsChecked="True"
+                              ToolTip="Show Solid">Solid</CheckBox>
+                    <CheckBox x:Name="modelShowWireframe"
+                              IsChecked="False"
+                              ToolTip="Show Wireframe">Wireframe</CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <CheckBox x:Name="cameraOrthographic"
+                              IsChecked="False"
+                              ToolTip="Orthographic or Perspective camera">Orthographic</CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <TextBlock Text="Distance: " />
+                    <TextBox Width="80" Text="{Binding ElementName=distanceSelector, Path=Value, Mode=TwoWay, Converter={x:Static local:LodDistanceConverter.Default}}" />
+                    <Slider x:Name="distanceSelector" Width="100" Minimum="0.0" Maximum="0.001" Value="0.001" />
+                </ToolBar>
+            </ToolBarTray>
+            <DockPanel DockPanel.Dock="Left">
+                <TextBlock DockPanel.Dock="Top" Text="Object Profiles: " />
+                <ListBox x:Name="optObjectProfilesListBox" ItemsSource="{Binding OptObjectProfiles}" DisplayMemberPath="Key" />
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Left">
+                <TextBlock DockPanel.Dock="Top" Text="Skins: " />
+                <ListBox x:Name="optSelectedSkinsListBox" DockPanel.Dock="Bottom" IsEnabled="False" />
+                <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+                    <ToolBar>
+                        <Button x:Name="clearSelectedSkinsButton" Content="Clear" Click="clearSelectedSkinsButton_Click" />
+                        <Button x:Name="addSelectedSkinsButton" Content="Add" Click="addSelectedSkinsButton_Click" />
+                    </ToolBar>
+                </ToolBarTray>
+                <ListBox x:Name="optSkinsListBox" ItemsSource="{Binding OptSkins}" MouseDoubleClick="optSkinsListBox_MouseDoubleClick" />
+            </DockPanel>
+            <hx:HelixViewport3D x:Name="viewport3D"
+                                Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
+                                ClipToBounds="False"
+                                IsHeadLightEnabled="True"
+                                IsViewCubeEdgeClicksEnabled="True"
+                                CameraMode="Inspect"
+                                CameraRotationMode="Trackball"
+                                IsChangeFieldOfViewEnabled="False"
+                                IsMoveEnabled="False"
+                                CameraChanged="viewport3D_CameraChanged"
+                                Orthographic="{Binding IsChecked, ElementName=cameraOrthographic}">
+                <hx:DefaultLights/>
+                <ModelVisual3D x:Name="modelVisual3D">
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptMeshesConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="Value" ElementName="distanceSelector" />
+                            <Binding Path="IsChecked" ElementName="modelShowSolid" />
+                            <Binding Path="IsChecked" ElementName="modelShowWireframe" />
+                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
+                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+            </hx:HelixViewport3D>
+        </DockPanel>
+    </DockPanel>
+</Window>
