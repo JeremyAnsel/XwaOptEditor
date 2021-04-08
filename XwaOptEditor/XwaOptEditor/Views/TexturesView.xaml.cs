@@ -153,9 +153,10 @@ namespace XwaOptEditor.Views
                 return;
             }
 
-            var texture = ((KeyValuePair<string, Texture>)this.Textures.SelectedItem).Value;
-
-            texture.ResetPaletteColors();
+            foreach (KeyValuePair<string, Texture> texture in this.Textures.SelectedItems)
+            {
+                texture.Value.ResetPaletteColors();
+            }
 
             this.OptModel.File = this.OptModel.File;
             this.OptModel.UndoStackPush("reset illumination");
