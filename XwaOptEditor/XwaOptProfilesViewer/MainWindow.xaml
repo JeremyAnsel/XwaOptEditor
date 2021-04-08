@@ -51,6 +51,15 @@
                     <TextBox Width="80" Text="{Binding ElementName=distanceSelector, Path=Value, Mode=TwoWay, Converter={x:Static local:LodDistanceConverter.Default}}" />
                     <Slider x:Name="distanceSelector" Width="100" Minimum="0.0" Maximum="0.001" Value="0.001" />
                 </ToolBar>
+                <ToolBar>
+                    <TextBlock Text="Version: " />
+                    <xctk:IntegerUpDown x:Name="versionSelector"
+                                        ToolTip="Version"
+                                        Minimum="0"
+                                        Maximum="{Binding OptFile.MaxTextureVersion, Converter={x:Static local:MaximumValueConverter.Default}}"
+                                        Value="0"
+                                        DefaultValue="0" />
+                </ToolBar>
             </ToolBarTray>
             <DockPanel DockPanel.Dock="Left">
                 <TextBlock DockPanel.Dock="Top" Text="Object Profiles: " />
@@ -84,6 +93,7 @@
                         <MultiBinding Converter="{x:Static local:OptMeshesConverter.Default}">
                             <Binding RelativeSource="{RelativeSource Self}" />
                             <Binding Path="OptFile" />
+                            <Binding Path="Value" ElementName="versionSelector" />
                             <Binding Path="Value" ElementName="distanceSelector" />
                             <Binding Path="IsChecked" ElementName="modelShowSolid" />
                             <Binding Path="IsChecked" ElementName="modelShowWireframe" />

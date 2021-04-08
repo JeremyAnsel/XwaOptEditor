@@ -20,13 +20,14 @@ namespace XwaOptProfilesViewer
         {
             // values[0]: model
             // values[1]: opt
-            // values[2]: distance
-            // values[3]: show or hide solid
-            // values[4]: show or hide wireframe
-            // values[5]: selected opt object profile
-            // values[6]: selected opt skins
+            // values[2]: version
+            // values[3]: distance
+            // values[4]: show or hide solid
+            // values[5]: show or hide wireframe
+            // values[6]: selected opt object profile
+            // values[7]: selected opt skins
 
-            if (values.Take(7).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
+            if (values.Take(8).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
             {
                 return null;
             }
@@ -45,27 +46,28 @@ namespace XwaOptProfilesViewer
             }
 
             var optFile = (OptFile)values[1];
+            int version = ((int?)values[2]).Value;
 
             float distance;
-            if (values[2] is float)
+            if (values[3] is float)
             {
-                distance = (float)values[2];
+                distance = (float)values[3];
             }
-            else if (values[2] is double)
+            else if (values[3] is double)
             {
-                distance = (float)(double)values[2];
+                distance = (float)(double)values[3];
             }
             else
             {
                 distance = 0.001f;
             }
 
-            bool showSolid = (bool)values[3];
-            bool showWireframe = (bool)values[4];
-            var selectedObjectProfile = (List<int>)values[5];
-            var selectedSkins = ((ItemCollection)values[6]).Cast<string>().ToList();
+            bool showSolid = (bool)values[4];
+            bool showWireframe = (bool)values[5];
+            var selectedObjectProfile = (List<int>)values[6];
+            var selectedSkins = ((ItemCollection)values[7]).Cast<string>().ToList();
 
-            var opt = OptModel.GetTransformedOpt(optFile, selectedObjectProfile, selectedSkins);
+            var opt = OptModel.GetTransformedOpt(optFile, version, selectedObjectProfile, selectedSkins);
             var cache = new OptCache(opt);
 
             foreach (var mesh in opt.Meshes)

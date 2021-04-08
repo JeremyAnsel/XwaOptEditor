@@ -90,6 +90,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MaximumValueConverter.cs" />
     <Compile Include="OptMeshesConverter.cs" />
     <Compile Include="OptModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

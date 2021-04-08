@@ -91,7 +91,7 @@ namespace XwaOptProfilesViewer
             return skins;
         }
 
-        public static OptFile GetTransformedOpt(OptFile optFile, List<int> objectProfile, List<string> skins)
+        public static OptFile GetTransformedOpt(OptFile optFile, int version, List<int> objectProfile, List<string> skins)
         {
             if (optFile == null || string.IsNullOrEmpty(optFile.FileName))
             {
@@ -100,6 +100,7 @@ namespace XwaOptProfilesViewer
 
             var opt = optFile.Clone();
 
+            SelectOptVersion(opt, version);
             ApplyObjectProfile(opt, objectProfile);
             ApplySkins(opt, skins);
 
@@ -107,6 +108,34 @@ namespace XwaOptProfilesViewer
             opt.CompactTextures();
 
             return opt;
+        }
+
+        private static void SelectOptVersion(OptFile opt, int version)
+        {
+            var facegroups = opt.Meshes
+                .SelectMany(t => t.Lods)
+                .SelectMany(t => t.FaceGroups);
+
+            foreach (var facegroup in facegroups)
+            {
+                if (facegroup.Textures.Count <= 1)
+                {
+                    continue;
+                }
+
+                int currentVersion = version;
+
+                if (version < 0 || version >= facegroup.Textures.Count)
+                {
+                    currentVersion = facegroup.Textures.Count - 1;
+                }
+
+                string texture = facegroup.Textures[currentVersion];
+                facegroup.Textures.Clear();
+                facegroup.Textures.Add(texture);
+            }
+
+            opt.CompactTextures();
         }
 
         private static void ApplyObjectProfile(OptFile opt, List<int> objectProfile)

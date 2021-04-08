@@ -100,31 +100,12 @@ namespace XwaOptProfilesViewer
         private void LoadOpt(string filename)
         {
             this.DataContext = null;
+            this.OptFile = null;
             this.OptObjectProfiles = null;
             this.OptSkins = null;
 
-            var opt = OptFile.FromFile(filename);
-
-            var facegroups = opt.Meshes
-                .SelectMany(t => t.Lods)
-                .SelectMany(t => t.FaceGroups);
-
-            foreach (var facegroup in facegroups)
-            {
-                if (facegroup.Textures.Count <= 1)
-                {
-                    continue;
-                }
-
-                string texture = facegroup.Textures[0];
-                facegroup.Textures.Clear();
-                facegroup.Textures.Add(texture);
-            }
-
-            opt.CompactTextures();
-
-            this.OptFile = opt;
-
+            this.OptFile = OptFile.FromFile(filename);
+            this.versionSelector.Value = 0;
             this.OptObjectProfiles = OptModel.GetObjectProfiles(filename);
             this.optObjectProfilesListBox.SelectedIndex = 0;
             this.optSelectedSkinsListBox.Items.Clear();
@@ -229,10 +210,11 @@ namespace XwaOptProfilesViewer
                 return null;
             }
 
+            int version = this.versionSelector.Value.Value;
             var selectedObjectProfileItem = (KeyValuePair<string, List<int>>)this.optObjectProfilesListBox.SelectedItem;
             var selectedSkins = this.optSelectedSkinsListBox.Items.Cast<string>().ToList();
 
-            var opt = OptModel.GetTransformedOpt(this.OptFile, selectedObjectProfileItem.Value, selectedSkins);
+            var opt = OptModel.GetTransformedOpt(this.OptFile, version, selectedObjectProfileItem.Value, selectedSkins);
 
             return opt;
         }
