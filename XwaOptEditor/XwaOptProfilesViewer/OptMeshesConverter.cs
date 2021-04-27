@@ -68,26 +68,16 @@ namespace XwaOptProfilesViewer
             var selectedSkins = ((ItemCollection)values[7]).Cast<string>().ToList();
 
             var opt = OptModel.GetTransformedOpt(optFile, version, selectedObjectProfile, selectedSkins);
-            var cache = new OptCache(opt);
 
-            foreach (var mesh in opt.Meshes)
+            var visual = new OptVisual3D
             {
-                if (mesh.Lods.Count == 0)
-                {
-                    continue;
-                }
+                File = opt,
+                IsSolid = showSolid,
+                IsWireframe = showWireframe,
+                Distance = distance
+            };
 
-                var visual = new OptVisual3D
-                {
-                    Cache = cache,
-                    Mesh = mesh,
-                    IsSolid = showSolid,
-                    IsWireframe = showWireframe,
-                    Distance = distance
-                };
-
-                model.Children.Add(visual);
-            }
+            model.Children.Add(visual);
 
             return null;
         }
