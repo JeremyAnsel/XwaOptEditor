@@ -159,11 +159,11 @@ namespace XwaOptEditor.ViewModels
                     dispatcher(() => this.OptModel.File = opt);
                     dispatcher(() => this.OptModel.UndoStackPush("open " + System.IO.Path.GetFileNameWithoutExtension(fileName)));
 
-                    if (!this.OptModel.IsPlayable)
-                    {
-                        Messenger.Instance.Notify(new MainViewSelectorMessage("PlayabilityMessages"));
-                        Messenger.Instance.Notify(new MessageBoxMessage(fileName + "\n\n" + "This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
-                    }
+                    //if (!this.OptModel.IsPlayable)
+                    //{
+                    //    Messenger.Instance.Notify(new MainViewSelectorMessage("PlayabilityMessages"));
+                    //    Messenger.Instance.Notify(new MessageBoxMessage(fileName + "\n\n" + "This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -232,11 +232,11 @@ namespace XwaOptEditor.ViewModels
                     dispatcher(() => this.OptModel.File = this.OptModel.File);
                     dispatcher(() => this.OptModel.UndoStackPush("save " + System.IO.Path.GetFileNameWithoutExtension(fileName)));
 
-                    if (!this.OptModel.IsPlayable)
-                    {
-                        Messenger.Instance.Notify(new MainViewSelectorMessage("PlayabilityMessages"));
-                        Messenger.Instance.Notify(new MessageBoxMessage(fileName + "\n\n" + "This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
-                    }
+                    //if (!this.OptModel.IsPlayable)
+                    //{
+                    //    Messenger.Instance.Notify(new MainViewSelectorMessage("PlayabilityMessages"));
+                    //    Messenger.Instance.Notify(new MessageBoxMessage(fileName + "\n\n" + "This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -353,10 +353,10 @@ namespace XwaOptEditor.ViewModels
         {
             Messenger.Instance.Notify(new MainViewSelectorMessage("PlayabilityMessages"));
 
-            if (!this.OptModel.IsPlayable)
-            {
-                Messenger.Instance.Notify(new MessageBoxMessage("This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
-            }
+            //if (!this.OptModel.IsPlayable)
+            //{
+            //    Messenger.Instance.Notify(new MessageBoxMessage("This opt will not be fully playable.", "Check Opt Playability", MessageBoxButton.OK, MessageBoxImage.Warning));
+            //}
         }
 
         private void ExecuteCheckFlatTexturesCommand()
