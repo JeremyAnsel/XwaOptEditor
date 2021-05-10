@@ -25,8 +25,9 @@ namespace XwaOptEditor.Converters
             // values[1]: opt or mesh
             // values[2]: show or hide
             // values[3]: selected engine glow
+            // values[4]: checked meshes
 
-            if (values.Take(4).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
+            if (values.Take(5).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
             {
                 return null;
             }
@@ -44,11 +45,12 @@ namespace XwaOptEditor.Converters
                 return null;
             }
 
+            var checkedMeshes = (IList<Mesh>)values[4];
             IEnumerable<EngineGlow> engineGlows;
 
             if (values[1] is OptFile)
             {
-                engineGlows = ((OptFile)values[1]).Meshes.SelectMany(t => t.EngineGlows);
+                engineGlows = ((OptFile)values[1]).Meshes.Where(t => checkedMeshes.Contains(t)).SelectMany(t => t.EngineGlows);
             }
             else if (values[1] is Mesh)
             {
@@ -96,9 +98,11 @@ namespace XwaOptEditor.Converters
                 });
             }
 
-            if (values[3] != null)
+            var selected = values[3] as EngineGlow;
+
+            if (selected != null && engineGlows.Contains(selected))
             {
-                var engine = (EngineGlow)values[3];
+                var engine = selected;
 
                 double depth = Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * 2.0;
                 double width = engine.Format.X * 2.0;

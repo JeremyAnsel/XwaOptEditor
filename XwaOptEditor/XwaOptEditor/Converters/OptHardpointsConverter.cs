@@ -70,8 +70,9 @@ namespace XwaOptEditor.Converters
             // values[2]: show or hide
             // values[3]: show or hide text
             // values[4]: selected hardpoint
+            // values[5]: checked meshes
 
-            if (values.Take(5).Any(t => t == DependencyProperty.UnsetValue))
+            if (values.Take(6).Any(t => t == DependencyProperty.UnsetValue))
             {
                 return null;
             }
@@ -93,11 +94,12 @@ namespace XwaOptEditor.Converters
 
             var selected = values[4] as Hardpoint;
 
+            var checkedMeshes = (IList<Mesh>)values[5];
             IEnumerable<Hardpoint> hardpoints;
 
             if (values[1] is OptFile)
             {
-                hardpoints = ((OptFile)values[1]).Meshes.SelectMany(t => t.Hardpoints);
+                hardpoints = ((OptFile)values[1]).Meshes.Where(t => checkedMeshes.Contains(t)).SelectMany(t => t.Hardpoints);
             }
             else if (values[1] is Mesh)
             {
@@ -149,7 +151,7 @@ namespace XwaOptEditor.Converters
                 }
             }
 
-            if (selected != null)
+            if (selected != null && hardpoints.Contains(selected))
             {
                 var t = selected;
                 var position = new Point3D(-t.Position.Y, -t.Position.X, t.Position.Z);

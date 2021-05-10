@@ -186,6 +186,13 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="#"
                                         Width="25">
                             <GridViewColumn.CellTemplate>
@@ -953,7 +960,15 @@
                                                         Distance="{Binding ModelDistance}"
                                                         Version="{Binding ModelVersion}"
                                                         IsSolid="{Binding ModelShowSolid}"
-                                                        IsWireframe="{Binding ModelShowWireframe}" />
+                                                        IsWireframe="{Binding ModelShowWireframe}">
+                            <localControl:CustomOptVisual3D.Meshes>
+                                <MultiBinding Converter="{vc:SelectFirstConverter}">
+                                    <Binding Path="CurrentMeshes.CheckedItems" />
+                                    <Binding Path="CurrentMeshes.CheckedItems.Count" />
+                                    <Binding Path="OptModel.File" />
+                                </MultiBinding>
+                            </localControl:CustomOptVisual3D.Meshes>
+                        </localControl:CustomOptVisual3D>
                         <ModelVisual3D>
                             <ModelVisual3D.Content>
                                 <MultiBinding Converter="{vc:OptCenterConverter}">
@@ -970,7 +985,9 @@
                                     <Binding Path="OptModel.File" />
                                     <Binding Path="ShowHitzones" />
                                     <Binding Path="CurrentMeshes.SelectedItems" />
+                                    <Binding Path="CurrentMeshes.CheckedItems" />
                                     <Binding Path="CurrentMeshes.SelectedItems.Count" />
+                                    <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                     <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
                                     <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
                                 </MultiBinding>
@@ -985,6 +1002,8 @@
                                     <Binding Path="ShowHardpointsText" />
                                     <Binding Path="SelectedItem"
                                              ElementName="Hardpoints" />
+                                    <Binding Path="CurrentMeshes.CheckedItems" />
+                                    <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                     <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
                                     <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
                                 </MultiBinding>
@@ -998,6 +1017,8 @@
                                     <Binding Path="ShowEngineGlows" />
                                     <Binding Path="SelectedItem"
                                              ElementName="EngineGlows" />
+                                    <Binding Path="CurrentMeshes.CheckedItems" />
+                                    <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
@@ -1012,6 +1033,8 @@
                                     <Binding Path="OptModel.File" />
                                     <Binding Path="ShowNormals" />
                                     <Binding Path="ModelDistance" />
+                                    <Binding Path="CurrentMeshes.CheckedItems" />
+                                    <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 </MultiBinding>
                             </ModelVisual3D.Content>
                         </ModelVisual3D>
@@ -1041,6 +1064,8 @@
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowHitzones" />
                                 <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
                             </MultiBinding>
@@ -1055,6 +1080,8 @@
                                 <Binding Path="ShowHardpointsText" />
                                 <Binding Path="SelectedItem"
                                          ElementName="Hardpoints" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
                             </MultiBinding>
@@ -1068,6 +1095,8 @@
                                 <Binding Path="ShowEngineGlows" />
                                 <Binding Path="SelectedItem"
                                          ElementName="EngineGlows" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />
@@ -1101,6 +1130,8 @@
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowHitzones" />
                                 <Binding Path="CurrentMeshes.SelectedItem" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Center" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Descriptor.Span" />
                             </MultiBinding>
@@ -1115,6 +1146,8 @@
                                 <Binding Path="ShowHardpointsText" />
                                 <Binding Path="SelectedItem"
                                          ElementName="Hardpoints" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/Position" />
                             </MultiBinding>
@@ -1128,6 +1161,8 @@
                                 <Binding Path="ShowEngineGlows" />
                                 <Binding Path="SelectedItem"
                                          ElementName="EngineGlows" />
+                                <Binding Path="CurrentMeshes.CheckedItems" />
+                                <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/OuterColor" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/Format" />

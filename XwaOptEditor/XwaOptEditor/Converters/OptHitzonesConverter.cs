@@ -25,8 +25,9 @@ namespace XwaOptEditor.Converters
             // values[1]: opt or mesh
             // values[2]: show or hide
             // values[3]: selected mesh
+            // values[4]: checked meshes
 
-            if (values.Take(4).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
+            if (values.Take(5).Any(t => t == System.Windows.DependencyProperty.UnsetValue))
             {
                 return null;
             }
@@ -56,11 +57,13 @@ namespace XwaOptEditor.Converters
                 selected.Add((Mesh)values[3]);
             }
 
+            var checkedMeshes = (IList<Mesh>)values[4];
             List<Tuple<Mesh, Vector, Vector>> hitzones;
 
             if (values[1] is OptFile)
             {
                 hitzones = ((OptFile)values[1]).Meshes
+                    .Where(t => checkedMeshes.Contains(t))
                     .Select(t => new Tuple<Mesh, Vector, Vector>(t, t.Descriptor.Center, t.Descriptor.Span.Abs()))
                     .ToList();
             }

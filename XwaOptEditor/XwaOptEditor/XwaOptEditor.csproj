@@ -101,6 +101,7 @@
     <Compile Include="Converters\OptNormalsConverter.cs" />
     <Compile Include="Converters\PalletizedTextureConverter.cs" />
     <Compile Include="Converters\PercentConverter.cs" />
+    <Compile Include="Converters\SelectFirstConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\TextureConverter.cs" />
     <Compile Include="Converters\TextureNameConverter.cs" />
