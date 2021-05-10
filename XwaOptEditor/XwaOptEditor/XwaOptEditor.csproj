@@ -136,6 +136,7 @@
     <Compile Include="Mvvm\Messenger.cs" />
     <Compile Include="Mvvm\MessengerKey.cs" />
     <Compile Include="Mvvm\ObservableObject.cs" />
+    <Compile Include="Mvvm\ObservableRangeCollection.cs" />
     <Compile Include="Mvvm\RelayCommandBinding.cs" />
     <Compile Include="Mvvm\SelectableCollection.cs" />
     <Compile Include="Mvvm\SelectableItem.cs" />

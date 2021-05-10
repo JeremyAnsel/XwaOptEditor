@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace XwaOptEditor.Mvvm
 {
-    public class SelectableCollection<T> : ObservableCollection<SelectableItem<T>> where T : class
+    public class SelectableCollection<T> : ObservableRangeCollection<SelectableItem<T>> where T : class
     {
         private T selectedItem;
 
@@ -16,7 +16,8 @@ namespace XwaOptEditor.Mvvm
 
         public SelectableCollection()
         {
-            this.SelectedItems = new ObservableCollection<T>();
+            this.SelectedItems = new ObservableRangeCollection<T>();
+            this.CheckedItems = new ObservableRangeCollection<T>();
         }
 
         public IEnumerable<T> Source
@@ -27,7 +28,7 @@ namespace XwaOptEditor.Mvvm
             }
         }
 
-        public ObservableCollection<T> SelectedItems { get; private set; }
+        public ObservableRangeCollection<T> SelectedItems { get; private set; }
 
         public T SelectedItem
         {
@@ -82,6 +83,36 @@ namespace XwaOptEditor.Mvvm
             this.SelectedItem = this.SelectedItems.FirstOrDefault();
         }
 
+        public ObservableRangeCollection<T> CheckedItems { get; private set; }
+
+        public bool HasCheckedItems
+        {
+            get
+            {
+                return this.CheckedItems.Count != 0;
+            }
+        }
+
+        internal void ChangeCheckedValue(T value, bool isChecked)
+        {
+            if (isChecked)
+            {
+                if (!this.CheckedItems.Contains(value))
+                {
+                    this.CheckedItems.Add(value);
+                }
+            }
+            else
+            {
+                if (this.CheckedItems.Contains(value))
+                {
+                    this.CheckedItems.Remove(value);
+                }
+            }
+
+            this.OnPropertyChanged(new PropertyChangedEventArgs("HasCheckedItems"));
+        }
+
         public void LoadItems(IEnumerable<T> items)
         {
             this.SelectedItem = null;
@@ -93,10 +124,15 @@ namespace XwaOptEditor.Mvvm
                 return;
             }
 
+            var selectableItems = new List<SelectableItem<T>>();
+
             foreach (var item in items)
             {
-                this.Add(new SelectableItem<T>(this, item));
+                selectableItems.Add(new SelectableItem<T>(this, item));
             }
+
+            this.AddRange(selectableItems);
+            this.CheckedItems.AddRange(items);
 
             if (this.Count > 0)
             {
