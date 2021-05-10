@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using JeremyAnsel.Xwa.Opt;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace JeremyAnsel.Xwa.WpfOpt
 {
@@ -44,6 +46,12 @@ namespace JeremyAnsel.Xwa.WpfOpt
         {
             get { return (OptFile)this.GetValue(FileProperty); }
             set { this.SetValue(FileProperty, value); }
+        }
+
+        public ObservableCollection<Mesh> Meshes
+        {
+            get { return (ObservableCollection<Mesh>)this.GetValue(MeshesProperty); }
+            set { this.SetValue(MeshesProperty, value); }
         }
 
         public Mesh Mesh
@@ -94,6 +102,8 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
         public static readonly DependencyProperty FileProperty = DependencyProperty.Register("File", typeof(OptFile), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
 
+        public static readonly DependencyProperty MeshesProperty = DependencyProperty.Register("Meshes", typeof(ObservableCollection<Mesh>), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
+
         public static readonly DependencyProperty MeshProperty = DependencyProperty.Register("Mesh", typeof(Mesh), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
 
         public static readonly DependencyProperty LodProperty = DependencyProperty.Register("Lod", typeof(MeshLod), typeof(OptVisual3D), new UIPropertyMetadata(null, ContentChanged));
@@ -108,10 +118,28 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
         public static readonly DependencyProperty ShowBackFacesProperty = DependencyProperty.Register("ShowBackFaces", typeof(bool), typeof(OptVisual3D), new UIPropertyMetadata(false, ContentChanged));
 
+        private void Meshes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ContentChanged(this, new DependencyPropertyChangedEventArgs(MeshesProperty, null, null));
+        }
+
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private static void ContentChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             var opt = (OptVisual3D)obj;
+
+            if (args.Property.Name == "Meshes")
+            {
+                if (args.OldValue != null)
+                {
+                    ((ObservableCollection<Mesh>)args.OldValue).CollectionChanged -= opt.Meshes_CollectionChanged;
+                }
+
+                if (args.NewValue != null)
+                {
+                    ((ObservableCollection<Mesh>)args.NewValue).CollectionChanged += opt.Meshes_CollectionChanged;
+                }
+            }
 
             switch (args.Property.Name)
             {
@@ -142,6 +170,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
                     break;
 
                 case "Cache":
+                case "Meshes":
                 case "Mesh":
                 case "Lod":
                 case "Distance":
@@ -149,16 +178,33 @@ namespace JeremyAnsel.Xwa.WpfOpt
                 case "IsSolid":
                 case "IsWireframe":
                 case "ShowBackFaces":
-                    if (opt.Distance == null)
                     {
-                        opt.LoadOpt(opt.Mesh, opt.Lod, opt.Version);
-                    }
-                    else
-                    {
-                        opt.LoadOpt(opt.Mesh, opt.Distance.Value, opt.Version);
-                    }
+                        var meshes = new List<Mesh>();
 
-                    break;
+                        if (opt.Mesh != null)
+                        {
+                            meshes.Add(opt.Mesh);
+                        }
+                        else if (opt.Meshes != null)
+                        {
+                            meshes.AddRange(opt.Meshes);
+                        }
+                        else if (opt.Cache?.file != null)
+                        {
+                            meshes.AddRange(opt.Cache.file.Meshes);
+                        }
+
+                        if (opt.Distance == null)
+                        {
+                            opt.LoadOpt(opt.Mesh, opt.Lod, opt.Version);
+                        }
+                        else
+                        {
+                            opt.LoadOpt(meshes, opt.Distance.Value, opt.Version);
+                        }
+
+                        break;
+                    }
             }
 
             if (opt.Changed != null)
@@ -169,6 +215,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
             switch (args.Property.Name)
             {
                 case "Cache":
+                case "Meshes":
                 case "Mesh":
                 case "Lod":
                 case "Distance":
@@ -192,7 +239,7 @@ namespace JeremyAnsel.Xwa.WpfOpt
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
-        private void LoadOpt(Mesh mesh, float distance, int version)
+        private void LoadOpt(IList<Mesh> meshes, float distance, int version)
         {
             this.Content = null;
             this.Children.Clear();
@@ -205,62 +252,22 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
             var opt = this.Cache.file;
 
-            if (mesh == null)
+            if (this.IsSolid)
             {
-                if (this.IsSolid)
+                for (int meshIndex = 0; meshIndex < meshes.Count; meshIndex++)
                 {
-                    for (int meshIndex = 0; meshIndex < opt.Meshes.Count; meshIndex++)
+                    int currentMeshIndex = opt.Meshes.IndexOf(meshes[meshIndex]);
+
+                    if (currentMeshIndex == -1)
                     {
-                        for (int lodIndex = 0; lodIndex < opt.Meshes[meshIndex].Lods.Count; lodIndex++)
-                        {
-                            if (opt.Meshes[meshIndex].Lods[lodIndex].Distance <= distance)
-                            {
-                                foreach (var model in CreateMeshModel(opt, meshIndex, lodIndex, version)
-                                    .Where(t => t != null))
-                                {
-                                    this.Children.Add(model);
-                                }
-                                break;
-                            }
-                        }
+                        continue;
                     }
-                }
 
-                if (this.IsWireframe)
-                {
-                    for (int meshIndex = 0; meshIndex < opt.Meshes.Count; meshIndex++)
+                    for (int lodIndex = 0; lodIndex < meshes[meshIndex].Lods.Count; lodIndex++)
                     {
-                        for (int lodIndex = 0; lodIndex < opt.Meshes[meshIndex].Lods.Count; lodIndex++)
+                        if (meshes[meshIndex].Lods[lodIndex].Distance <= distance)
                         {
-                            if (opt.Meshes[meshIndex].Lods[lodIndex].Distance <= distance)
-                            {
-                                foreach (var model in CreateMeshModelWireframe(opt, meshIndex, lodIndex)
-                                    .Where(t => t != null))
-                                {
-                                    this.Children.Add(model);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                int meshIndex = opt.Meshes.IndexOf(mesh);
-
-                if (meshIndex == -1)
-                {
-                    return;
-                }
-
-                if (this.IsSolid)
-                {
-                    for (int lodIndex = 0; lodIndex < mesh.Lods.Count; lodIndex++)
-                    {
-                        if (mesh.Lods[lodIndex].Distance <= distance)
-                        {
-                            foreach (var model in CreateMeshModel(opt, meshIndex, lodIndex, version)
+                            foreach (var model in CreateMeshModel(opt, currentMeshIndex, lodIndex, version)
                                 .Where(t => t != null))
                             {
                                 this.Children.Add(model);
@@ -269,14 +276,24 @@ namespace JeremyAnsel.Xwa.WpfOpt
                         }
                     }
                 }
+            }
 
-                if (this.IsWireframe)
+            if (this.IsWireframe)
+            {
+                for (int meshIndex = 0; meshIndex < meshes.Count; meshIndex++)
                 {
-                    for (int lodIndex = 0; lodIndex < mesh.Lods.Count; lodIndex++)
+                    int currentMeshIndex = opt.Meshes.IndexOf(meshes[meshIndex]);
+
+                    if (currentMeshIndex == -1)
                     {
-                        if (mesh.Lods[lodIndex].Distance <= distance)
+                        continue;
+                    }
+
+                    for (int lodIndex = 0; lodIndex < meshes[meshIndex].Lods.Count; lodIndex++)
+                    {
+                        if (meshes[meshIndex].Lods[lodIndex].Distance <= distance)
                         {
-                            foreach (var model in CreateMeshModelWireframe(opt, meshIndex, lodIndex)
+                            foreach (var model in CreateMeshModelWireframe(opt, currentMeshIndex, lodIndex)
                                 .Where(t => t != null))
                             {
                                 this.Children.Add(model);
