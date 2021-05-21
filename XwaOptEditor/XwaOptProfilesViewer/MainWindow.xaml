@@ -15,6 +15,7 @@
         <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
             <ToolBar>
                 <Button x:Name="openButton" Content="Open..." Click="openButton_Click" />
+                <Button x:Name="reloadButton" Content="Reload" Click="reloadButton_Click" />
                 <Separator/>
                 <TextBlock Text="Export " />
                 <Button Content="Opt..." Click="exportOptButton_Click" />

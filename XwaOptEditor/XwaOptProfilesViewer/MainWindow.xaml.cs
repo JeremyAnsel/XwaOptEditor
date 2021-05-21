@@ -97,6 +97,25 @@ namespace XwaOptProfilesViewer
             }
         }
 
+        private void reloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = this.OptFile?.FileName;
+
+            if (!System.IO.File.Exists(filename))
+            {
+                return;
+            }
+
+            try
+            {
+                this.LoadOpt(filename);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void LoadOpt(string filename)
         {
             this.DataContext = null;
