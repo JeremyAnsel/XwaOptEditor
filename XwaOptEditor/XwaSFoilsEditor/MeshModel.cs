@@ -96,6 +96,7 @@ namespace XwaSFoilsEditor
                     this.OnPropertyChanged(nameof(LookLength));
                     this.OnPropertyChanged(nameof(LookLengthFactor));
                     this.OnPropertyChanged(nameof(RealAngle));
+                    this.OnPropertyChanged(nameof(RealAngleDegree));
                 }
             }
         }
@@ -200,6 +201,7 @@ namespace XwaSFoilsEditor
                     this.angle = value;
                     this.OnPropertyChanged();
                     this.OnPropertyChanged(nameof(RealAngle));
+                    this.OnPropertyChanged(nameof(RealAngleDegree));
                 }
             }
         }
@@ -209,6 +211,14 @@ namespace XwaSFoilsEditor
             get
             {
                 return this.Angle * this.LookLengthFactor;
+            }
+        }
+
+        public float RealAngleDegree
+        {
+            get
+            {
+                return this.RealAngle * 360.0f / 255;
             }
         }
 

@@ -113,7 +113,10 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Angle, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RealAngle}" />
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                    <TextBlock Text="{Binding RealAngle}" />
+                    <TextBlock Text="{Binding RealAngleDegree, StringFormat='{}{0}°'}" />
+                </StackPanel>
             </Grid>
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Closing Speed: " />
             <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ClosingSpeed, UpdateSourceTrigger=PropertyChanged}" />
