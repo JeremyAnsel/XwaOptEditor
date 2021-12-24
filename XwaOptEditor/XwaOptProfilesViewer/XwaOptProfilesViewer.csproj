@@ -47,8 +47,14 @@
       <HintPath>..\packages\JeremyAnsel.ColorQuant.2.0.65\lib\net40\JeremyAnsel.ColorQuant.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JeremyAnsel.IO.Locator, Version=2.0.31.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JeremyAnsel.IO.Locator.2.0.31\lib\net45\JeremyAnsel.IO.Locator.dll</HintPath>
+    </Reference>
     <Reference Include="JeremyAnsel.Xwa.Opt, Version=2.0.36.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JeremyAnsel.Xwa.Opt.2.0.36\lib\net40\JeremyAnsel.Xwa.Opt.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.24.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.24.0\lib\net45\SharpCompress.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

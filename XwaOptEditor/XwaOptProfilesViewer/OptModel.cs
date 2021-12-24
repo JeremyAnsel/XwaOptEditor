@@ -1,4 +1,5 @@
-﻿using JeremyAnsel.Xwa.HooksConfig;
+using JeremyAnsel.IO.Locator;
+using JeremyAnsel.Xwa.HooksConfig;
 using JeremyAnsel.Xwa.Opt;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,16 @@ namespace XwaOptProfilesViewer
                 {
                     skins.Add(Path.GetFileName(path));
                 }
+
+                foreach (string path in Directory.EnumerateFiles(directory, "*.zip"))
+                {
+                    skins.Add(Path.GetFileNameWithoutExtension(path));
+                }
+
+                foreach (string path in Directory.EnumerateFiles(directory, "*.7z"))
+                {
+                    skins.Add(Path.GetFileNameWithoutExtension(path));
+                }
             }
 
             return skins;
@@ -154,14 +165,38 @@ namespace XwaOptProfilesViewer
             }
         }
 
+        private static string GetSkinDirectoryLocatorPath(string directory, string optName, string skinName)
+        {
+            string path = $"{directory}\\Skins\\{optName}\\{skinName}";
+
+            var baseDirectoryInfo = new DirectoryInfo(path);
+            bool baseDirectoryExists = baseDirectoryInfo.Exists && baseDirectoryInfo.EnumerateFiles().Any();
+
+            if (baseDirectoryExists)
+            {
+                return path;
+            }
+
+            if (File.Exists(path + ".zip"))
+            {
+                return path + ".zip";
+            }
+
+            if (File.Exists(path + ".7z"))
+            {
+                return path + ".7z";
+            }
+
+            return null;
+        }
+
         private static void ApplySkins(OptFile opt, List<string> skins)
         {
             string optName = Path.GetFileNameWithoutExtension(opt.FileName);
             string directory = Path.GetDirectoryName(opt.FileName);
 
-            var baseDefaultSkinDirectory = new DirectoryInfo($"{directory}\\Skins\\{optName}\\Default");
-            bool baseDefaultSkinExists = baseDefaultSkinDirectory.Exists && baseDefaultSkinDirectory.EnumerateFiles().Any();
-            bool hasSkins = baseDefaultSkinExists || skins.Count != 0;
+            bool hasDefaultSkin = GetSkinDirectoryLocatorPath(directory, optName, "Default") != null;
+            bool hasSkins = hasDefaultSkin || skins.Count != 0;
 
             if (hasSkins)
             {
@@ -172,10 +207,10 @@ namespace XwaOptProfilesViewer
         private static void UpdateOptFile(string optName, OptFile opt, IList<string> baseSkins)
         {
             List<List<string>> fgSkins = ReadFgSkins(optName, baseSkins);
-            List<string> distinctSkins = fgSkins.SelectMany(t => t).Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
+            List<string> distinctSkins = fgSkins.SelectMany(t => t).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             ICollection<string> texturesExist = GetTexturesExist(optName, opt, distinctSkins);
             CreateSwitchTextures(opt, texturesExist, fgSkins);
-            UpdateSkins(optName, opt, fgSkins);
+            UpdateSkins(optName, opt, distinctSkins, fgSkins);
         }
 
         private static List<List<string>> ReadFgSkins(string optName, IList<string> baseSkins)
@@ -201,12 +236,27 @@ namespace XwaOptProfilesViewer
 
             foreach (string skin in distinctSkins)
             {
-                string skinDirectory = $"{directory}\\Skins\\{optName}\\{skin}";
+                string path = GetSkinDirectoryLocatorPath(directory, optName, skin);
 
-                var filesEnum = Directory.EnumerateFiles(skinDirectory)
-                    .Select(t => Path.GetFileName(t));
+                if (path == null)
+                {
+                    continue;
+                }
 
-                var filesSet = new SortedSet<string>(filesEnum, StringComparer.InvariantCultureIgnoreCase);
+                SortedSet<string> filesSet;
+
+                using (IFileLocator locator = FileLocatorFactory.Create(path))
+                {
+                    if (locator == null)
+                    {
+                        continue;
+                    }
+
+                    var filesEnum = locator.EnumerateFiles()
+                        .Select(t => Path.GetFileName(t));
+
+                    filesSet = new SortedSet<string>(filesEnum, StringComparer.OrdinalIgnoreCase);
+                }
 
                 foreach (string textureName in opt.Textures.Keys)
                 {
@@ -282,8 +332,36 @@ namespace XwaOptProfilesViewer
             }
         }
 
-        private static void UpdateSkins(string optName, OptFile opt, List<List<string>> fgSkins)
+        private static void UpdateSkins(string optName, OptFile opt, List<string> distinctSkins, List<List<string>> fgSkins)
         {
+            var locatorsPath = new Dictionary<string, string>(distinctSkins.Count, StringComparer.OrdinalIgnoreCase);
+            var filesSets = new Dictionary<string, SortedSet<string>>(distinctSkins.Count, StringComparer.OrdinalIgnoreCase);
+            string directory = Path.GetDirectoryName(opt.FileName);
+
+            foreach (string skin in distinctSkins)
+            {
+                string path = GetSkinDirectoryLocatorPath(directory, optName, skin);
+                locatorsPath.Add(skin, path);
+
+                SortedSet<string> filesSet = null;
+
+                if (path != null)
+                {
+                    using (IFileLocator locator = FileLocatorFactory.Create(path))
+                    {
+                        if (locator != null)
+                        {
+                            var filesEnum = locator.EnumerateFiles()
+                                .Select(t => Path.GetFileName(t));
+
+                            filesSet = new SortedSet<string>(filesEnum, StringComparer.OrdinalIgnoreCase);
+                        }
+                    }
+                }
+
+                filesSets.Add(skin, filesSet ?? new SortedSet<string>());
+            }
+
             opt.Textures.AsParallel().ForAll(texture =>
             {
                 int position = texture.Key.IndexOf("_fg_");
@@ -295,34 +373,47 @@ namespace XwaOptProfilesViewer
 
                 string textureName = texture.Key.Substring(0, position);
                 int fgIndex = int.Parse(texture.Key.Substring(position + 4, texture.Key.IndexOf('_', position + 4) - position - 4), CultureInfo.InvariantCulture);
-                string directory = Path.GetDirectoryName(opt.FileName);
 
                 foreach (string skin in fgSkins[fgIndex])
                 {
-                    string skinDirectory = $"{directory}\\Skins\\{optName}\\{skin}";
+                    string path = locatorsPath[skin];
 
-                    var filesEnum = Directory.EnumerateFiles(skinDirectory)
-                        .Select(t => Path.GetFileName(t));
+                    if (path == null)
+                    {
+                        continue;
+                    }
 
-                    var filesSet = new SortedSet<string>(filesEnum, StringComparer.InvariantCultureIgnoreCase);
-
-                    string filename = TextureExists(filesSet, textureName, skin);
+                    string filename = TextureExists(filesSets[skin], textureName, skin);
 
                     if (filename == null)
                     {
                         continue;
                     }
 
-                    CombineTextures(texture.Value, Path.Combine(skinDirectory, filename));
+                    using (IFileLocator locator = FileLocatorFactory.Create(path))
+                    {
+                        if (locator == null)
+                        {
+                            continue;
+                        }
+
+                        CombineTextures(texture.Value, locator, filename);
+                    }
                 }
 
                 texture.Value.GenerateMipmaps();
             });
         }
 
-        private static void CombineTextures(Texture baseTexture, string filename)
+        private static void CombineTextures(Texture baseTexture, IFileLocator locator, string filename)
         {
-            Texture newTexture = Texture.FromFile(filename);
+            Texture newTexture;
+
+            using (Stream file = locator.Open(filename))
+            {
+                newTexture = Texture.FromStream(file);
+                newTexture.Name = Path.GetFileNameWithoutExtension(filename);
+            }
 
             if (newTexture.Width != baseTexture.Width || newTexture.Height != baseTexture.Height)
             {
