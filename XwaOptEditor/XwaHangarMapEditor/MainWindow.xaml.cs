@@ -77,10 +77,12 @@ namespace XwaHangarMapEditor
 
         private void SetWorkingDirectory()
         {
-            var dlg = new WPFFolderBrowser.WPFFolderBrowserDialog();
-            dlg.Title = "Choose a working directory containing " + AppSettings.XwaExeFileName + " or a child directory";
+            var dlg = new FolderBrowserForWPF.Dialog
+            {
+                Title = "Choose a working directory containing " + AppSettings.XwaExeFileName + " or a child directory"
+            };
 
-            if (dlg.ShowDialog(this) == true)
+            if (dlg.ShowDialog() == true)
             {
                 string fileName = dlg.FileName;
 

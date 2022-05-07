@@ -115,7 +115,7 @@ namespace OptRhinoConverter
                         {
                             layer.Name = meshName;
 
-                            file.Layers.Add(layer);
+                            file.AllLayers.Add(layer);
                         }
 
                         foreach (var faceGroup in lod.FaceGroups)
@@ -230,7 +230,7 @@ namespace OptRhinoConverter
                                 }
                             }
 
-                            file.Materials.Add(material);
+                            file.AllMaterials.Add(material);
                         }
                     }
 
@@ -343,7 +343,7 @@ namespace OptRhinoConverter
                         {
                             if (attributes.MaterialIndex != -1)
                             {
-                                using (var material = file.Materials[attributes.MaterialIndex])
+                                using (var material = file.AllMaterials.FindIndex(attributes.MaterialIndex))
                                 {
                                     faceGroup.Textures.Add(material.Name);
                                 }
@@ -355,9 +355,9 @@ namespace OptRhinoConverter
                 opt.CompactBuffers();
                 opt.ComputeHitzones();
 
-                for (int materialIndex = 0; materialIndex < file.Materials.Count; materialIndex++)
+                for (int materialIndex = 0; materialIndex < file.AllMaterials.Count; materialIndex++)
                 {
-                    using (var material = file.Materials[materialIndex])
+                    using (var material = file.AllMaterials.FindIndex(materialIndex))
                     {
                         if (opt.Textures.ContainsKey(material.Name))
                         {

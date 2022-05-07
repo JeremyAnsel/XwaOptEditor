@@ -4,76 +4,70 @@ setlocal
 cd "%~dp0"
 
 For %%a in (
-"OptStructure\bin\Release\*.dll"
-"OptStructure\bin\Release\*.exe"
-"OptStructure\bin\Release\*.config"
+"OptStructure\bin\Release\net48\*.dll"
+"OptStructure\bin\Release\net48\*.exe"
+"OptStructure\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"OptTextures\bin\Release\*.dll"
-"OptTextures\bin\Release\*.exe"
-"OptTextures\bin\Release\*.config"
+"OptTextures\bin\Release\net48\*.dll"
+"OptTextures\bin\Release\net48\*.exe"
+"OptTextures\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"XwaOptExplorer\bin\Release\*.dll"
-"XwaOptExplorer\bin\Release\*.exe"
-"XwaOptExplorer\bin\Release\*.config"
+"XwaOptExplorer\bin\Release\net48\*.dll"
+"XwaOptExplorer\bin\Release\net48\*.exe"
+"XwaOptExplorer\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"XwaOptEditor\bin\Release\*.dll"
-"XwaOptEditor\bin\Release\*.exe"
-"XwaOptEditor\bin\Release\*.config"
-"XwaOptEditor\bin\Release\XwaOptEditor.pdb"
+"XwaOptEditor\bin\Release\net48\*.dll"
+"XwaOptEditor\bin\Release\net48\*.exe"
+"XwaOptEditor\bin\Release\net48\*.config"
+"XwaOptEditor\bin\Release\net48\XwaOptEditor.pdb"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"XwaOptEditor\bin\Release\x86\*.dll"
+"XwaOptEditor\bin\Release\net48\Win32\*.dll"
 ) do (
-xcopy /s /d "%%~a" dist\x86\
+xcopy /s /d "%%~a" dist\Win32\
 )
 
 For %%a in (
-"XwaOptEditor\bin\Release\x64\*.dll"
+"XwaOptEditor\bin\Release\net48\Win64\*.dll"
 ) do (
-xcopy /s /d "%%~a" dist\x64\
+xcopy /s /d "%%~a" dist\Win64\
 )
 
 For %%a in (
-"patch_32bpp\XwaExePatcher\*.*"
-) do (
-xcopy /s /d "%%~a" dist\patch_32bpp\
-)
-
-For %%a in (
-"XwaHangarMapEditor\bin\Release\*.dll"
-"XwaHangarMapEditor\bin\Release\*.exe"
-"XwaHangarMapEditor\bin\Release\*.config"
+"XwaHangarMapEditor\bin\Release\net48\*.dll"
+"XwaHangarMapEditor\bin\Release\net48\*.exe"
+"XwaHangarMapEditor\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"XwaOptProfilesViewer\bin\Release\*.dll"
-"XwaOptProfilesViewer\bin\Release\*.exe"
-"XwaOptProfilesViewer\bin\Release\*.config"
+"XwaOptProfilesViewer\bin\Release\net48\*.dll"
+"XwaOptProfilesViewer\bin\Release\net48\*.exe"
+"XwaOptProfilesViewer\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
 
 For %%a in (
-"XwaSFoilsEditor\bin\Release\*.dll"
-"XwaSFoilsEditor\bin\Release\*.exe"
-"XwaSFoilsEditor\bin\Release\*.config"
+"XwaSFoilsEditor\bin\Release\net48\*.dll"
+"XwaSFoilsEditor\bin\Release\net48\*.exe"
+"XwaSFoilsEditor\bin\Release\net48\*.config"
 ) do (
 xcopy /s /d "%%~a" dist\
 )
