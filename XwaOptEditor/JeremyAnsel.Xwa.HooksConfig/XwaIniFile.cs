@@ -220,8 +220,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
                 throw new ArgumentNullException(nameof(iniKey));
             }
 
-            XwaIniSection section;
-            if (this.Sections.TryGetValue(iniKey, out section))
+            if (this.Sections.TryGetValue(iniKey, out XwaIniSection section))
             {
                 section.Lines.Clear();
             }

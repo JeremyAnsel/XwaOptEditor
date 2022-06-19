@@ -15,87 +15,21 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
         public static int ToInt32(string text)
         {
-            var sb = new StringBuilder();
-            int length = text.Length;
-            int index = 0;
+            text = text.Trim();
 
-            while (index < length && char.IsWhiteSpace(text, index))
+            bool isNegative = text.StartsWith("-");
+            if (isNegative)
             {
-                index++;
+                text = text.Substring(1).TrimStart();
             }
 
-            if (index == length)
+            int index = text.IndexOf('.');
+            if (index != -1)
             {
-                return 0;
+                text = text.Substring(0, index);
             }
 
-            bool isNegative = false;
-
-            if (text[index] == '+')
-            {
-                index++;
-            }
-            else if (text[index] == '-')
-            {
-                isNegative = true;
-                index++;
-            }
-
-            while (index < length && char.IsWhiteSpace(text, index))
-            {
-                index++;
-            }
-
-            if (index == length)
-            {
-                return 0;
-            }
-
-            bool isHex = false;
-
-            if (index + 2 <= length)
-            {
-                if (text[index] == '0')
-                {
-                    if (text[index + 1] == 'x' || text[index + 1] == 'X')
-                    {
-                        isHex = true;
-                        sb.Append("0x");
-                        index += 2;
-                    }
-                }
-            }
-
-            while (index < length)
-            {
-                char c = text[index];
-
-                bool isDigit;
-
-                if (isHex)
-                {
-                    isDigit = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-                }
-                else
-                {
-                    isDigit = c >= '0' && c <= '9';
-                }
-
-                if (!isDigit)
-                {
-                    break;
-                }
-
-                sb.Append(c);
-                index++;
-            }
-
-            if (sb.Length == 0)
-            {
-                return 0;
-            }
-
-            int value = (int)Int32Converter.ConvertFromInvariantString(sb.ToString());
+            int value = (int)Int32Converter.ConvertFromInvariantString(text);
             if (isNegative)
             {
                 value = -value;
@@ -244,7 +178,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
             foreach (string line in lines)
             {
-                int value = ToInt32(line.Trim());
+                int value = int.Parse(line.Trim());
                 values.Add(value);
             }
 
@@ -257,7 +191,7 @@ namespace JeremyAnsel.Xwa.HooksConfig
 
             foreach (string line in lines)
             {
-                ushort value = (ushort)ToInt32(line.Trim());
+                ushort value = ushort.Parse(line.Trim());
                 values.Add(value);
             }
 
