@@ -3,31 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptEditor", "XwaOptEditor\XwaOptEditor.csproj", "{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaOptEditor", "XwaOptEditor\XwaOptEditor.csproj", "{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.HooksConfig", "JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj", "{DB442A7B-9516-41D6-8DEC-F20CE77C7396}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyAnsel.Xwa.HooksConfig", "JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj", "{DB442A7B-9516-41D6-8DEC-F20CE77C7396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeremyAnsel.Xwa.WpfOpt", "JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj", "{A1BC0819-12F6-467C-A418-41934C332FD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyAnsel.Xwa.WpfOpt", "JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj", "{A1BC0819-12F6-467C-A418-41934C332FD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptAn8Converter", "OptAn8Converter\OptAn8Converter.csproj", "{4F33558E-5C1F-448A-961D-B005C4B4E63D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptAn8Converter", "OptAn8Converter\OptAn8Converter.csproj", "{4F33558E-5C1F-448A-961D-B005C4B4E63D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavefrontObj", "WavefrontObj\WavefrontObj.csproj", "{B8925CDB-B68C-4632-8D7F-99DB90188E0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WavefrontObj", "WavefrontObj\WavefrontObj.csproj", "{B8925CDB-B68C-4632-8D7F-99DB90188E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptObjConverter", "OptObjConverter\OptObjConverter.csproj", "{8F598798-EFA8-430E-A4AF-E7A77FD66D9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptObjConverter", "OptObjConverter\OptObjConverter.csproj", "{8F598798-EFA8-430E-A4AF-E7A77FD66D9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptRhinoConverter", "OptRhinoConverter\OptRhinoConverter.csproj", "{BADB7D31-47A6-41AE-855E-E03D3FE260CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptRhinoConverter", "OptRhinoConverter\OptRhinoConverter.csproj", "{BADB7D31-47A6-41AE-855E-E03D3FE260CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptStructure", "OptStructure\OptStructure.csproj", "{7D3AE969-4072-455B-9ACF-08FC61D8CA54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptStructure", "OptStructure\OptStructure.csproj", "{7D3AE969-4072-455B-9ACF-08FC61D8CA54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptTextures", "OptTextures\OptTextures.csproj", "{D73C9019-0B20-440E-AD2B-78F47F0BF358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptTextures", "OptTextures\OptTextures.csproj", "{D73C9019-0B20-440E-AD2B-78F47F0BF358}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaHangarMapEditor", "XwaHangarMapEditor\XwaHangarMapEditor.csproj", "{6E18B063-4594-454E-806F-27FB7429C74C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaOptExplorer", "XwaOptExplorer\XwaOptExplorer.csproj", "{223C4A1E-5FFE-40AA-8062-D13FDCC279AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptExplorer", "XwaOptExplorer\XwaOptExplorer.csproj", "{223C4A1E-5FFE-40AA-8062-D13FDCC279AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaOptProfilesViewer", "XwaOptProfilesViewer\XwaOptProfilesViewer.csproj", "{A242A50A-D036-4357-8E97-CFA06014677B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptProfilesViewer", "XwaOptProfilesViewer\XwaOptProfilesViewer.csproj", "{A242A50A-D036-4357-8E97-CFA06014677B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaSFoilsEditor", "XwaSFoilsEditor\XwaSFoilsEditor.csproj", "{3A33A112-65A3-4273-A9B0-EAB70EED0C42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaSFoilsEditor", "XwaSFoilsEditor\XwaSFoilsEditor.csproj", "{3A33A112-65A3-4273-A9B0-EAB70EED0C42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,10 +69,6 @@ Global
 		{D73C9019-0B20-440E-AD2B-78F47F0BF358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D73C9019-0B20-440E-AD2B-78F47F0BF358}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D73C9019-0B20-440E-AD2B-78F47F0BF358}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E18B063-4594-454E-806F-27FB7429C74C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E18B063-4594-454E-806F-27FB7429C74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E18B063-4594-454E-806F-27FB7429C74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E18B063-4594-454E-806F-27FB7429C74C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{223C4A1E-5FFE-40AA-8062-D13FDCC279AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{223C4A1E-5FFE-40AA-8062-D13FDCC279AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{223C4A1E-5FFE-40AA-8062-D13FDCC279AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
