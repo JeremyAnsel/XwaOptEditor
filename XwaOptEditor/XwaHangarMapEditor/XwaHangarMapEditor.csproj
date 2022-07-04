@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Version>1.0.0</Version>
+    <Company>Jérémy Ansel</Company>
+    <Copyright>Copyright © 2015-2022 Jérémy Ansel</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
+    <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
+    <PackageReference Include="JeremyAnsel.IO.Locator" Version="3.0.34" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.44" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj" />
+    <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj" />
+    <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj" />
+  </ItemGroup>
+
+</Project>
