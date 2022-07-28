@@ -53,16 +53,48 @@ namespace XwaSFoilsEditor
             return lines;
         }
 
+        public static IList<string> GetSFoilsHatchesLines(string ship)
+        {
+            var lines = XwaHooksConfig.GetFileLines(ship + "SFoilsHatches.txt");
+
+            if (lines.Count == 0)
+            {
+                lines = XwaHooksConfig.GetFileLines(ship + ".ini", "SFoilsHatches");
+            }
+
+            return lines;
+        }
+
+        public static IList<string> GetSFoilsHangarDoorsLines(string ship)
+        {
+            var lines = XwaHooksConfig.GetFileLines(ship + "SFoilsHangarDoors.txt");
+
+            if (lines.Count == 0)
+            {
+                lines = XwaHooksConfig.GetFileLines(ship + ".ini", "SFoilsHangarDoors");
+            }
+
+            return lines;
+        }
+
         public static IList<SFoil> GetSFoilsList(string optFilename)
         {
             string ship = XwaHooksConfig.GetStringWithoutExtension(optFilename);
 
             var sfoilsLines = GetSFoilsLines(ship);
             var landingGearsLines = GetSFoilsLandingGearsLines(ship);
+            var landingHatchesLines = GetSFoilsHatchesLines(ship);
+            var landingHangarDoorsLines = GetSFoilsHangarDoorsLines(ship);
 
-            var lines = new List<string>(sfoilsLines.Count + landingGearsLines.Count);
+            var lines = new List<string>(
+                sfoilsLines.Count
+                + landingGearsLines.Count
+                + landingHatchesLines.Count
+                + landingHangarDoorsLines.Count);
             lines.AddRange(sfoilsLines);
             lines.AddRange(landingGearsLines);
+            lines.AddRange(landingHatchesLines);
+            lines.AddRange(landingHangarDoorsLines);
 
             IList<IList<string>> values = XwaHooksConfig.GetFileListValues(lines);
             var sfoils = new List<SFoil>();

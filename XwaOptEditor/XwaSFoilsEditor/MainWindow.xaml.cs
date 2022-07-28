@@ -427,49 +427,139 @@ namespace XwaSFoilsEditor
 
             double showSFoilsOpened = this.showSFoils.Value;
 
-            if (showSFoilsOpened != 0)
+            int bridgeIndex = -1;
+            Transform3D bridgeTransform = Transform3D.Identity;
+            Transform3D bridgeTransformRotation = Transform3D.Identity;
+
+            foreach (var sfoil in this.Meshes)
             {
-                int bridgeIndex = -1;
-                Transform3D bridgeTransform = Transform3D.Identity;
-                Transform3D bridgeTransformRotation = Transform3D.Identity;
-
-                foreach (var sfoil in this.Meshes)
+                if (sfoil.MeshIndex >= optFile.Meshes.Count)
                 {
-                    if (sfoil.MeshIndex >= optFile.Meshes.Count)
-                    {
-                        continue;
-                    }
-
-                    if (sfoil.Angle == 0)
-                    {
-                        continue;
-                    }
-
-                    double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
-                    angle *= showSFoilsOpened;
-                    var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
-                    var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle));
-
-                    var mesh = optFile.Meshes[sfoil.MeshIndex];
-                    TransformMesh(mesh, transform, transformRotation);
-
-                    if (bridgeIndex == -1)
-                    {
-                        if (mesh.Descriptor.MeshType == MeshType.Bridge)
-                        {
-                            bridgeIndex = sfoil.MeshIndex;
-                            bridgeTransform = transform;
-                            bridgeTransformRotation = transformRotation;
-                        }
-                    }
+                    continue;
                 }
 
-                if (bridgeIndex != -1)
+                if (sfoil.Angle == 0)
                 {
-                    foreach (var mesh in optFile.Meshes)
+                    continue;
+                }
+
+                double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
+                angle *= showSFoilsOpened;
+                var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
+                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle));
+
+                var mesh = optFile.Meshes[sfoil.MeshIndex];
+                TransformMesh(mesh, transform, transformRotation);
+
+                if (bridgeIndex == -1)
+                {
+                    if (mesh.Descriptor.MeshType == MeshType.Bridge)
                     {
-                        TransformMesh(mesh, bridgeTransform, bridgeTransformRotation);
+                        bridgeIndex = sfoil.MeshIndex;
+                        bridgeTransform = transform;
+                        bridgeTransformRotation = transformRotation;
                     }
+                }
+            }
+
+            if (this.showPivotAxis.IsChecked == true)
+            {
+                var texture = new JeremyAnsel.Xwa.Opt.Texture
+                {
+                    Name = "Arrow",
+                    Width = 8,
+                    Height = 8,
+                    ImageData = new byte[8 * 8 * 4 * 2 - 4]
+                };
+
+                for (int i = 0; i < texture.ImageData.Length; i += 4)
+                {
+                    texture.ImageData[i + 0] = 0;
+                    texture.ImageData[i + 1] = 0;
+                    texture.ImageData[i + 2] = 0xff;
+                    texture.ImageData[i + 3] = 0xff;
+                }
+
+                optFile.Textures.Add(texture.Name, texture);
+
+                if (this.Meshes.Count != optFile.Meshes.Count)
+                {
+                    throw new InvalidOperationException("S-Foils items count is not equals to the OPT meshes count");
+                }
+
+                for (int modelIndex = 0; modelIndex < this.Meshes.Count; modelIndex++)
+                {
+                    MeshModel model = this.Meshes[modelIndex];
+
+                    var optMesh = new JeremyAnsel.Xwa.Opt.Mesh();
+                    //optFile.Meshes.Add(optMesh);
+                    optFile.Meshes.Insert(modelIndex * 2 + 1, optMesh);
+
+                    if (model.Angle == 0)
+                    {
+                        continue;
+                    }
+
+                    var pivot = model.Pivot.ToPoint3D();
+                    var direction = model.Look.Normalize().Scale(optFile.Size).ToVector3D();
+
+                    var visual = new ArrowVisual3D
+                    {
+                        Material = Materials.Red,
+                        Point1 = pivot + direction,
+                        Point2 = pivot - direction,
+                        Diameter = optFile.Size * 0.005
+                    };
+
+                    MeshGeometry3D geometry = (MeshGeometry3D)visual.Model.Geometry;
+
+                    foreach (Point3D position in geometry.Positions)
+                    {
+                        optMesh.Vertices.Add(position.ToVector());
+                    }
+
+                    foreach (Vector3D normal in geometry.Normals)
+                    {
+                        optMesh.VertexNormals.Add(normal.ToPoint3D().ToVector());
+                    }
+
+                    foreach (Point coords in geometry.TextureCoordinates)
+                    {
+                        optMesh.TextureCoordinates.Add(new TextureCoordinates((float)coords.X, -(float)coords.Y));
+                    }
+
+                    var optLod = new JeremyAnsel.Xwa.Opt.MeshLod();
+                    optMesh.Lods.Add(optLod);
+
+                    var optFaceGroup = new JeremyAnsel.Xwa.Opt.FaceGroup();
+                    optLod.FaceGroups.Add(optFaceGroup);
+
+                    optFaceGroup.Textures.Add(texture.Name);
+
+                    for (int index = 0; index < geometry.TriangleIndices.Count; index += 3)
+                    {
+                        int index0 = geometry.TriangleIndices[index];
+                        int index1 = geometry.TriangleIndices[index + 1];
+                        int index2 = geometry.TriangleIndices[index + 2];
+                        Indices indices = new(index0, index1, index2);
+
+                        var face = new JeremyAnsel.Xwa.Opt.Face
+                        {
+                            VerticesIndex = indices,
+                            VertexNormalsIndex = indices,
+                            TextureCoordinatesIndex = indices
+                        };
+
+                        optFaceGroup.Faces.Add(face);
+                    }
+                }
+            }
+
+            if (bridgeIndex != -1)
+            {
+                foreach (var mesh in optFile.Meshes)
+                {
+                    TransformMesh(mesh, bridgeTransform, bridgeTransformRotation);
                 }
             }
 
