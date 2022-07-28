@@ -129,7 +129,7 @@ namespace OptAn8Converter
                     }
 
                     var an8Mesh = new An8Mesh();
-                    an8Mesh.Name = string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}", mesh.Descriptor.MeshType, objectsIndex);
+                    an8Mesh.Name = string.Format(CultureInfo.InvariantCulture, "{0:D3}.{1}", objectsIndex, mesh.Descriptor.MeshType);
                     an8Object.Components.Add(an8Mesh);
                     objectsIndex++;
 

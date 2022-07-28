@@ -109,7 +109,7 @@ namespace OptRhinoConverter
                             textureNames.Add(texture);
                         }
 
-                        string meshName = string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}", mesh.Descriptor.MeshType, objectsIndex);
+                        string meshName = string.Format(CultureInfo.InvariantCulture, "{0:D3}.{1}", objectsIndex, mesh.Descriptor.MeshType);
 
                         using (var layer = new Rhino.DocObjects.Layer())
                         {

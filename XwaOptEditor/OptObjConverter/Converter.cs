@@ -127,7 +127,7 @@ namespace OptObjConverter
                         continue;
                     }
 
-                    var objMesh = new ObjMesh(string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}", mesh.Descriptor.MeshType, objectsIndex));
+                    var objMesh = new ObjMesh(string.Format(CultureInfo.InvariantCulture, "{0:D3}.{1}", objectsIndex, mesh.Descriptor.MeshType));
                     obj.Meshes.Add(objMesh);
                     objectsIndex++;
 
