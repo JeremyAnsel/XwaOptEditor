@@ -9,6 +9,14 @@ namespace XwaHangarMapEditor
 {
     public sealed class HangarObjects
     {
+        public struct PlayerCraft
+        {
+            public ushort ModelIndex;
+            public int OffsetX;
+            public int OffsetY;
+            public int OffsetZ;
+        }
+
         public bool LoadShuttle { get; set; }
 
         public ushort ShuttleModelIndex { get; set; }
@@ -81,9 +89,15 @@ namespace XwaHangarMapEditor
 
         public bool IsHangarFloorInverted { get; set; }
 
+        public int HangarFloorInvertedHeight { get; set; }
+
         public byte HangarIff { get; set; }
 
+        public bool DrawShadows { get; set; }
+
         public int PlayerAnimationElevation { get; set; }
+
+        public int PlayerAnimationInvertedElevation { get; set; }
 
         public int PlayerAnimationStraightLine { get; set; }
 
@@ -93,7 +107,17 @@ namespace XwaHangarMapEditor
 
         public int PlayerOffsetZ { get; set; }
 
+        public int PlayerInvertedOffsetX { get; set; }
+
+        public int PlayerInvertedOffsetY { get; set; }
+
+        public int PlayerInvertedOffsetZ { get; set; }
+
+        public List<PlayerCraft> PlayerCrafts { get; set; }
+
         public bool IsPlayerFloorInverted { get; set; }
+
+        public List<int> PlayerFloorInvertedModelIndices { get; set; }
 
         public uint LightColorIntensity { get; set; }
 
@@ -162,13 +186,46 @@ namespace XwaHangarMapEditor
             hangar.HangarRoofCraneLowOffset = XwaHooksConfig.GetFileKeyValueInt(lines, "HangarRoofCraneLowOffset", -1400 + 1400);
             hangar.HangarRoofCraneHighOffset = XwaHooksConfig.GetFileKeyValueInt(lines, "HangarRoofCraneHighOffset", 1400 + 1400);
             hangar.IsHangarFloorInverted = XwaHooksConfig.GetFileKeyValueInt(lines, "IsHangarFloorInverted", 0) != 0;
+            hangar.HangarFloorInvertedHeight = XwaHooksConfig.GetFileKeyValueInt(lines, "HangarFloorInvertedHeight", 0);
             hangar.HangarIff = (byte)XwaHooksConfig.GetFileKeyValueInt(lines, "HangarIff", -1);
+            hangar.DrawShadows = XwaHooksConfig.GetFileKeyValueInt(lines, "DrawShadows", hangar.IsHangarFloorInverted ? 0 : 1) != 0;
             hangar.PlayerAnimationElevation = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerAnimationElevation", 0);
+            hangar.PlayerAnimationInvertedElevation = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerAnimationInvertedElevation", hangar.PlayerAnimationElevation);
             hangar.PlayerAnimationStraightLine = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerAnimationStraightLine", 0);
             hangar.PlayerOffsetX = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerOffsetX", 0);
             hangar.PlayerOffsetY = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerOffsetY", 0);
             hangar.PlayerOffsetZ = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerOffsetZ", 0);
+            hangar.PlayerInvertedOffsetX = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerInvertedOffsetX", hangar.PlayerOffsetX);
+            hangar.PlayerInvertedOffsetY = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerInvertedOffsetY", hangar.PlayerOffsetY);
+            hangar.PlayerInvertedOffsetZ = XwaHooksConfig.GetFileKeyValueInt(lines, "PlayerInvertedOffsetZ", hangar.PlayerOffsetZ);
+
+            hangar.PlayerCrafts = new List<PlayerCraft>();
+            IList<string> playerModelIndices = XwaHooksConfig.Tokennize(XwaHooksConfig.GetFileKeyValue(lines, "PlayerModelIndices"));
+            IList<string> playerOffsetsX = XwaHooksConfig.Tokennize(XwaHooksConfig.GetFileKeyValue(lines, "PlayerOffsetsX"));
+            IList<string> playerOffsetsY = XwaHooksConfig.Tokennize(XwaHooksConfig.GetFileKeyValue(lines, "PlayerOffsetsY"));
+            IList<string> playerOffsetsZ = XwaHooksConfig.Tokennize(XwaHooksConfig.GetFileKeyValue(lines, "PlayerOffsetsZ"));
+
+            if (playerModelIndices.Count == playerOffsetsX.Count
+                && playerModelIndices.Count == playerOffsetsY.Count
+                && playerModelIndices.Count == playerOffsetsZ.Count)
+            {
+                for (int i = 0; i < playerModelIndices.Count; i++)
+                {
+                    PlayerCraft player;
+                    player.ModelIndex = (ushort)XwaHooksConfig.ToInt32(playerModelIndices[i]);
+                    player.OffsetX = XwaHooksConfig.ToInt32(playerOffsetsX[i]);
+                    player.OffsetY = XwaHooksConfig.ToInt32(playerOffsetsY[i]);
+                    player.OffsetZ = XwaHooksConfig.ToInt32(playerOffsetsZ[i]);
+                    hangar.PlayerCrafts.Add(player);
+                }
+            }
+
             hangar.IsPlayerFloorInverted = XwaHooksConfig.GetFileKeyValueInt(lines, "IsPlayerFloorInverted", 0) != 0;
+
+            hangar.PlayerFloorInvertedModelIndices = XwaHooksConfig.Tokennize(XwaHooksConfig.GetFileKeyValue(lines, "PlayerFloorInvertedModelIndices"))
+                .Select(t => XwaHooksConfig.ToInt32(t))
+                .ToList();
+
             hangar.LightColorIntensity = XwaHooksConfigHelpers.GetFileKeyValueUnsignedInt(lines, "LightColorIntensity", 0xC0);
             hangar.LightColorRgb = XwaHooksConfigHelpers.GetFileKeyValueUnsignedInt(lines, "LightColorRgb", 0xFFFFFF);
 

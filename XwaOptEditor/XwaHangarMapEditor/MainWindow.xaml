@@ -177,6 +177,8 @@
                                                         DisplayMemberBinding="{Binding HeadingZ}" />
                                         <GridViewColumn Header="Profile"
                                                         DisplayMemberBinding="{Binding ObjectProfile}" />
+                                        <GridViewColumn Header="IsInverted"
+                                                        DisplayMemberBinding="{Binding IsHangarFloorInverted}" />
                                     </GridView>
                                 </ListView.View>
                             </ListView>

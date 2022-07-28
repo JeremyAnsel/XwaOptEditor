@@ -34,7 +34,7 @@ namespace XwaHangarMapEditor
 
                 try
                 {
-                    if (parts.Count == 8)
+                    if (parts.Count == 9)
                     {
                         item.ModelIndex = StringConverter.ToUInt16(parts[0]);
                         item.Markings = StringConverter.ToInt32(parts[1]);
@@ -49,6 +49,26 @@ namespace XwaHangarMapEditor
                         {
                             item.ObjectProfile = "Default";
                         }
+
+                        item.IsHangarFloorInverted = StringConverter.ToInt32(parts[8]) != 0;
+                    }
+                    else if (parts.Count == 8)
+                    {
+                        item.ModelIndex = StringConverter.ToUInt16(parts[0]);
+                        item.Markings = StringConverter.ToInt32(parts[1]);
+                        item.PositionX = StringConverter.ToInt32(parts[2]);
+                        item.PositionY = StringConverter.ToInt32(parts[3]);
+                        item.PositionZ = StringConverter.ToInt32(parts[4]);
+                        item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[5]);
+                        item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[6]);
+                        item.ObjectProfile = parts[7].Trim();
+
+                        if (string.IsNullOrEmpty(item.ObjectProfile))
+                        {
+                            item.ObjectProfile = "Default";
+                        }
+
+                        item.IsHangarFloorInverted = null;
                     }
                     else if (parts.Count == 7)
                     {
@@ -60,6 +80,7 @@ namespace XwaHangarMapEditor
                         item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[5]);
                         item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[6]);
                         item.ObjectProfile = "Default";
+                        item.IsHangarFloorInverted = null;
                     }
                     else if (parts.Count == 6)
                     {
@@ -71,6 +92,7 @@ namespace XwaHangarMapEditor
                         item.HeadingXY = StringConverter.ToInt16OrUInt16(parts[4]);
                         item.HeadingZ = StringConverter.ToInt16OrUInt16(parts[5]);
                         item.ObjectProfile = "Default";
+                        item.IsHangarFloorInverted = null;
                     }
                     else
                     {

@@ -50,13 +50,24 @@ HangarRoofCraneAxis = 0
 HangarRoofCraneLowOffset = 0
 HangarRoofCraneHighOffset = 2800
 IsHangarFloorInverted = 0
+HangarFloorInvertedHeight = 0
 HangarIff = -1
+DrawShadows = 1
 PlayerAnimationElevation = 0
+PlayerAnimationInvertedElevation = 0
 PlayerAnimationStraightLine = 0
 PlayerOffsetX = 0
 PlayerOffsetY = 0
 PlayerOffsetZ = 0
+PlayerInvertedOffsetX = 0
+PlayerInvertedOffsetY = 0
+PlayerInvertedOffsetZ = 0
+PlayerModelIndices =
+PlayerOffsetsX =
+PlayerOffsetsY =
+PlayerOffsetsZ =
 IsPlayerFloorInverted = 0
+PlayerFloorInvertedModelIndices =
 LightColorIntensity = 192
 LightColorRgb = FFFFFF
 FlightModels\XWing.opt = FlightModels\XWing.opt
@@ -67,11 +78,12 @@ FlightModels\XWing.opt = FlightModels\XWing.opt
 ; Format is : model index, position X, position Y, position Z, heading XY, heading Z
 ; or : model index, markings, position X, position Y, position Z, heading XY, heading Z
 ; or : model index, markings, position X, position Y, position Z, heading XY, heading Z, object profile
+; or : model index, markings, position X, position Y, position Z, heading XY, heading Z, object profile, isFloorInverted
 ; Numbers can be in decimal or hexadecimal (0x) notation.
 ; When position Z is set to 0x7FFFFFFF, this means that the object stands at the ground.
 
 ; XWing
-1, 0, 0, 0, 0x7FFFFFFF, 0, 0, Default
+1, 0, 0, 0, 0x7FFFFFFF, 0, 0, Default, 0
 ";
     }
 }

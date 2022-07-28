@@ -45,9 +45,11 @@ namespace XwaHangarMapEditor
             }
         }
 
+        public bool? IsHangarFloorInverted { get; set; }
+
         public override string ToString()
         {
-            return ModelIndex + ", " + Markings + ", (" + PositionX + "," + PositionY + "," + PositionZString + "), (" + HeadingXY + "," + HeadingZ + "), " + ObjectProfile;
+            return ModelIndex + ", " + Markings + ", (" + PositionX + "," + PositionY + "," + PositionZString + "), (" + HeadingXY + "," + HeadingZ + "), " + ObjectProfile + ", " + IsHangarFloorInverted;
         }
     }
 }

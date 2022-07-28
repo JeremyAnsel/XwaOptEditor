@@ -589,11 +589,13 @@ namespace XwaHangarMapEditor
             double offsetY = item.PositionY;
             double offsetZ;
 
+            bool isFloorInverted = item.IsHangarFloorInverted ?? isHangarFloorInverted;
+
             if (item.IsOnFloor)
             {
-                if (isHangarFloorInverted)
+                if (isFloorInverted)
                 {
-                    offsetZ = hangarFloorZ - model.ClosedSFoilsElevationInverted;
+                    offsetZ = hangarFloorZ + hangarObjects.HangarFloorInvertedHeight - model.ClosedSFoilsElevationInverted;
                 }
                 else
                 {
@@ -816,11 +818,13 @@ namespace XwaHangarMapEditor
             double offsetY = item.PositionY;
             double offsetZ;
 
+            bool isFloorInverted = item.IsHangarFloorInverted ?? isHangarFloorInverted;
+
             if (item.IsOnFloor)
             {
-                if (isHangarFloorInverted)
+                if (isFloorInverted)
                 {
-                    offsetZ = hangarFloorZ - model.ClosedSFoilsElevationInverted;
+                    offsetZ = hangarFloorZ + hangarObjects.HangarFloorInvertedHeight - model.ClosedSFoilsElevationInverted;
                 }
                 else
                 {
