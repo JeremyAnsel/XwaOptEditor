@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace XwaOptEditor.ViewModels
             this.CheckFlatTexturesCommand = new DelegateCommand(this.ExecuteCheckFlatTexturesCommand);
 
             this.ImportOptCommand = new DelegateCommand(this.ExecuteImportOptCommand);
+            this.ExportOptCommand = new DelegateCommand(this.ExecuteExportOptCommand);
             this.ImportObjCommand = new DelegateCommand(this.ExecuteImportObjCommand);
             this.ExportObjCommand = new DelegateCommand(this.ExecuteExportObjCommand);
             this.ImportRhinoCommand = new DelegateCommand(this.ExecuteImportRhinoCommand);
@@ -91,6 +93,7 @@ namespace XwaOptEditor.ViewModels
         public ICommand CheckFlatTexturesCommand { get; private set; }
 
         public ICommand ImportOptCommand { get; private set; }
+        public ICommand ExportOptCommand { get; private set; }
         public ICommand ImportObjCommand { get; private set; }
         public ICommand ExportObjCommand { get; private set; }
         public ICommand ImportRhinoCommand { get; private set; }
@@ -455,6 +458,132 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.OptModel.File = opt);
                 dispatcher(() => this.OptModel.UndoStackPush("import " + System.IO.Path.GetFileName(fileName)));
             });
+        }
+
+        private void ExecuteExportOptCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                string fileName = FileDialogService.GetSaveOptFileName("Export OPT file", this.OptModel.File.FileName);
+
+                if (fileName == null)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat("Exporting ", System.IO.Path.GetFileName(fileName), "..."));
+
+                var opt = this.OptModel.File;
+                //bool scale = this.IsImportExportScaleEnabled;
+                bool scale = false;
+
+                try
+                {
+                    ExportOpt(opt, fileName, scale);
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                }
+            });
+        }
+
+        private void ExportOpt(OptFile opt, string optPath, bool scale)
+        {
+            if (opt == null)
+            {
+                throw new ArgumentNullException(nameof(opt));
+            }
+
+            opt = opt.Clone();
+
+            if (scale)
+            {
+                var engineGlows = new List<Tuple<EngineGlow, JeremyAnsel.Xwa.Opt.Vector>>(opt.EngineGlowsCount);
+
+                foreach (var mesh in opt.Meshes)
+                {
+                    foreach (var engineGlow in mesh.EngineGlows)
+                    {
+                        var format = engineGlow.Format.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, 1.0f);
+                        engineGlows.Add(Tuple.Create(engineGlow, format));
+                    }
+                }
+
+                opt.Scale(OptFile.ScaleFactor);
+
+                foreach (var engineGlow in engineGlows)
+                {
+                    engineGlow.Item1.Format = engineGlow.Item2;
+                }
+            }
+
+            opt.CompactBuffers();
+            opt.RemoveUnusedTextures();
+
+            string optDirectory = System.IO.Path.GetDirectoryName(optPath);
+            string optName = System.IO.Path.GetFileNameWithoutExtension(optPath);
+            int maxTextureVersion = opt.MaxTextureVersion;
+
+            string createMarkingsSkinDirectoryPath(int markings) => System.IO.Path.Combine(
+                optDirectory,
+                optName,
+                "Default_" + markings.ToString(CultureInfo.InvariantCulture));
+
+            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(optDirectory, optName));
+
+            for (int markings = 0; markings < maxTextureVersion; markings++)
+            {
+                System.IO.Directory.CreateDirectory(createMarkingsSkinDirectoryPath(markings));
+            }
+
+            var skinsTextures = new Dictionary<string, string>(opt.Textures.Count, StringComparer.OrdinalIgnoreCase);
+
+            if (maxTextureVersion > 1)
+            {
+                foreach (Mesh mesh in opt.Meshes)
+                {
+                    foreach (var lod in mesh.Lods)
+                    {
+                        foreach (var faceGroup in lod.FaceGroups)
+                        {
+                            if (faceGroup.Textures.Count <= 1)
+                            {
+                                continue;
+                            }
+
+                            string baseTextureName = faceGroup.Textures[0];
+
+                            for (int markings = 0; markings < faceGroup.Textures.Count; markings++)
+                            {
+                                string skinTextureName = faceGroup.Textures[markings];
+
+                                string key = System.IO.Path.Combine(createMarkingsSkinDirectoryPath(markings), baseTextureName);
+                                string value = skinTextureName;
+
+                                if (skinsTextures.ContainsKey(key))
+                                {
+                                    continue;
+                                }
+
+                                skinsTextures.Add(key, value);
+                            }
+
+                            faceGroup.Textures.Clear();
+                            faceGroup.Textures.Add(baseTextureName);
+                        }
+                    }
+                }
+            }
+
+            foreach (var skin in skinsTextures)
+            {
+                var texture = opt.Textures[skin.Value];
+                texture.Save(skin.Key + ".png");
+            }
+
+            opt.RemoveUnusedTextures();
+            opt.Save(System.IO.Path.Combine(optDirectory, optName, optName + ".opt"));
         }
 
         private void ExecuteImportObjCommand()

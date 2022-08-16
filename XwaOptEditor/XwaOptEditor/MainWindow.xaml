@@ -89,6 +89,8 @@
                                 Command="{Binding ImportAn8Command}" />
                         <Separator />
                         <TextBlock Text="Export " />
+                        <Button Content="Opt..."
+                                Command="{Binding ExportOptCommand}" />
                         <Button Content="Obj..."
                                 Command="{Binding ExportObjCommand}" />
                         <Button Content="3dm..."
