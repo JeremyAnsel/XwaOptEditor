@@ -161,5 +161,13 @@ namespace XwaOptEditor.Views
             this.OptModel.File = this.OptModel.File;
             this.OptModel.UndoStackPush("reset illumination");
         }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            var texture = (KeyValuePair<string, Texture>)row.DataContext;
+
+            this.ViewModel.RenameTextureCommand.Execute(texture.Value);
+        }
     }
 }

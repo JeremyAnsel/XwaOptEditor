@@ -26,6 +26,7 @@ namespace XwaOptEditor.ViewModels
             this.ReplaceMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceMapCommand);
             this.ReplaceAlphaMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceAlphaMapCommand);
             this.ReplaceIllumMapCommand = new DelegateCommandOf<Texture>(this.ExecuteReplaceIllumMapCommand);
+            this.RenameTextureCommand = new DelegateCommandOf<Texture>(this.ExecuteRenameTextureCommand);
 
             this.UpCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteUpCommand);
             this.DownCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteDownCommand);
@@ -68,6 +69,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand ReplaceAlphaMapCommand { get; private set; }
 
         public ICommand ReplaceIllumMapCommand { get; private set; }
+
+        public ICommand RenameTextureCommand { get; private set; }
 
         public ICommand UpCommand { get; private set; }
 
@@ -343,6 +346,70 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage(name, ex));
+                }
+            });
+        }
+
+        private void ExecuteRenameTextureCommand(Texture texture)
+        {
+            if (texture == null)
+            {
+                return;
+            }
+
+            var opt = this.OptModel.File;
+            string oldName = texture.Name;
+            string newName = Microsoft.VisualBasic.Interaction.InputBox("New name for " + oldName, "New texture name");
+
+            if (string.IsNullOrEmpty(newName))
+            {
+                return;
+            }
+
+            if (opt.Textures.Keys.Contains(newName, StringComparer.OrdinalIgnoreCase))
+            {
+                Messenger.Instance.Notify(new MessageBoxMessage(
+                    newName + " already exists",
+                    "Rename texture",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning));
+
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    foreach (Mesh mesh in opt.Meshes)
+                    {
+                        foreach (var lod in mesh.Lods)
+                        {
+                            foreach (var faceGroup in lod.FaceGroups)
+                            {
+                                for (int markings = 0; markings < faceGroup.Textures.Count; markings++)
+                                {
+                                    string name = faceGroup.Textures[markings];
+
+                                    if (string.Equals(name, oldName, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        faceGroup.Textures[markings] = newName;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    opt.Textures.Remove(oldName);
+                    texture.Name = newName;
+                    opt.Textures.Add(texture.Name, texture);
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("rename " + oldName));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Rename " + oldName + " to " + newName, "Rename texture", ex));
                 }
             });
         }

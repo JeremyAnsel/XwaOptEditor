@@ -61,6 +61,13 @@
                             Command="{Binding DataContext.DownCommand}"
                             CommandParameter="{Binding SelectedItems}" />
                 </ToolBar>
+                <ToolBar Band="2"
+                         BandIndex="1"
+                         IsEnabled="{Binding HasItems}">
+                    <Button Content="Rename..."
+                            Command="{Binding DataContext.RenameTextureCommand}"
+                            CommandParameter="{Binding SelectedItem.Value}" />
+                </ToolBar>
                 <ToolBar Band="3"
                          BandIndex="0"
                          IsEnabled="{Binding HasItems}">
@@ -95,6 +102,12 @@
                       EnableRowVirtualization="True"
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling">
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick"
+                                     Handler="DataGridRow_MouseDoubleClick" />
+                    </Style>
+                </DataGrid.ItemContainerStyle>
                 <DataGrid.ContextMenu>
                     <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
                         <MenuItem IsEnabled="{Binding HasItems}"
@@ -126,6 +139,10 @@
                                       Command="{Binding DataContext.ReplaceIllumMapCommand}"
                                       CommandParameter="{Binding SelectedItem.Value}" />
                         </MenuItem>
+                        <MenuItem IsEnabled="{Binding HasItems}"
+                                  Header="Rename..."
+                                  Command="{Binding DataContext.RenameTextureCommand}"
+                                  CommandParameter="{Binding SelectedItem.Value}" />
                         <MenuItem IsEnabled="{Binding HasItems}"
                                   Header="Move Up"
                                   Command="{Binding DataContext.UpCommand}"
