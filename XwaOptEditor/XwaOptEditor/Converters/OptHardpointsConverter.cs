@@ -15,48 +15,48 @@ namespace XwaOptEditor.Converters
 {
     class OptHardpointsConverter : BaseConverter, IMultiValueConverter
     {
-        public static Dictionary<HardpointType, Color> HardpointsColors = new Dictionary<HardpointType, Color>()
+        public static Dictionary<string, Color> HardpointsColors = new Dictionary<string, Color>()
         {
-            {HardpointType.None, Colors.LightGray},
-            {HardpointType.RebelLaser, Color.FromRgb(255,0,0)},
-            {HardpointType.TurboRebelLaser, Color.FromRgb(255,64,64)},
-            {HardpointType.EmpireLaser, Color.FromRgb(0,255,0)},
-            {HardpointType.TurboEmpireLaser, Color.FromRgb(64,255,64)},
-            {HardpointType.IonCannon, Color.FromRgb(0,0,255)},
-            {HardpointType.TurboIonCannon, Color.FromRgb(64,64,255)},
-            {HardpointType.Torpedo, Colors.Brown},
-            {HardpointType.Missile, Colors.Brown},
-            {HardpointType.SuperRebelLaser, Color.FromRgb(255,128,128)},
-            {HardpointType.SuperEmpireLaser, Color.FromRgb(128,255,128)},
-            {HardpointType.SuperIonCannon, Color.FromRgb(128,128,255)},
-            {HardpointType.SuperTorpedo, Colors.Brown},
-            {HardpointType.SuperMissile, Colors.Brown},
-            {HardpointType.DumbBomb, Colors.Brown},
-            {HardpointType.FiredBomb, Colors.Brown},
-            {HardpointType.MagPulse, Colors.Brown},
-            {HardpointType.TurboMagPulse, Colors.Brown},
-            {HardpointType.SuperMagPulse, Colors.Brown},
-            {HardpointType.Gunner, Colors.Yellow},
-            {HardpointType.CockpitSparks, Colors.LightGray},
-            {HardpointType.DockingPoint, Colors.LightGray},
-            {HardpointType.Towing, Colors.LightGray},
-            {HardpointType.AccStart, Colors.LightGray},
-            {HardpointType.AccEnd, Colors.LightGray},
-            {HardpointType.InsideHangar, Colors.LightGray},
-            {HardpointType.OutsideHangar, Colors.LightGray},
-            {HardpointType.DockFromBig, Colors.LightGray},
-            {HardpointType.DockFromSmall, Colors.LightGray},
-            {HardpointType.DockToBig, Colors.LightGray},
-            {HardpointType.DockToSmall, Colors.LightGray},
-            {HardpointType.Cockpit, Colors.LightGray},
-            {HardpointType.EngineGlow, Colors.LightGray},
-            {HardpointType.Custom1, Colors.LightGray},
-            {HardpointType.Custom2, Colors.LightGray},
-            {HardpointType.Custom3, Colors.LightGray},
-            {HardpointType.Custom4, Colors.LightGray},
-            {HardpointType.Custom5, Colors.LightGray},
-            {HardpointType.Custom6, Colors.LightGray},
-            {HardpointType.JammingPoint, Colors.LightGray},
+            {"" + HardpointType.None, Colors.LightGray},
+            {"280 " + HardpointType.RebelLaser, Color.FromRgb(255,0,0)},
+            {"281 " + HardpointType.TurboRebelLaser, Color.FromRgb(255,64,64)},
+            {"282 " + HardpointType.EmpireLaser, Color.FromRgb(0,255,0)},
+            {"283 " + HardpointType.TurboEmpireLaser, Color.FromRgb(64,255,64)},
+            {"284 " + HardpointType.IonCannon, Color.FromRgb(0,0,255)},
+            {"285 " + HardpointType.TurboIonCannon, Color.FromRgb(64,64,255)},
+            {"286 " + HardpointType.Torpedo, Colors.Brown},
+            {"287 " + HardpointType.Missile, Colors.Brown},
+            {"288 " + HardpointType.SuperRebelLaser, Color.FromRgb(255,128,128)},
+            {"289 " + HardpointType.SuperEmpireLaser, Color.FromRgb(128,255,128)},
+            {"290 " + HardpointType.SuperIonCannon, Color.FromRgb(128,128,255)},
+            {"291 " + HardpointType.SuperTorpedo, Colors.Brown},
+            {"292 " + HardpointType.SuperMissile, Colors.Brown},
+            {"293 " + HardpointType.DumbBomb, Colors.Brown},
+            {"294 " + HardpointType.FiredBomb, Colors.Brown},
+            {"295 " + HardpointType.MagPulse, Colors.Brown},
+            {"296 " + HardpointType.TurboMagPulse, Colors.Brown},
+            {"297 " + HardpointType.SuperMagPulse, Colors.Brown},
+            {"" + HardpointType.Gunner, Colors.Yellow},
+            {"" + HardpointType.CockpitSparks, Colors.LightGray},
+            {"" + HardpointType.DockingPoint, Colors.LightGray},
+            {"" + HardpointType.Towing, Colors.LightGray},
+            {"" + HardpointType.AccStart, Colors.LightGray},
+            {"" + HardpointType.AccEnd, Colors.LightGray},
+            {"" + HardpointType.InsideHangar, Colors.LightGray},
+            {"" + HardpointType.OutsideHangar, Colors.LightGray},
+            {"" + HardpointType.DockFromBig, Colors.LightGray},
+            {"" + HardpointType.DockFromSmall, Colors.LightGray},
+            {"" + HardpointType.DockToBig, Colors.LightGray},
+            {"" + HardpointType.DockToSmall, Colors.LightGray},
+            {"" + HardpointType.Cockpit, Colors.LightGray},
+            {"" + HardpointType.EngineGlow, Colors.LightGray},
+            {"" + HardpointType.Custom1, Colors.LightGray},
+            {"" + HardpointType.Custom2, Colors.LightGray},
+            {"" + HardpointType.Custom3, Colors.LightGray},
+            {"" + HardpointType.Custom4, Colors.LightGray},
+            {"" + HardpointType.Custom5, Colors.LightGray},
+            {"" + HardpointType.Custom6, Colors.LightGray},
+            {"" + HardpointType.JammingPoint, Colors.LightGray},
         };
 
         public OptHardpointsConverter()
@@ -124,7 +124,7 @@ namespace XwaOptEditor.Converters
 
             foreach (var point in points)
             {
-                Color color = HardpointsColors.ContainsKey(point.Key) ? HardpointsColors[point.Key] : HardpointsColors[0];
+                Color color = HardpointsColors.Count > (int)point.Key ? HardpointsColors.ElementAt((int)point.Key).Value : HardpointsColors.ElementAt(0).Value;
 
                 visuals.Add(new PointsVisual3D()
                 {
@@ -156,7 +156,7 @@ namespace XwaOptEditor.Converters
                 var t = selected;
                 var position = new Point3D(-t.Position.Y, -t.Position.X, t.Position.Z);
 
-                Color color = HardpointsColors.ContainsKey(t.HardpointType) ? HardpointsColors[t.HardpointType] : HardpointsColors[0];
+                Color color = HardpointsColors.Count > (int)t.HardpointType ? HardpointsColors.ElementAt((int)t.HardpointType).Value : HardpointsColors.ElementAt(0).Value;
 
                 visuals.Add(new PointsVisual3D()
                 {

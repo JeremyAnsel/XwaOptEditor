@@ -480,8 +480,10 @@
                                                         Width="150">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <localControl:EnumComboBox EnumType="{x:Type opt:HardpointType}"
-                                                                               Text="{Binding HardpointType}" />
+                                                    <!--<localControl:EnumComboBox EnumType="{x:Type opt:HardpointType}"
+                                                                               Text="{Binding HardpointType}" />-->
+                                                    <ComboBox ItemsSource="{Binding Source={x:Static vc:OptHardpointsConverter.HardpointsColors}, Path=Keys}"
+                                                              Text="{Binding HardpointType, Converter={vc:OptHardpointTypeConverter}}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
