@@ -40,13 +40,14 @@ namespace JeremyAnsel.Xwa.WpfOpt
 
             int size = texture.Width * texture.Height;
             int bpp = texture.BitsPerPixel;
+            int paletteIndex = opt.Version >= 5 ? 8 : 15;
 
             if (bpp == 8)
             {
                 var palette = new BitmapPalette(Enumerable.Range(0, 256)
                     .Select(i =>
                     {
-                        ushort c = BitConverter.ToUInt16(texture.Palette, 8 * 512 + i * 2);
+                        ushort c = BitConverter.ToUInt16(texture.Palette, paletteIndex * 512 + i * 2);
 
                         byte r = (byte)((c & 0xF800) >> 11);
                         byte g = (byte)((c & 0x7E0) >> 5);

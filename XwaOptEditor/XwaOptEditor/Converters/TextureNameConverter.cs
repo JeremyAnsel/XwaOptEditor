@@ -47,7 +47,7 @@ namespace XwaOptEditor.Converters
 
             Texture texture = optFile.Textures.ContainsKey(textureName) ? optFile.Textures[textureName] : null;
 
-            return TextureHelpers.BuildOptTexture(texture);
+            return TextureHelpers.BuildOptTexture(texture, optFile.Version >= 5 ? 8 : 15);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
