@@ -92,7 +92,7 @@ namespace XwaOptEditor.Converters
                 visuals.Add(new BoundingBoxWireFrameVisual3D()
                 {
                     BoundingBox = new Rect3D(hitzone.Position, hitzone.Size),
-                    Color = selected.Contains(hitzone.Mesh) ? Colors.Orange : Colors.YellowGreen
+                    Color = selected.Contains(hitzone.Mesh) ? Colors.Red : Colors.YellowGreen
                 });
             }
 
