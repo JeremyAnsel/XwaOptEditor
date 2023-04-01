@@ -15,8 +15,8 @@
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
     <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
-    <PackageReference Include="JeremyAnsel.IO.Locator" Version="3.0.35" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.44" />
+    <PackageReference Include="JeremyAnsel.IO.Locator" Version="3.0.38" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.45" />
   </ItemGroup>
 
   <ItemGroup>

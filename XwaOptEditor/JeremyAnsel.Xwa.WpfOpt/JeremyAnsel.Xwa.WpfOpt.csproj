@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.44" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.45" />
   </ItemGroup>
 
 </Project>
