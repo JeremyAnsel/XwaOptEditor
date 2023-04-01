@@ -140,6 +140,17 @@
                             Command="{Binding ReplaceMeshAn8Command}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItem}" />
                 </ToolBar>
+                <ToolBar Band="6"
+                         BandIndex="0">
+                    <Button Content="Quad2Tri"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding MeshQuad2TriCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Tri2Quad"
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding MeshTri2QuadCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                </ToolBar>
             </ToolBarTray>
             <ListView x:Name="meshesListView"
                       ItemsSource="{Binding CurrentMeshes}"
@@ -680,29 +691,44 @@
                                       Width="5"
                                       VerticalAlignment="Stretch"
                                       HorizontalAlignment="Center" />
-                        <ListView Grid.Column="0"
-                                  ItemsSource="{Binding CurrentFaceGroups}"
-                                  VirtualizingPanel.IsVirtualizing="True"
-                                  VirtualizingPanel.VirtualizationMode="Recycling">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="IsSelected"
-                                            Value="{Binding IsSelected}" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Value.Textures.Count}" />
-                                        <TextBlock Text=" textures, " />
-                                        <TextBlock Text="{Binding Value.Faces.Count}" />
-                                        <TextBlock Text=" faces, " />
-                                        <TextBlock Text="{Binding Value.VerticesCount}" />
-                                        <TextBlock Text=" vertices" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <DockPanel Grid.Column="0">
+                            <ToolBarTray DockPanel.Dock="Bottom"
+                                         IsLocked="True">
+                                <ToolBar Band="0"
+                                         BandIndex="0">
+                                    <Button Content="Quad2Tri"
+                                            IsEnabled="{Binding CurrentFaceGroups.HasSelectedItems}"
+                                            Command="{Binding FaceGroupQuad2TriCommand}"
+                                            CommandParameter="{Binding CurrentFaceGroups.SelectedItems}" />
+                                    <Button Content="Tri2Quad"
+                                            IsEnabled="{Binding CurrentFaceGroups.HasSelectedItems}"
+                                            Command="{Binding FaceGroupTri2QuadCommand}"
+                                            CommandParameter="{Binding CurrentFaceGroups.SelectedItems}" />
+                                </ToolBar>
+                            </ToolBarTray>
+                            <ListView ItemsSource="{Binding CurrentFaceGroups}"
+                                      VirtualizingPanel.IsVirtualizing="False"
+                                      VirtualizingPanel.VirtualizationMode="Recycling">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="IsSelected"
+                                                Value="{Binding IsSelected}" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Value.Textures.Count}" />
+                                            <TextBlock Text=" textures, " />
+                                            <TextBlock Text="{Binding Value.Faces.Count}" />
+                                            <TextBlock Text=" faces, " />
+                                            <TextBlock Text="{Binding Value.VerticesCount}" />
+                                            <TextBlock Text=" vertices" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DockPanel>
                         <TabControl Grid.Column="2">
                             <TabItem Header="Textures">
                                 <DockPanel>
@@ -875,18 +901,18 @@
                     <ToolBar>
                         <TextBlock Text="Version: " />
                         <xctk:IntegerUpDown ToolTip="Version"
-                                    Minimum="0"
-                                    Maximum="{Binding OptModel.File.MaxTextureVersion, Converter={vc:MaximumValueConverter}}"
-                                    DefaultValue="0"
-                                    Value="{Binding ModelVersion}" />
+                                            Minimum="0"
+                                            Maximum="{Binding OptModel.File.MaxTextureVersion, Converter={vc:MaximumValueConverter}}"
+                                            DefaultValue="0"
+                                            Value="{Binding ModelVersion}" />
                     </ToolBar>
                 </ToolBarTray>
                 <xctk:ColorPicker x:Name="backgroundColorPicker"
-                            ToolTip="Background Color"
-                            UsingAlphaChannel="False"
-                            ShowStandardColors="False"
-                            AvailableColorsSortingMode="HueSaturationBrightness"
-                            SelectedColor="Black" />
+                                  ToolTip="Background Color"
+                                  UsingAlphaChannel="False"
+                                  ShowStandardColors="False"
+                                  AvailableColorsSortingMode="HueSaturationBrightness"
+                                  SelectedColor="Black" />
             </DockPanel>
             <ToolBarTray DockPanel.Dock="Bottom"
                          IsLocked="True">

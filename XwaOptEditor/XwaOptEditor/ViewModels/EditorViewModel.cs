@@ -135,6 +135,12 @@ namespace XwaOptEditor.ViewModels
             this.UpTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteUpTextureNamesCommand);
             this.DownTextureNamesCommand = new DelegateCommandOf<int>(this.ExecuteDownTextureNamesCommand);
 
+            this.FaceGroupQuad2TriCommand = new DelegateCommandOfList<FaceGroup>(this.ExecuteFaceGroupQuad2TriCommand);
+            this.FaceGroupTri2QuadCommand = new DelegateCommandOfList<FaceGroup>(this.ExecuteFaceGroupTri2QuadCommand);
+
+            this.MeshQuad2TriCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMeshQuad2TriCommand);
+            this.MeshTri2QuadCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMeshTri2QuadCommand);
+
             this.SelectMeshCommand = new DelegateCommandOf<Tuple<MeshLodFace, Point3D>>(this.ExecuteSelectMeshCommand);
             this.AddMeshToSelectionCommand = new DelegateCommandOf<Tuple<MeshLodFace, Point3D>>(this.ExecuteAddMeshToSelectionCommand);
             this.AddHardpointCommand = new DelegateCommandOf<Tuple<MeshLodFace, Point3D>>(this.ExecuteAddHardpointCommand);
@@ -235,6 +241,14 @@ namespace XwaOptEditor.ViewModels
         public ICommand UpTextureNamesCommand { get; private set; }
 
         public ICommand DownTextureNamesCommand { get; private set; }
+
+        public ICommand FaceGroupQuad2TriCommand { get; private set; }
+
+        public ICommand FaceGroupTri2QuadCommand { get; private set; }
+
+        public ICommand MeshQuad2TriCommand { get; private set; }
+
+        public ICommand MeshTri2QuadCommand { get; private set; }
 
         public ICommand SelectMeshCommand { get; private set; }
 
@@ -1707,6 +1721,140 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.CurrentFaceGroups.SetSelection(faceGroups));
                 dispatcher(() => this.ModelVersion = textureIndex + 1);
                 dispatcher(() => this.OptModel.UndoStackPush("move down texture name"));
+            });
+        }
+
+        private void ExecuteFaceGroupQuad2TriCommand(IList<FaceGroup> faceGroups)
+        {
+            if (this.CurrentFaceGroups.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (faceGroups == null || faceGroups.Count == 0)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+                var lod = this.CurrentLods.SelectedItem;
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
+
+                lod.GroupFaceGroups();
+
+                lod.GetFaceGroups(faceGroups)
+                    .AsParallel()
+                    .ForAll(faceGroup => faceGroup.Quad2Tri());
+
+                lod.CompactFaceGroups();
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.OptModel.UndoStackPush("quad2tri"));
+            });
+        }
+
+        private void ExecuteFaceGroupTri2QuadCommand(IList<FaceGroup> faceGroups)
+        {
+            if (this.CurrentFaceGroups.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (faceGroups == null || faceGroups.Count == 0)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+                var lod = this.CurrentLods.SelectedItem;
+                var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
+
+                lod.GroupFaceGroups();
+
+                lod.GetFaceGroups(faceGroups)
+                    .AsParallel()
+                    .ForAll(faceGroup => faceGroup.Tri2Quad(mesh));
+
+                lod.CompactFaceGroups();
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentLods.SetSelection(lod));
+                dispatcher(() => this.OptModel.UndoStackPush("tri2quad"));
+            });
+        }
+
+        private void ExecuteMeshQuad2TriCommand(IList<Mesh> meshes)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (meshes == null || meshes.Count == 0)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                foreach (var mesh in meshes)
+                {
+                    foreach (var lod in mesh.Lods)
+                    {
+                        lod.GroupFaceGroups();
+
+                        lod.FaceGroups
+                            .AsParallel()
+                            .ForAll(faceGroup => faceGroup.Quad2Tri());
+
+                        lod.CompactFaceGroups();
+                    }
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("quad2tri"));
+            });
+        }
+
+        private void ExecuteMeshTri2QuadCommand(IList<Mesh> meshes)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            if (meshes == null || meshes.Count == 0)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                foreach (var mesh in meshes)
+                {
+                    foreach (var lod in mesh.Lods)
+                    {
+                        lod.GroupFaceGroups();
+
+                        lod.FaceGroups
+                            .AsParallel()
+                            .ForAll(faceGroup => faceGroup.Tri2Quad(mesh));
+
+                        lod.CompactFaceGroups();
+                    }
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("tri2quad"));
             });
         }
 
