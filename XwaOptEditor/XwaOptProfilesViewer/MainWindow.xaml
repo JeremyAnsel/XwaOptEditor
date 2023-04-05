@@ -41,6 +41,16 @@
                     <CheckBox x:Name="modelShowWireframe"
                               IsChecked="False"
                               ToolTip="Show Wireframe">Wireframe</CheckBox>
+                    <CheckBox x:Name="modelShowHardpoints"
+                              IsChecked="False"
+                              ToolTip="Show Hardpoints">HPs</CheckBox>
+                    <CheckBox x:Name="modelShowHardpointsText"
+                              IsEnabled="{Binding IsChecked, ElementName=modelShowHardpoints}"
+                              IsChecked="False"
+                              ToolTip="Show Hardpoints Text">HPs Text</CheckBox>
+                    <CheckBox x:Name="modelShowEngineGlows"
+                              IsChecked="False"
+                              ToolTip="Show Engine Glows">EGs</CheckBox>
                 </ToolBar>
                 <ToolBar>
                     <CheckBox x:Name="cameraOrthographic"
@@ -77,6 +87,32 @@
                 </ToolBarTray>
                 <ListBox x:Name="optSkinsListBox" ItemsSource="{Binding OptSkins}" MouseDoubleClick="optSkinsListBox_MouseDoubleClick" />
             </DockPanel>
+            <Expander DockPanel.Dock="Right"
+                      ExpandDirection="Left">
+                <Expander.Header>
+                    <TextBlock Text="Legend">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <ListBox ItemsSource="{x:Static local:OptHardpointsConverter.HardpointsColors}"
+                         SelectionMode="Single"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="     ">
+                                    <Run.Background>
+                                    <SolidColorBrush Color="{Binding Value, Mode=OneWay}" />
+                                    </Run.Background>
+                                </Run>
+                                <Run Text="{Binding Key, Mode=OneWay}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
             <hx:HelixViewport3D x:Name="viewport3D"
                                 Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
                                 ClipToBounds="False"
@@ -98,6 +134,37 @@
                             <Binding Path="Value" ElementName="distanceSelector" />
                             <Binding Path="IsChecked" ElementName="modelShowSolid" />
                             <Binding Path="IsChecked" ElementName="modelShowWireframe" />
+                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
+                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+                <ModelVisual3D>
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptHardpointsConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="Children" ElementName="modelVisual3D" />
+                            <Binding Path="IsChecked" ElementName="modelShowHardpoints" />
+                            <Binding Path="IsChecked" ElementName="modelShowHardpointsText" />
+                            <Binding Path="Children.Count" ElementName="modelVisual3D" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="Value" ElementName="distanceSelector" />
+                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
+                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                        </MultiBinding>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+                <ModelVisual3D>
+                    <ModelVisual3D.Content>
+                        <MultiBinding Converter="{x:Static local:OptEngineGlowsConverter.Default}">
+                            <Binding RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="Children" ElementName="modelVisual3D" />
+                            <Binding Path="IsChecked" ElementName="modelShowEngineGlows" />
+                            <Binding Path="Children.Count" ElementName="modelVisual3D" />
+                            <Binding Path="OptFile" />
+                            <Binding Path="Value" ElementName="distanceSelector" />
                             <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
                             <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
                             <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
