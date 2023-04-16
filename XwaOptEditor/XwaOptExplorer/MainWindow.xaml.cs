@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Win32;
 
@@ -61,6 +65,60 @@ namespace XwaOptExplorer
             this.viewport.Camera.FarPlaneDistance = 4000000;
 
             this.viewport.ZoomExtents();
+        }
+
+        private static readonly Dictionary<string, string> _tools = new()
+        {
+            {"Structure...", "OptStructure"},
+            {"Textures...", "OptTextures"},
+            {"Editor...", "XwaOptEditor"},
+            {"Profiles...", "XwaOptProfilesViewer"},
+            {"SFoils...", "XwaSFoilsEditor"},
+        };
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var element = (ButtonBase)sender;
+
+            if (element.Tag is not string fileName || element.Content is not string content)
+            {
+                return;
+            }
+
+            if(!_tools.TryGetValue(content, out string toolName))
+            {
+                return;
+            }
+
+            string toolPath = GetToolDirectory(toolName);
+
+            if (toolPath is null)
+            {
+                return;
+            }
+
+            Process.Start(toolPath, $"\"{fileName}\"");
+        }
+
+        private static string GetToolDirectory(string toolName)
+        {
+            if (File.Exists(toolName + ".exe"))
+            {
+                return toolName + ".exe";
+            }
+
+            string[] directories = Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar);
+            directories[directories.Length - 4] = toolName;
+
+            string directory = string.Join(Path.DirectorySeparatorChar.ToString(), directories);
+            string toolPath = directory + Path.DirectorySeparatorChar + toolName + ".exe";
+
+            if (File.Exists(toolPath))
+            {
+                return toolPath;
+            }
+
+            return null;
         }
     }
 }

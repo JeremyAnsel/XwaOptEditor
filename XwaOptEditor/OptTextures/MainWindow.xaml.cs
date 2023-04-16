@@ -21,7 +21,19 @@ namespace OptTextures
     /// </summary>
     public partial class MainWindow : Window
     {
-        OptFile OptFile
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1)
+            {
+                this.OpenFile(args[1]);
+            }
+        }
+
+        public OptFile OptFile
         {
             get
             {
@@ -34,11 +46,6 @@ namespace OptTextures
             }
         }
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
         private void Execute_Open(object sender, ExecutedRoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -46,14 +53,19 @@ namespace OptTextures
 
             if (dlg.ShowDialog() == true)
             {
-                try
-                {
-                    this.OptFile = OptFile.FromFile(dlg.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                this.OpenFile(dlg.FileName);
+            }
+        }
+
+        private void OpenFile(string fileName)
+        {
+            try
+            {
+                this.OptFile = OptFile.FromFile(fileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

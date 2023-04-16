@@ -17,6 +17,23 @@
         <ToolBar DockPanel.Dock="Top"
                  ToolBarTray.IsLocked="True">
             <Button Command="ApplicationCommands.Open">Open...</Button>
+            <Separator />
+            <TextBlock Text="Open in " />
+            <Button Content="Editor..."
+                    Tag="{Binding /FilePath}"
+                    Click="EditButton_Click" />
+            <Button Content="Profiles..."
+                    Tag="{Binding /FilePath}"
+                    Click="EditButton_Click" />
+            <Button Content="SFoils..."
+                    Tag="{Binding /FilePath}"
+                    Click="EditButton_Click" />
+            <Button Content="Structure..."
+                    Tag="{Binding /FilePath}"
+                    Click="EditButton_Click" />
+            <Button Content="Textures..."
+                    Tag="{Binding /FilePath}"
+                    Click="EditButton_Click" />
         </ToolBar>
         <Grid>
             <Grid.ColumnDefinitions>

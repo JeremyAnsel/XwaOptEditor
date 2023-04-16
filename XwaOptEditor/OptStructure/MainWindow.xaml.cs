@@ -24,6 +24,13 @@ namespace OptStructure
         public MainWindow()
         {
             InitializeComponent();
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1)
+            {
+                this.OpenFile(args[1]);
+            }
         }
 
         public OptFileNodes OptFile
@@ -45,15 +52,20 @@ namespace OptStructure
 
             if (dlg.ShowDialog() == true)
             {
-                try
-                {
-                    OptFile = null;
-                    OptFile = OptFileNodes.FromFile(dlg.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                this.OpenFile(dlg.FileName);
+            }
+        }
+
+        private void OpenFile(string fileName)
+        {
+            try
+            {
+                OptFile = null;
+                OptFile = OptFileNodes.FromFile(fileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

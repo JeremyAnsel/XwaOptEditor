@@ -58,6 +58,22 @@ namespace XwaOptProfilesViewer
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1)
+            {
+                try
+                {
+                    this.LoadOpt(args[1]);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.ToString(), ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                return;
+            }
+
             this.openButton_Click(null, null);
         }
 

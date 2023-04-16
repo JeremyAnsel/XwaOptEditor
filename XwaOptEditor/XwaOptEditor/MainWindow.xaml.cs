@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using JeremyAnsel.Xwa.Opt;
 using Microsoft.Win32;
 using XwaOptEditor.Messages;
 using XwaOptEditor.Mvvm;
+using XwaOptEditor.Services;
 using XwaOptEditor.ViewModels;
 
 namespace XwaOptEditor
@@ -52,6 +54,35 @@ namespace XwaOptEditor
             this.Unloaded += (sender, args) =>
             {
                 Messenger.Instance.Unregister(this);
+            };
+
+            this.Loaded += (sender, e) =>
+            {
+                string[] args = Environment.GetCommandLineArgs();
+
+                if (args.Length > 1)
+                {
+                    BusyIndicatorService.Run(dispatcher =>
+                    {
+                        string fileName = args[1];
+
+                        BusyIndicatorService.Notify(string.Concat("Opening ", System.IO.Path.GetFileName(fileName), "..."));
+
+                        try
+                        {
+                            dispatcher(() => this.ViewModel.OptModel.File = null);
+
+                            var opt = OptFile.FromFile(fileName);
+
+                            dispatcher(() => this.ViewModel.OptModel.File = opt);
+                            dispatcher(() => this.ViewModel.OptModel.UndoStackPush("open " + System.IO.Path.GetFileNameWithoutExtension(fileName)));
+                        }
+                        catch (Exception ex)
+                        {
+                            Messenger.Instance.Notify(new MessageBoxMessage(fileName, ex));
+                        }
+                    });
+                }
             };
         }
 

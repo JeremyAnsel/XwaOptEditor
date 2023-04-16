@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Xwa S-Foils Editor" Height="500" Width="1000"
         UseLayoutRounding="True"
-        ContentRendered="Window_ContentRendered">
+        Loaded="Window_Loaded">
     <DockPanel>
         <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
             <ToolBar>
