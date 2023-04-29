@@ -240,11 +240,9 @@ namespace XwaOptEditor.ViewModels
 
                     int bpp = newTexture.BitsPerPixel;
 
-                    newTexture.GenerateMipmaps();
-
-                    if (bpp == 8)
+                    if (bpp == 32)
                     {
-                        newTexture.Convert32To8();
+                        newTexture.GenerateMipmaps();
                     }
 
                     this.OptModel.File.Textures[newTexture.Name] = newTexture;

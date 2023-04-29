@@ -548,11 +548,9 @@ namespace OptAn8Converter
                     texture.Palette[2] = 0xff;
                 }
 
-                texture.GenerateMipmaps();
-
-                if (bpp == 8)
+                if (bpp == 32)
                 {
-                    texture.Convert32To8();
+                    texture.GenerateMipmaps();
                 }
 
                 opt.Textures.Add(texture.Name, texture);
