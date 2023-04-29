@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
+using JeremyAnsel.Xwa.WpfOpt;
 
 namespace XwaOptEditor.Controls
 {
-    class CustomHelixViewport3D : HelixViewport3D
+    class CustomHelixViewport3D : GlobalHelixViewport3D
     {
         public CustomHelixViewport3D()
         {

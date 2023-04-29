@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:wpfOpt="clr-namespace:JeremyAnsel.Xwa.WpfOpt;assembly=JeremyAnsel.Xwa.WpfOpt"
         xmlns:local="clr-namespace:XwaOptProfilesViewer"
         mc:Ignorable="d"
         Title="Xwa Opt Profiles Viewer"
@@ -33,6 +34,40 @@
                               ShowStandardColors="False"
                               AvailableColorsSortingMode="HueSaturationBrightness"
                               SelectedColor="Black" />
+            <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+                <ToolBar>
+                    <TextBlock Text="Lights Intensity: " />
+                    <TextBox Width="50"
+                             Text="{Binding ElementName=lightsIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                    <Slider x:Name="lightsIntensitySlider"
+                            Width="100"
+                            Minimum="0.0"
+                            Maximum="2.0"
+                            Value="1.0"
+                            SmallChange="0.1"
+                            LargeChange="0.1" />
+                    <TextBlock Text="Ambient Intensity: " />
+                    <TextBox Width="50"
+                             Text="{Binding ElementName=ambientIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                    <Slider x:Name="ambientIntensitySlider"
+                            Width="100"
+                            Minimum="0.0"
+                            Maximum="2.0"
+                            Value="0.0"
+                            SmallChange="0.1"
+                            LargeChange="0.1" />
+                    <TextBlock Text="Head Light Intensity: " />
+                    <TextBox Width="50"
+                             Text="{Binding ElementName=headLightIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                    <Slider x:Name="headLightIntensitySlider"
+                            Width="100"
+                            Minimum="0.0"
+                            Maximum="1.0"
+                            Value="1.0"
+                            SmallChange="0.1"
+                            LargeChange="0.1" />
+                </ToolBar>
+            </ToolBarTray>
             <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
                 <ToolBar>
                     <CheckBox x:Name="modelShowSolid"
@@ -113,10 +148,11 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
-            <hx:HelixViewport3D x:Name="viewport3D"
+            <wpfOpt:GlobalHelixViewport3D x:Name="viewport3D"
                                 Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
                                 ClipToBounds="False"
                                 IsHeadLightEnabled="True"
+                                HeadLightIntensity="{Binding ElementName=headLightIntensitySlider, Path=Value}"
                                 IsViewCubeEdgeClicksEnabled="True"
                                 CameraMode="Inspect"
                                 CameraRotationMode="Trackball"
@@ -124,7 +160,9 @@
                                 IsMoveEnabled="False"
                                 CameraChanged="viewport3D_CameraChanged"
                                 Orthographic="{Binding IsChecked, ElementName=cameraOrthographic}">
-                <hx:DefaultLights/>
+                <!--<hx:DefaultLights />-->
+                <wpfOpt:GlobalLights LightsIntensity="{Binding ElementName=lightsIntensitySlider, Path=Value}"
+                                     AmbientIntensity="{Binding ElementName=ambientIntensitySlider, Path=Value}" />
                 <ModelVisual3D x:Name="modelVisual3D">
                     <ModelVisual3D.Content>
                         <MultiBinding Converter="{x:Static local:OptMeshesConverter.Default}">
@@ -171,7 +209,7 @@
                         </MultiBinding>
                     </ModelVisual3D.Content>
                 </ModelVisual3D>
-            </hx:HelixViewport3D>
+            </wpfOpt:GlobalHelixViewport3D>
         </DockPanel>
     </DockPanel>
 </Window>

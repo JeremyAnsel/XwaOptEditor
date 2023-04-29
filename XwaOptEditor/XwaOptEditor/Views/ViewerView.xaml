@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:hx="http://helix-toolkit.org/wpf"
+             xmlns:wpfOpt="clr-namespace:JeremyAnsel.Xwa.WpfOpt;assembly=JeremyAnsel.Xwa.WpfOpt"
              xmlns:vm="clr-namespace:XwaOptEditor.ViewModels"
              xmlns:vc="clr-namespace:XwaOptEditor.Converters"
              xmlns:localControl="clr-namespace:XwaOptEditor.Controls"
@@ -22,6 +23,42 @@
                           ShowStandardColors="False"
                           AvailableColorsSortingMode="HueSaturationBrightness"
                           SelectedColor="Black" />
+        <ToolBarTray DockPanel.Dock="Bottom"
+                     IsLocked="True"
+                     HorizontalAlignment="Right">
+            <ToolBar>
+                <TextBlock Text="Lights Intensity: " />
+                <TextBox Width="50"
+                         Text="{Binding ElementName=lightsIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                <Slider x:Name="lightsIntensitySlider"
+                        Width="100"
+                        Minimum="0.0"
+                        Maximum="2.0"
+                        Value="1.0"
+                        SmallChange="0.1"
+                        LargeChange="0.1" />
+                <TextBlock Text="Ambient Intensity: " />
+                <TextBox Width="50"
+                         Text="{Binding ElementName=ambientIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                <Slider x:Name="ambientIntensitySlider"
+                        Width="100"
+                        Minimum="0.0"
+                        Maximum="2.0"
+                        Value="0.0"
+                        SmallChange="0.1"
+                        LargeChange="0.1" />
+                <TextBlock Text="Head Light Intensity: " />
+                <TextBox Width="50"
+                         Text="{Binding ElementName=headLightIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                <Slider x:Name="headLightIntensitySlider"
+                        Width="100"
+                        Minimum="0.0"
+                        Maximum="1.0"
+                        Value="1.0"
+                        SmallChange="0.1"
+                        LargeChange="0.1" />
+            </ToolBar>
+        </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Bottom"
                      IsLocked="True"
                      HorizontalAlignment="Right">
@@ -51,8 +88,11 @@
                                             IsMoveEnabled="False"
                                             Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                             IsHeadLightEnabled="True"
+                                            HeadLightIntensity="{Binding ElementName=headLightIntensitySlider, Path=Value}"
                                             IsViewCubeEdgeClicksEnabled="True">
-            <hx:DefaultLights />
+            <!--<hx:DefaultLights />-->
+            <wpfOpt:GlobalLights LightsIntensity="{Binding ElementName=lightsIntensitySlider, Path=Value}"
+                                 AmbientIntensity="{Binding ElementName=ambientIntensitySlider, Path=Value}" />
             <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
                                             Version="{Binding ModelVersion}"
                                             Distance="{Binding ModelDistance}"

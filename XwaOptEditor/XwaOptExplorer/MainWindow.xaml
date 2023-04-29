@@ -84,6 +84,42 @@
                     <TextBlock Text="{Binding ElementName=optVisual, Path=File.EngineGlowsCount}" />
                 </StackPanel>
                 <ToolBarTray DockPanel.Dock="Bottom"
+                             IsLocked="True"
+                             HorizontalAlignment="Right">
+                    <ToolBar>
+                        <TextBlock Text="Lights Intensity: " />
+                        <TextBox Width="50"
+                                 Text="{Binding ElementName=lightsIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                        <Slider x:Name="lightsIntensitySlider"
+                                Width="100"
+                                Minimum="0.0"
+                                Maximum="2.0"
+                                Value="1.0"
+                                SmallChange="0.1"
+                                LargeChange="0.1" />
+                        <TextBlock Text="Ambient Intensity: " />
+                        <TextBox Width="50"
+                                 Text="{Binding ElementName=ambientIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                        <Slider x:Name="ambientIntensitySlider"
+                                Width="100"
+                                Minimum="0.0"
+                                Maximum="2.0"
+                                Value="0.0"
+                                SmallChange="0.1"
+                                LargeChange="0.1" />
+                        <TextBlock Text="Head Light Intensity: " />
+                        <TextBox Width="50"
+                                 Text="{Binding ElementName=headLightIntensitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                        <Slider x:Name="headLightIntensitySlider"
+                                Width="100"
+                                Minimum="0.0"
+                                Maximum="1.0"
+                                Value="1.0"
+                                SmallChange="0.1"
+                                LargeChange="0.1" />
+                    </ToolBar>
+                </ToolBarTray>
+                <ToolBarTray DockPanel.Dock="Bottom"
                      IsLocked="True"
                      HorizontalAlignment="Right">
                     <ToolBar>
@@ -104,7 +140,7 @@
                         <CheckBox IsChecked="{Binding ElementName=optVisual, Path=IsWireframe}">Wireframe</CheckBox>
                     </ToolBar>
                 </ToolBarTray>
-                <hx:HelixViewport3D x:Name="viewport"
+                <wpfOpt:GlobalHelixViewport3D x:Name="viewport"
                                     Grid.Column="2"
                                     ClipToBounds="False"
                                     CameraMode="Inspect"
@@ -113,12 +149,15 @@
                                     IsMoveEnabled="False"
                                     Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={vc:ColorToBrushConverter}, FallbackValue=Black}"
                                     IsHeadLightEnabled="True"
+                                    HeadLightIntensity="{Binding ElementName=headLightIntensitySlider, Path=Value}"
                                     IsViewCubeEdgeClicksEnabled="True">
-                    <hx:DefaultLights />
+                    <!--<hx:DefaultLights />-->
+                    <wpfOpt:GlobalLights LightsIntensity="{Binding ElementName=lightsIntensitySlider, Path=Value}"
+                                         AmbientIntensity="{Binding ElementName=ambientIntensitySlider, Path=Value}" />
                     <wpfOpt:OptVisual3D x:Name="optVisual"
                                         FileName="{Binding /FilePath, Mode=OneWay}"
                                         ModelChanged="OptVisual_ModelChanged" />
-                </hx:HelixViewport3D>
+                </wpfOpt:GlobalHelixViewport3D>
             </DockPanel>
         </Grid>
     </DockPanel>
