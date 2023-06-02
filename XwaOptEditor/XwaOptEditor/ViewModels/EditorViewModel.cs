@@ -1744,7 +1744,7 @@ namespace XwaOptEditor.ViewModels
 
                 lod.GetFaceGroups(faceGroups)
                     .AsParallel()
-                    .ForAll(faceGroup => faceGroup.Quad2Tri());
+                    .ForAll(faceGroup => faceGroup.Quad2TriOptech());
 
                 lod.CompactFaceGroups();
 
@@ -1774,6 +1774,10 @@ namespace XwaOptEditor.ViewModels
                 var faceGroups = this.CurrentFaceGroups.SelectedItems.ToList();
 
                 lod.GroupFaceGroups();
+
+                lod.GetFaceGroups(faceGroups)
+                    .AsParallel()
+                    .ForAll(faceGroup => faceGroup.Quad2TriOptech());
 
                 lod.GetFaceGroups(faceGroups)
                     .AsParallel()
@@ -1810,7 +1814,7 @@ namespace XwaOptEditor.ViewModels
 
                         lod.FaceGroups
                             .AsParallel()
-                            .ForAll(faceGroup => faceGroup.Quad2Tri());
+                            .ForAll(faceGroup => faceGroup.Quad2TriOptech());
 
                         lod.CompactFaceGroups();
                     }
@@ -1841,6 +1845,10 @@ namespace XwaOptEditor.ViewModels
                     foreach (var lod in mesh.Lods)
                     {
                         lod.GroupFaceGroups();
+
+                        lod.FaceGroups
+                            .AsParallel()
+                            .ForAll(faceGroup => faceGroup.Quad2TriOptech());
 
                         lod.FaceGroups
                             .AsParallel()

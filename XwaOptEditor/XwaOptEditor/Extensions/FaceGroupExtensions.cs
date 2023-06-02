@@ -10,6 +10,32 @@ namespace XwaOptEditor.Extensions
 {
     static class FaceGroupExtensions
     {
+        public static void Quad2TriOptech(this FaceGroup faceGroup)
+        {
+            for (int faceIndex = 0; faceIndex < faceGroup.Faces.Count; faceIndex++)
+            {
+                var face = faceGroup.Faces[faceIndex];
+
+                if (face.TrianglesCount != 2)
+                {
+                    continue;
+                }
+
+                faceGroup.Faces.Insert(faceIndex + 1, face.Clone());
+                var newFace = faceGroup.Faces[faceIndex + 1];
+
+                face.VerticesIndex = new Indices(face.VerticesIndex.A, face.VerticesIndex.B, face.VerticesIndex.D, -1);
+                face.EdgesIndex = new Indices(face.EdgesIndex.A, face.EdgesIndex.B, face.EdgesIndex.D, -1);
+                face.TextureCoordinatesIndex = new Indices(face.TextureCoordinatesIndex.A, face.TextureCoordinatesIndex.B, face.TextureCoordinatesIndex.D, -1);
+                face.VertexNormalsIndex = new Indices(face.VertexNormalsIndex.A, face.VertexNormalsIndex.B, face.VertexNormalsIndex.D, -1);
+
+                newFace.VerticesIndex = new Indices(newFace.VerticesIndex.B, newFace.VerticesIndex.C, newFace.VerticesIndex.D, -1);
+                newFace.EdgesIndex = new Indices(newFace.EdgesIndex.B, newFace.EdgesIndex.C, newFace.EdgesIndex.D, -1);
+                newFace.TextureCoordinatesIndex = new Indices(newFace.TextureCoordinatesIndex.B, newFace.TextureCoordinatesIndex.C, newFace.TextureCoordinatesIndex.D, -1);
+                newFace.VertexNormalsIndex = new Indices(newFace.VertexNormalsIndex.B, newFace.VertexNormalsIndex.C, newFace.VertexNormalsIndex.D, -1);
+            }
+        }
+
         public static void Quad2Tri(this FaceGroup faceGroup)
         {
             for (int faceIndex = 0; faceIndex < faceGroup.Faces.Count; faceIndex++)
@@ -206,7 +232,7 @@ namespace XwaOptEditor.Extensions
                     float angleA = GetAngleBetweenVectors(VectorSubstract(a2, a0), VectorSubstract(b2, a0), normalA);
                     float angleB = GetAngleBetweenVectors(VectorSubstract(b2, a1), VectorSubstract(a2, a1), normalA);
 
-                    if (angleA < 0.0f || angleB < 0.0f)
+                    if (angleA <= 0.0f || angleB <= 0.0f)
                     {
                         continue;
                     }
@@ -238,6 +264,19 @@ namespace XwaOptEditor.Extensions
                         face.VertexNormalsIndex.At(edges[2]));
 
                     faceGroup.Faces.RemoveAt(faceSubIndex);
+
+                    //{
+                    //    Vector vA = mesh.Vertices.ElementAtOrDefault(face.VerticesIndex.A);
+                    //    Vector vB = mesh.Vertices.ElementAtOrDefault(face.VerticesIndex.B);
+                    //    Vector vC = mesh.Vertices.ElementAtOrDefault(face.VerticesIndex.C);
+                    //    Vector vD = mesh.Vertices.ElementAtOrDefault(face.VerticesIndex.D);
+
+                    //    float angleDAB = GetAngleBetweenVectors(VectorSubstract(vD, vA), VectorSubstract(vB, vA), normalA);
+                    //    float angleABC = GetAngleBetweenVectors(VectorSubstract(vA, vB), VectorSubstract(vC, vB), normalA);
+                    //    float angleBCD = GetAngleBetweenVectors(VectorSubstract(vB, vC), VectorSubstract(vD, vC), normalA);
+                    //    float angleCDA = GetAngleBetweenVectors(VectorSubstract(vC, vD), VectorSubstract(vA, vD), normalA);
+                    //}
+
                     break;
                 }
             }
