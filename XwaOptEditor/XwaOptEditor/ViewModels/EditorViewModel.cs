@@ -96,6 +96,7 @@ namespace XwaOptEditor.ViewModels
             this.SplitMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteSplitMeshesCommand);
             this.MergeMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMergeMeshesCommand);
             this.MoveMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteMoveMeshesCommand);
+            this.ScaleMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteScaleMeshesCommand);
             this.RotateMeshCommand = new DelegateCommandOf<Mesh>(this.ExecuteRotateMeshCommand);
             this.DuplicateMeshesCommand = new DelegateCommandOfList<Mesh>(this.ExecuteDuplicateMeshesCommand);
             this.ComputeHitzonesCommand = new DelegateCommand(this.ExecuteComputeHitzonesCommand);
@@ -175,6 +176,8 @@ namespace XwaOptEditor.ViewModels
         public ICommand MergeMeshesCommand { get; private set; }
 
         public ICommand MoveMeshesCommand { get; private set; }
+
+        public ICommand ScaleMeshesCommand { get; private set; }
 
         public ICommand RotateMeshCommand { get; private set; }
 
@@ -734,6 +737,141 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
                 dispatcher(() => this.OptModel.UndoStackPush("move meshes"));
+            });
+        }
+
+        private void ExecuteScaleMeshesCommand(IList<Mesh> meshes)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                JeremyAnsel.Xwa.Opt.Vector minSize = new JeremyAnsel.Xwa.Opt.Vector()
+                {
+                    X = meshes.Count == 0 ? 0.0f : meshes.Min(t => Math.Min(t.Descriptor.Min.X, t.Descriptor.Max.X)),
+                    Y = meshes.Count == 0 ? 0.0f : meshes.Min(t => Math.Min(t.Descriptor.Min.Y, t.Descriptor.Max.Y)),
+                    Z = meshes.Count == 0 ? 0.0f : meshes.Min(t => Math.Min(t.Descriptor.Min.Z, t.Descriptor.Max.Z))
+                };
+
+                JeremyAnsel.Xwa.Opt.Vector maxSize = new JeremyAnsel.Xwa.Opt.Vector()
+                {
+                    X = meshes.Count == 0 ? 0.0f : meshes.Max(t => Math.Max(t.Descriptor.Min.X, t.Descriptor.Max.X)),
+                    Y = meshes.Count == 0 ? 0.0f : meshes.Max(t => Math.Max(t.Descriptor.Min.Y, t.Descriptor.Max.Y)),
+                    Z = meshes.Count == 0 ? 0.0f : meshes.Max(t => Math.Max(t.Descriptor.Min.Z, t.Descriptor.Max.Z))
+                };
+
+                JeremyAnsel.Xwa.Opt.Vector spanSize = new JeremyAnsel.Xwa.Opt.Vector()
+                {
+                    X = maxSize.X - minSize.X,
+                    Y = maxSize.Y - minSize.Y,
+                    Z = maxSize.Z - minSize.Z
+                };
+
+                var size = spanSize.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, OptFile.ScaleFactor);
+
+                var message = Messenger.Instance.Notify(
+                    new ScaleFactorMessage
+                    {
+                        SizeX = size.X,
+                        SizeY = size.Y,
+                        SizeZ = size.Z
+                    });
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify(string.Concat(message.ScaleType, "..."));
+
+                if (message.ScaleX == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(message.ScaleX));
+                }
+
+                if (message.ScaleY == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(message.ScaleY));
+                }
+
+                if (message.ScaleZ == 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(message.ScaleZ));
+                }
+
+                bool invertFaceOrder = (Math.Sign(message.ScaleX) * Math.Sign(message.ScaleY) * Math.Sign(message.ScaleZ)) < 0;
+
+                JeremyAnsel.Xwa.Opt.Vector center = JeremyAnsel.Xwa.Opt.Vector.Empty;
+
+                if (meshes.Count == 1)
+                {
+                    center = meshes[0].Descriptor.Center;
+                    meshes[0].Move(-center.X, -center.Y, -center.Z);
+                }
+
+                meshes
+                    .AsParallel()
+                    .ForAll(mesh =>
+                    {
+                        for (int i = 0; i < mesh.Vertices.Count; i++)
+                        {
+                            mesh.Vertices[i] = mesh.Vertices[i].Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                        }
+
+                        for (int i = 0; i < mesh.VertexNormals.Count; i++)
+                        {
+                            mesh.VertexNormals[i] = mesh.VertexNormals[i].Scale(Math.Sign(message.ScaleX), Math.Sign(message.ScaleY), Math.Sign(message.ScaleZ));
+                        }
+
+                        JeremyAnsel.Xwa.Opt.Vector min = mesh.Descriptor.Min.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                        JeremyAnsel.Xwa.Opt.Vector max = mesh.Descriptor.Max.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+
+                        mesh.Descriptor.Min = new JeremyAnsel.Xwa.Opt.Vector(Math.Min(min.X, max.X), Math.Min(min.Y, max.Y), Math.Min(min.Z, max.Z));
+                        mesh.Descriptor.Max = new JeremyAnsel.Xwa.Opt.Vector(Math.Max(min.X, max.X), Math.Max(min.Y, max.Y), Math.Max(min.Z, max.Z));
+
+                        mesh.Descriptor.Center = mesh.Descriptor.Center.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                        mesh.Descriptor.Span = mesh.Descriptor.Span.Scale(message.ScaleX, message.ScaleY, message.ScaleZ).Abs();
+                        mesh.Descriptor.Target = mesh.Descriptor.Target.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+
+                        mesh.RotationScale.Pivot = mesh.RotationScale.Pivot.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+
+                        foreach (var lod in mesh.Lods)
+                        {
+                            lod.Distance /= Math.Max(Math.Max(Math.Abs(message.ScaleX), Math.Abs(message.ScaleY)), Math.Abs(message.ScaleZ));
+
+                            foreach (var face in lod.FaceGroups.SelectMany(t => t.Faces))
+                            {
+                                face.Normal = face.Normal.Scale(Math.Sign(message.ScaleX), Math.Sign(message.ScaleY), Math.Sign(message.ScaleZ));
+                                face.TexturingDirection = face.TexturingDirection.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                                face.TexturingMagniture = face.TexturingMagniture.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+
+                                if (invertFaceOrder)
+                                {
+                                    face.VerticesIndex = face.VerticesIndex.InvertOrder();
+                                    face.EdgesIndex = face.EdgesIndex.InvertOrder();
+                                    face.TextureCoordinatesIndex = face.TextureCoordinatesIndex.InvertOrder();
+                                    face.VertexNormalsIndex = face.VertexNormalsIndex.InvertOrder();
+                                }
+                            }
+                        }
+
+                        foreach (var hardpoint in mesh.Hardpoints)
+                        {
+                            hardpoint.Position = hardpoint.Position.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                        }
+
+                        foreach (var engineGlow in mesh.EngineGlows)
+                        {
+                            engineGlow.Position = engineGlow.Position.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+                        }
+                    });
+
+                if (meshes.Count == 1)
+                {
+                    meshes[0].Move(center.X, center.Y, center.Z);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(meshes));
+                dispatcher(() => this.OptModel.UndoStackPush("scale meshes"));
             });
         }
 

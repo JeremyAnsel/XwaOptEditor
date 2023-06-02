@@ -99,6 +99,10 @@
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding MoveMeshesCommand}"
                             CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
+                    <Button Content="Scale..."
+                            IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                            Command="{Binding ScaleMeshesCommand}"
+                            CommandParameter="{Binding CurrentMeshes.SelectedItems}" />
                     <Button Content="Rotate..."
                             IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
                             Command="{Binding RotateMeshCommand}"
