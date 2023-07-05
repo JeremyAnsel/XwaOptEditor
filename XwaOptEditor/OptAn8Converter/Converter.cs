@@ -14,23 +14,23 @@ namespace OptAn8Converter
     {
         public static void OptToAn8(OptFile opt, string an8Path)
         {
-            Converter.OptToAn8(opt, an8Path, true, null);
+            Converter.OptToAn8(opt, an8Path, true, null, true);
         }
 
         public static void OptToAn8(OptFile opt, string an8Path, Action<string> notify)
         {
-            Converter.OptToAn8(opt, an8Path, true, notify);
+            Converter.OptToAn8(opt, an8Path, true, notify, true);
         }
 
         public static void OptToAn8(OptFile opt, string an8Path, bool scale)
         {
-            Converter.OptToAn8(opt, an8Path, scale, null);
+            Converter.OptToAn8(opt, an8Path, scale, null, true);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public static void OptToAn8(OptFile opt, string an8Path, bool scale, Action<string> notify)
+        public static void OptToAn8(OptFile opt, string an8Path, bool scale, Action<string> notify, bool addTexturePrefix)
         {
             if (opt == null)
             {
@@ -47,16 +47,18 @@ namespace OptAn8Converter
 
             foreach (var texture in opt.Textures.Values)
             {
-                texture.Save(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", an8Name, texture.Name)));
+                string textureName = addTexturePrefix ? string.Concat(an8Name, "_", texture.Name) : texture.Name;
+
+                texture.Save(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}.png", textureName)));
 
                 if (texture.HasAlpha)
                 {
-                    texture.SaveAlphaMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", an8Name, texture.Name)));
+                    texture.SaveAlphaMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_alpha.png", textureName)));
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", an8Name, texture.Name)));
+                    texture.SaveIllumMap(Path.Combine(an8Directory, string.Format(CultureInfo.InvariantCulture, "{0}_illum.png", textureName)));
                 }
             }
 
@@ -92,17 +94,19 @@ namespace OptAn8Converter
 
                 foreach (var texture in opt.Textures.Values)
                 {
+                    string textureName = addTexturePrefix ? string.Concat(an8Name, "_", texture.Name) : texture.Name;
+
                     var an8Texture = new An8Texture();
-                    an8Texture.Name = an8Name + "_" + texture.Name;
-                    an8Texture.Files.Add(string.Concat(an8Name, "_", texture.Name, ".png"));
+                    an8Texture.Name = textureName;
+                    an8Texture.Files.Add(string.Concat(textureName, ".png"));
                     an8.Textures.Add(an8Texture);
 
                     var an8Material = new An8Material();
-                    an8Material.Name = an8Name + "_" + texture.Name;
+                    an8Material.Name = textureName;
                     an8Material.FrontSurface = new An8Surface();
                     an8Material.FrontSurface.Diffuse = new An8MaterialColor
                     {
-                        TextureName = an8Name + "_" + texture.Name,
+                        TextureName = textureName,
                         TextureParams = new An8TextureParams
                         {
                             AlphaMode = texture.HasAlpha ? An8AlphaMode.Final : An8AlphaMode.None,
@@ -137,7 +141,8 @@ namespace OptAn8Converter
                         .SelectMany(t => t.Textures)
                         .Distinct())
                     {
-                        an8Mesh.MaterialList.Add(an8Name + "_" + texture);
+                        string textureName = addTexturePrefix ? string.Concat(an8Name, "_", texture) : texture;
+                        an8Mesh.MaterialList.Add(textureName);
                     }
 
                     if (scale)

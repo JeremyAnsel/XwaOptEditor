@@ -937,6 +937,10 @@ namespace XwaOptEditor.ViewModels
 
         private void ExecuteExportMeshObjCommand(IList<Mesh> meshes)
         {
+            var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+            bool scale = mainWindowViewModel?.IsImportExportScaleEnabled ?? true;
+            bool prefix = mainWindowViewModel?.IsAddPrefixToTexturesEnabled ?? true;
+
             BusyIndicatorService.Run(dispatcher =>
             {
                 string fileName = FileDialogService.GetSaveObjFileName("Export OBJ file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "obj"));
@@ -958,11 +962,9 @@ namespace XwaOptEditor.ViewModels
 
                 opt.RemoveUnusedTextures();
 
-                bool scale = true;
-
                 try
                 {
-                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {
@@ -973,6 +975,10 @@ namespace XwaOptEditor.ViewModels
 
         private void ExecuteExportMeshRhinoCommand(IList<Mesh> meshes)
         {
+            var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+            bool scale = mainWindowViewModel?.IsImportExportScaleEnabled ?? true;
+            bool prefix = mainWindowViewModel?.IsAddPrefixToTexturesEnabled ?? true;
+
             BusyIndicatorService.Run(dispatcher =>
             {
                 string fileName = FileDialogService.GetSaveRhinoFileName("Export 3DM file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "3dm"));
@@ -994,11 +1000,9 @@ namespace XwaOptEditor.ViewModels
 
                 opt.RemoveUnusedTextures();
 
-                bool scale = true;
-
                 try
                 {
-                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {
@@ -1009,6 +1013,10 @@ namespace XwaOptEditor.ViewModels
 
         private void ExecuteExportMeshAn8Command(IList<Mesh> meshes)
         {
+            var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+            bool scale = mainWindowViewModel?.IsImportExportScaleEnabled ?? true;
+            bool prefix = mainWindowViewModel?.IsAddPrefixToTexturesEnabled ?? true;
+
             BusyIndicatorService.Run(dispatcher =>
             {
                 string fileName = FileDialogService.GetSaveAn8FileName("Export AN8 file", System.IO.Path.ChangeExtension(this.OptModel.File.FileName, "an8"));
@@ -1030,11 +1038,9 @@ namespace XwaOptEditor.ViewModels
 
                 opt.RemoveUnusedTextures();
 
-                bool scale = true;
-
                 try
                 {
-                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {

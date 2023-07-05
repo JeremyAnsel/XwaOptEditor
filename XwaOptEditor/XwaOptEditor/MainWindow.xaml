@@ -97,6 +97,8 @@
                                 Command="{Binding ExportRhinoCommand}" />
                         <Button Content="An8..."
                                 Command="{Binding ExportAn8Command}" />
+                        <CheckBox Content="Add prefix to textures"
+                                  IsChecked="{Binding IsAddPrefixToTexturesEnabled}" />
                         <Separator />
                         <CheckBox Content="Scale from/to m"
                                   IsChecked="{Binding IsImportExportScaleEnabled}" />

@@ -18,9 +18,12 @@ namespace XwaOptEditor.ViewModels
     {
         private bool isImportExportScaleEnabled;
 
+        private bool isAddPrefixToTexturesEnabled;
+
         public MainWindowViewModel()
         {
             this.isImportExportScaleEnabled = true;
+            this.isAddPrefixToTexturesEnabled = true;
 
             this.OptModel = new OptModel();
 
@@ -72,6 +75,23 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.isImportExportScaleEnabled = value;
                     this.RaisePropertyChangedEvent("IsImportExportScaleEnabled");
+                }
+            }
+        }
+
+        public bool IsAddPrefixToTexturesEnabled
+        {
+            get
+            {
+                return this.isAddPrefixToTexturesEnabled;
+            }
+
+            set
+            {
+                if (value != this.isAddPrefixToTexturesEnabled)
+                {
+                    this.isAddPrefixToTexturesEnabled = value;
+                    this.RaisePropertyChangedEvent("IsAddPrefixToTexturesEnabled");
                 }
             }
         }
@@ -643,10 +663,11 @@ namespace XwaOptEditor.ViewModels
 
                 var opt = this.OptModel.File;
                 bool scale = this.IsImportExportScaleEnabled;
+                bool prefix = this.isAddPrefixToTexturesEnabled;
 
                 try
                 {
-                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptObjConverter.Converter.OptToObj(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {
@@ -712,10 +733,11 @@ namespace XwaOptEditor.ViewModels
 
                 var opt = this.OptModel.File;
                 bool scale = this.IsImportExportScaleEnabled;
+                bool prefix = this.isAddPrefixToTexturesEnabled;
 
                 try
                 {
-                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptRhinoConverter.Converter.OptToRhino(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {
@@ -781,10 +803,11 @@ namespace XwaOptEditor.ViewModels
 
                 var opt = this.OptModel.File;
                 bool scale = this.IsImportExportScaleEnabled;
+                bool prefix = this.isAddPrefixToTexturesEnabled;
 
                 try
                 {
-                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify);
+                    OptAn8Converter.Converter.OptToAn8(opt, fileName, scale, BusyIndicatorService.Notify, prefix);
                 }
                 catch (Exception ex)
                 {

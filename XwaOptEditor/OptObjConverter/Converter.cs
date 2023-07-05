@@ -13,23 +13,23 @@ namespace OptObjConverter
     {
         public static void OptToObj(OptFile opt, string objPath)
         {
-            Converter.OptToObj(opt, objPath, true, null);
+            Converter.OptToObj(opt, objPath, true, null, true);
         }
 
         public static void OptToObj(OptFile opt, string objPath, Action<string> notify)
         {
-            Converter.OptToObj(opt, objPath, true, notify);
+            Converter.OptToObj(opt, objPath, true, notify, true);
         }
 
         public static void OptToObj(OptFile opt, string objPath, bool scale)
         {
-            Converter.OptToObj(opt, objPath, scale, null);
+            Converter.OptToObj(opt, objPath, scale, null, true);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public static void OptToObj(OptFile opt, string objPath, bool scale, Action<string> notify)
+        public static void OptToObj(OptFile opt, string objPath, bool scale, Action<string> notify, bool addTexturePrefix)
         {
             if (opt == null)
             {
@@ -46,16 +46,18 @@ namespace OptObjConverter
 
             foreach (var texture in opt.Textures.Values)
             {
-                texture.Save(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)));
+                string textureName = addTexturePrefix ? string.Concat(objName, "_", texture.Name) : texture.Name;
+
+                texture.Save(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}.png", textureName)));
 
                 if (texture.HasAlpha)
                 {
-                    texture.SaveAlphaMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name)));
+                    texture.SaveAlphaMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_alpha.png", textureName)));
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", objName, texture.Name)));
+                    texture.SaveIllumMap(Path.Combine(objDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_illum.png", textureName)));
                 }
             }
 
@@ -63,15 +65,17 @@ namespace OptObjConverter
 
             foreach (var texture in opt.Textures.Values)
             {
+                string textureName = addTexturePrefix ? string.Concat(objName, "_", texture.Name) : texture.Name;
+
                 var material = new ObjMaterial
                 {
-                    Name = objName + "_" + texture.Name,
-                    DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", objName, texture.Name)
+                    Name = textureName,
+                    DiffuseMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}.png", textureName)
                 };
 
                 if (texture.HasAlpha)
                 {
-                    material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", objName, texture.Name);
+                    material.AlphaMapFileName = string.Format(CultureInfo.InvariantCulture, "{0}_alpha.png", textureName);
                 }
 
                 if (texture.IsIlluminated)

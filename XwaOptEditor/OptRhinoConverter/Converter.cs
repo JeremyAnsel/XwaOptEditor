@@ -12,23 +12,23 @@ namespace OptRhinoConverter
     {
         public static void OptToRhino(OptFile opt, string rhinoPath)
         {
-            Converter.OptToRhino(opt, rhinoPath, true, null);
+            Converter.OptToRhino(opt, rhinoPath, true, null, true);
         }
 
         public static void OptToRhino(OptFile opt, string rhinoPath, Action<string> notify)
         {
-            Converter.OptToRhino(opt, rhinoPath, true, notify);
+            Converter.OptToRhino(opt, rhinoPath, true, notify, true);
         }
 
         public static void OptToRhino(OptFile opt, string rhinoPath, bool scale)
         {
-            Converter.OptToRhino(opt, rhinoPath, scale, null);
+            Converter.OptToRhino(opt, rhinoPath, scale, null, true);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Reviewed")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed")]
-        public static void OptToRhino(OptFile opt, string rhinoPath, bool scale, Action<string> notify)
+        public static void OptToRhino(OptFile opt, string rhinoPath, bool scale, Action<string> notify, bool addTexturePrefix)
         {
             if (opt == null)
             {
@@ -45,16 +45,18 @@ namespace OptRhinoConverter
 
             foreach (var texture in opt.Textures.Values)
             {
-                texture.Save(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}.png", rhinoName, texture.Name)));
+                string textureName = addTexturePrefix ? string.Concat(rhinoName, "_", texture.Name) : texture.Name;
+
+                texture.Save(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}.png", textureName)));
 
                 if (texture.HasAlpha)
                 {
-                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_alpha.png", rhinoName, texture.Name)));
+                    texture.SaveAlphaMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_alpha.png", textureName)));
                 }
 
                 if (texture.IsIlluminated)
                 {
-                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_{1}_illum.png", rhinoName, texture.Name)));
+                    texture.SaveIllumMap(Path.Combine(rhinoDirectory, string.Format(CultureInfo.InvariantCulture, "{0}_illum.png", textureName)));
                 }
             }
 
@@ -210,7 +212,7 @@ namespace OptRhinoConverter
 
                         using (var material = new Rhino.DocObjects.Material())
                         {
-                            material.Name = rhinoName + "_" + textureName;
+                            material.Name = addTexturePrefix ? string.Concat(rhinoName, "_", textureName) : textureName;
 
                             if (texture == null)
                             {
@@ -218,11 +220,11 @@ namespace OptRhinoConverter
                             }
                             else
                             {
-                                material.SetBitmapTexture(rhinoName + "_" + textureName + ".png");
+                                material.SetBitmapTexture(material.Name + ".png");
 
                                 if (texture.HasAlpha)
                                 {
-                                    material.SetTransparencyTexture(rhinoName + "_" + textureName + "_alpha.png");
+                                    material.SetTransparencyTexture(material.Name + "_alpha.png");
                                 }
 
                                 if (texture.IsIlluminated)
