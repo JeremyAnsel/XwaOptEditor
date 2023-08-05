@@ -85,7 +85,7 @@ namespace XwaOptExplorer
                 return;
             }
 
-            if(!_tools.TryGetValue(content, out string toolName))
+            if (!_tools.TryGetValue(content, out string toolName))
             {
                 return;
             }
