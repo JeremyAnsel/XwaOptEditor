@@ -50,6 +50,7 @@ namespace XwaOptExplorer
 
             this.DataContext = System.IO.Directory
                 .EnumerateFiles(directory, "*.opt")
+                .Where(t => t.EndsWith(".opt", StringComparison.OrdinalIgnoreCase))
                 .Select(t => new OptFileItem(t))
                 .ToList();
         }
