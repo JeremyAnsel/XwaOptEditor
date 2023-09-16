@@ -115,7 +115,7 @@ namespace XwaHangarMapEditor
 
             SelectOptVersion(opt, version);
             ApplyObjectProfile(opt, objectProfile);
-            ApplySkins(opt, skins);
+            ApplySkins(opt, version, skins);
 
             opt.CompactBuffers();
             opt.CompactTextures();
@@ -192,30 +192,33 @@ namespace XwaHangarMapEditor
             return null;
         }
 
-        private static void ApplySkins(OptFile opt, IList<string> skins)
+        private static void ApplySkins(OptFile opt, int version, IList<string> skins)
         {
             string optName = Path.GetFileNameWithoutExtension(opt.FileName);
             string directory = Path.GetDirectoryName(opt.FileName);
 
             bool hasDefaultSkin = GetSkinDirectoryLocatorPath(directory, optName, "Default") != null;
-            bool hasSkins = hasDefaultSkin || skins.Count != 0;
+            bool hasDefaultSkinMarking = GetSkinDirectoryLocatorPath(directory, optName, "Default_" + version.ToString(CultureInfo.InvariantCulture)) != null;
+            bool hasSkins = hasDefaultSkin || hasDefaultSkinMarking || skins.Count != 0;
 
             if (hasSkins)
             {
-                UpdateOptFile(optName, opt, skins);
+                string defaultSkin = hasDefaultSkinMarking ? "Default_" + version.ToString(CultureInfo.InvariantCulture) : "Default";
+
+                UpdateOptFile(optName, opt, skins, defaultSkin);
             }
         }
 
-        private static void UpdateOptFile(string optName, OptFile opt, IList<string> baseSkins)
+        private static void UpdateOptFile(string optName, OptFile opt, IList<string> baseSkins, string defaultSkin)
         {
-            IList<IList<string>> fgSkins = ReadFgSkins(optName, baseSkins);
+            IList<IList<string>> fgSkins = ReadFgSkins(optName, baseSkins, defaultSkin);
             IList<string> distinctSkins = fgSkins.SelectMany(t => t).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             ICollection<string> texturesExist = GetTexturesExist(optName, opt, distinctSkins);
             CreateSwitchTextures(opt, texturesExist, fgSkins);
             UpdateSkins(optName, opt, distinctSkins, fgSkins);
         }
 
-        private static IList<IList<string>> ReadFgSkins(string optName, IList<string> baseSkins)
+        private static IList<IList<string>> ReadFgSkins(string optName, IList<string> baseSkins, string defaultSkin)
         {
             var fgSkins = new List<IList<string>>(1);
 
@@ -223,7 +226,7 @@ namespace XwaHangarMapEditor
 
             if (skins.Count == 0)
             {
-                skins.Add("Default");
+                skins.Add(defaultSkin);
             }
 
             fgSkins.Add(skins);
