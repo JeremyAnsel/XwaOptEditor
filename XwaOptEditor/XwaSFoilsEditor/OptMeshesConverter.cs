@@ -65,9 +65,11 @@ namespace XwaSFoilsEditor
 
             foreach (var child in model.Children)
             {
+                bool isVisible = sfoils[model.Children.IndexOf(child)].IsVisible;
+
                 var visual = (OptVisual3D)child;
-                visual.IsSolid = showSolid;
-                visual.IsWireframe = showWireframe;
+                visual.IsSolid = isVisible && showSolid;
+                visual.IsWireframe = isVisible && showWireframe;
                 visual.Transform = Transform3D.Identity;
             }
 

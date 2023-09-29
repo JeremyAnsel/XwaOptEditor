@@ -11,6 +11,8 @@ namespace XwaSFoilsEditor
 {
     public sealed class MeshModel : INotifyPropertyChanged
     {
+        private bool isVisible = true;
+
         private string name;
 
         private int meshIndex;
@@ -28,6 +30,23 @@ namespace XwaSFoilsEditor
         private int closingSpeed;
 
         private int openingSpeed;
+
+        public bool IsVisible
+        {
+            get
+            {
+                return this.isVisible;
+            }
+
+            set
+            {
+                if (value != this.isVisible)
+                {
+                    this.isVisible = value;
+                    this.OnPropertyChanged();
+                }
+            }
+        }
 
         public string Name
         {

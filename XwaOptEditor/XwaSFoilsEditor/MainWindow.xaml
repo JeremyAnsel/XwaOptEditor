@@ -30,15 +30,18 @@
         <ListBox x:Name="meshesList" DockPanel.Dock="Left" Width="200" ItemsSource="{Binding Meshes}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding MeshIndex}" />
-                        <Run Text="-" />
-                        <Run Text="{Binding Name}" />
-                        <Run Text="-" />
-                        <Run Text="{Binding Angle}" />
-                        <Run Text="-" />
-                        <Run Text="{Binding RealAngle, Mode=OneWay, StringFormat='\{0:F2\}'}" />
-                    </TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsVisible}" Margin="0 0 5 0" />
+                        <TextBlock>
+                            <Run Text="{Binding MeshIndex}" />
+                            <Run Text="-" />
+                            <Run Text="{Binding Name}" />
+                            <Run Text="-" />
+                            <Run Text="{Binding Angle}" />
+                            <Run Text="-" />
+                            <Run Text="{Binding RealAngle, Mode=OneWay, StringFormat='\{0:F2\}'}" />
+                        </TextBlock>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -181,6 +184,7 @@
                             <Binding Path="Value" ElementName="showSFoils" />
                             <Binding Path="IsChecked" ElementName="modelShowSolid" />
                             <Binding Path="IsChecked" ElementName="modelShowWireframe" />
+                            <Binding Path="Meshes/IsVisible" />
                             <Binding Path="Meshes/Pivot" />
                             <Binding Path="Meshes/Look" />
                             <Binding Path="Meshes/Up" />
@@ -200,6 +204,7 @@
                             <Binding Path="SelectedItem" ElementName="meshesList" />
                             <Binding Path="Meshes" />
                             <Binding Path="Value" ElementName="showSFoils" />
+                            <Binding Path="Meshes/IsVisible" />
                             <Binding Path="Meshes/Pivot" />
                             <Binding Path="Meshes/Look" />
                             <Binding Path="Meshes/Up" />
@@ -217,6 +222,7 @@
                             <Binding Path="OptFile" />
                             <Binding Path="IsChecked" ElementName="showPivotAxis" />
                             <Binding Path="SelectedItem" ElementName="meshesList" />
+                            <Binding Path="Meshes/IsVisible" />
                             <Binding Path="Meshes/Pivot" />
                             <Binding Path="Meshes/Look" />
                             <Binding Path="Meshes/Up" />

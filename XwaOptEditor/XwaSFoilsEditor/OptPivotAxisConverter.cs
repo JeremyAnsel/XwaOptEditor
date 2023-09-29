@@ -49,6 +49,11 @@ namespace XwaSFoilsEditor
 
             var selected = (MeshModel)values[3];
 
+            if (!selected.IsVisible)
+            {
+                return null;
+            }
+
             var pivot = selected.Pivot.ToPoint3D();
             var direction = selected.Look.Normalize().Scale(opt.Size).ToVector3D();
 

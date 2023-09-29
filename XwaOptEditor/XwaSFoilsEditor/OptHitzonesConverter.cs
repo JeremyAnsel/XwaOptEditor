@@ -62,6 +62,14 @@ namespace XwaSFoilsEditor
                     Size = new Size3D(t.Item3.Y, t.Item3.X, t.Item3.Z)
                 }))
             {
+                bool isVisible = sfoils[opt.Meshes.IndexOf(hitzone.Mesh)].IsVisible;
+
+                if (!isVisible)
+                {
+                    visuals.Add(new BoundingBoxWireFrameVisual3D());
+                    continue;
+                }
+
                 visuals.Add(new BoundingBoxWireFrameVisual3D()
                 {
                     BoundingBox = new Rect3D(hitzone.Position, hitzone.Size),
