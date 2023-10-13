@@ -207,7 +207,9 @@ namespace OptAn8Converter
                                 currentVersion = faceGroup.Textures.Count - 1;
                             }
 
-                            materialIndex = an8Mesh.MaterialList.IndexOf(an8Name + "_" + faceGroup.Textures[currentVersion]);
+                            string texture = faceGroup.Textures[currentVersion];
+                            string textureName = addTexturePrefix ? string.Concat(an8Name, "_", texture) : texture;
+                            materialIndex = an8Mesh.MaterialList.IndexOf(textureName);
                         }
 
                         foreach (var face in faceGroup.Faces)

@@ -173,7 +173,9 @@ namespace OptObjConverter
                                 currentVersion = faceGroup.Textures.Count - 1;
                             }
 
-                            objFaceGroup.MaterialName = objName + "_" + faceGroup.Textures[currentVersion];
+                            string texture = faceGroup.Textures[currentVersion];
+                            string textureName = addTexturePrefix ? string.Concat(objName, "_", texture) : texture;
+                            objFaceGroup.MaterialName = textureName;
                         }
 
                         objMesh.FaceGroups.Add(objFaceGroup);
