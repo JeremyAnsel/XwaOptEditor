@@ -38,7 +38,7 @@
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Text="Center X: " />
+                   Text="{Binding XAxisLabel, StringFormat='Center {0}: ', FallbackValue='Center X: '}" />
         <TextBox Grid.Row="1"
                  Grid.Column="2"
                  Grid.ColumnSpan="2"
@@ -50,7 +50,7 @@
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Text="Center Y: " />
+                   Text="{Binding YAxisLabel, StringFormat='Center {0}: ', FallbackValue='Center Y: '}" />
         <TextBox Grid.Row="2"
                  Grid.Column="2"
                  Grid.ColumnSpan="2"

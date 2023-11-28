@@ -351,6 +351,8 @@ namespace XwaOptEditor
             Action action = () =>
             {
                 var dialog = new RotateFactorDialog(this);
+                dialog.XAxisLabel = message.XAxisLabel;
+                dialog.YAxisLabel = message.YAxisLabel;
                 dialog.CenterX = message.CenterX;
                 dialog.CenterY = message.CenterY;
                 dialog.Angle = message.Angle;

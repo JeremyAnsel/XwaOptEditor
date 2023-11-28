@@ -109,6 +109,14 @@
                                 Command="{Binding ChangeAxesCommand}" />
                         <Button Content="Center"
                                 Command="{Binding CenterCommand}" />
+                        <Separator />
+                        <TextBlock Text="Rotate " />
+                        <Button Content="XY..."
+                                Command="{Binding RotateXYCommand}" />
+                        <Button Content="XZ..."
+                                Command="{Binding RotateXZCommand}" />
+                        <Button Content="YZ..."
+                                Command="{Binding RotateYZCommand}" />
                     </ToolBar>
                 </DockPanel>
             </DockPanel>

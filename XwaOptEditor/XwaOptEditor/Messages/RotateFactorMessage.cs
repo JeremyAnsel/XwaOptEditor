@@ -15,5 +15,9 @@ namespace XwaOptEditor.Messages
         public float CenterY { get; set; }
 
         public float Angle{ get; set; }
+
+        public string XAxisLabel { get; set; } = "X";
+
+        public string YAxisLabel { get; set; } = "Y";
     }
 }

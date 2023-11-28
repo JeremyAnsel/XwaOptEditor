@@ -38,6 +38,10 @@ namespace XwaOptEditor
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string XAxisLabel { get; set; } = "X";
+
+        public string YAxisLabel { get; set; } = "Y";
+
         public float CenterX
         {
             get

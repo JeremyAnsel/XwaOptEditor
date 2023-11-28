@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using JeremyAnsel.Xwa.Opt;
+using XwaOptEditor.Extensions;
 using XwaOptEditor.Messages;
 using XwaOptEditor.Models;
 using XwaOptEditor.Mvvm;
@@ -53,6 +54,9 @@ namespace XwaOptEditor.ViewModels
             this.ScaleCommand = new DelegateCommand(this.ExecuteScaleCommand);
             this.ChangeAxesCommand = new DelegateCommand(this.ExecuteChangeAxesCommand);
             this.CenterCommand = new DelegateCommand(this.ExecuteCenterCommand);
+            this.RotateXYCommand = new DelegateCommand(this.ExecuteRotateXYCommand);
+            this.RotateXZCommand = new DelegateCommand(this.ExecuteRotateXZCommand);
+            this.RotateYZCommand = new DelegateCommand(this.ExecuteRotateYZCommand);
 
             this.CommandBindings = new CommandBindingCollection();
             this.CommandBindings.Add(ApplicationCommands.Help, this.HelpCommand);
@@ -124,6 +128,12 @@ namespace XwaOptEditor.ViewModels
         public ICommand ScaleCommand { get; private set; }
         public ICommand ChangeAxesCommand { get; private set; }
         public ICommand CenterCommand { get; private set; }
+
+        public ICommand RotateXYCommand { get; private set; }
+
+        public ICommand RotateXZCommand { get; private set; }
+
+        public ICommand RotateYZCommand { get; private set; }
 
         public CommandBindingCollection CommandBindings { get; private set; }
 
@@ -890,6 +900,96 @@ namespace XwaOptEditor.ViewModels
 
                 dispatcher(() => this.OptModel.File = opt);
                 dispatcher(() => this.OptModel.UndoStackPush("center"));
+            });
+        }
+
+        private void ExecuteRotateXYCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var message = new RotateFactorMessage
+                {
+                    XAxisLabel = "X",
+                    YAxisLabel = "Y"
+                };
+
+                Messenger.Instance.Notify(message);
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify("Rotating ...");
+
+                var opt = this.OptModel.File;
+
+                opt.Meshes
+                    .AsParallel()
+                    .ForAll(mesh => mesh.RotateXY(message.Angle, message.CenterX, message.CenterY));
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("rotate XY"));
+            });
+        }
+
+        private void ExecuteRotateXZCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var message = new RotateFactorMessage
+                {
+                    XAxisLabel = "X",
+                    YAxisLabel = "Z"
+                };
+
+                Messenger.Instance.Notify(message);
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify("Rotating ...");
+
+                var opt = this.OptModel.File;
+
+                opt.Meshes
+                    .AsParallel()
+                    .ForAll(mesh => mesh.RotateXZ(message.Angle, message.CenterX, message.CenterY));
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("rotate XZ"));
+            });
+        }
+
+        private void ExecuteRotateYZCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var message = new RotateFactorMessage
+                {
+                    XAxisLabel = "Y",
+                    YAxisLabel = "Z"
+                };
+
+                Messenger.Instance.Notify(message);
+
+                if (!message.Changed)
+                {
+                    return;
+                }
+
+                BusyIndicatorService.Notify("Rotating ...");
+
+                var opt = this.OptModel.File;
+
+                opt.Meshes
+                    .AsParallel()
+                    .ForAll(mesh => mesh.RotateYZ(message.Angle, message.CenterX, message.CenterY));
+
+                dispatcher(() => this.OptModel.File = opt);
+                dispatcher(() => this.OptModel.UndoStackPush("rotate YZ"));
             });
         }
     }
