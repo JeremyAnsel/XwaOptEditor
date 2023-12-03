@@ -338,7 +338,8 @@ namespace XwaHangarMapEditor
 
             try
             {
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap();
+                bool includeHangar = this.exportIncludeHangar.IsChecked == true;
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar);
 
                 optFile.Save(fileName);
 
@@ -387,7 +388,8 @@ namespace XwaHangarMapEditor
 
             try
             {
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap();
+                bool includeHangar = this.exportIncludeHangar.IsChecked == true;
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar);
 
                 OptObjConverter.Converter.OptToObj(optFile, fileName, true);
 

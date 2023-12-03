@@ -627,7 +627,7 @@ namespace XwaHangarMapEditor
             return modelVisual3D;
         }
 
-        public OptFile BuildOptMap()
+        public OptFile BuildOptMap(bool includeHangar = true)
         {
             HangarSkins hangarSkins = this.HangarSkins;
             HangarObjects hangarObjects = this.HangarObjects;
@@ -643,7 +643,10 @@ namespace XwaHangarMapEditor
 
             if (hangar != null)
             {
-                MergeOpt(optFile, hangar.File);
+                if (includeHangar)
+                {
+                    MergeOpt(optFile, hangar.File);
+                }
 
                 Hardpoint hangarFloorHardpoint = hangar.File
                     .Meshes

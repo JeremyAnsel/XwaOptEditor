@@ -84,6 +84,8 @@
                         Click="ExportOptButton_Click">Opt...</Button>
                 <Button x:Name="exportObjButton"
                         Click="ExportObjButton_Click">Obj...</Button>
+                <CheckBox x:Name="exportIncludeHangar"
+                          IsChecked="True">Hangar</CheckBox>
             </ToolBar>
             <StackPanel>
                 <DockPanel>
