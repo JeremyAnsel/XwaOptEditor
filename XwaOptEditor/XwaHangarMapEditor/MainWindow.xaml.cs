@@ -169,11 +169,13 @@ namespace XwaHangarMapEditor
                 iniFile.ParseIni();
                 iniFile.Read("Skins", "Skins");
                 iniFile.Read("HangarObjects", "HangarObjects");
+                iniFile.Read("HangarCamera", "HangarCamera");
                 iniFile.Read("HangarMap", "HangarMap");
                 iniFile.Read("FamHangarMap", "FamHangarMap");
 
                 string hangarSkinsText = string.Join("\n", iniFile.Sections["Skins"].Lines);
                 string hangarObjectsText = string.Join("\n", iniFile.Sections["HangarObjects"].Lines);
+                string hangarCameraText = string.Join("\n", iniFile.Sections["HangarCamera"].Lines);
                 string hangarMapText = string.Join("\n",
                     iniFile.Sections["HangarMap"].Lines
                     .Union(iniFile.Sections["FamHangarMap"].Lines));
@@ -184,11 +186,13 @@ namespace XwaHangarMapEditor
                 this.ViewModel.HangarModel = null;
                 this.ViewModel.HangarSkinsText = null;
                 this.ViewModel.HangarObjectsText = null;
+                this.ViewModel.HangarCameraText = null;
                 this.ViewModel.HangarMapText = null;
 
                 this.ViewModel.HangarModel = hangarModel;
                 this.ViewModel.HangarSkinsText = hangarSkinsText;
                 this.ViewModel.HangarObjectsText = hangarObjectsText;
+                this.ViewModel.HangarCameraText = hangarCameraText;
                 this.ViewModel.HangarMapText = hangarMapText;
                 this.ViewModel.HangarBaseName = hangarBaseName;
 
@@ -261,6 +265,7 @@ namespace XwaHangarMapEditor
             iniFile.ParseIni();
             iniFile.Read("Skins", "Skins");
             iniFile.Read("HangarObjects", "HangarObjects");
+            iniFile.Read("HangarCamera", "HangarCamera");
             iniFile.Read("HangarMap", "HangarMap");
             iniFile.Read("FamHangarMap", "FamHangarMap");
 
@@ -276,6 +281,13 @@ namespace XwaHangarMapEditor
             foreach (string line in this.ViewModel.HangarObjectsText.SplitLines(false))
             {
                 hangarObjectsIniList.Add(line);
+            }
+
+            ICollection<string> hangarCameraIniList = iniFile.RetrieveLinesList("HangarCamera");
+
+            foreach (string line in this.ViewModel.HangarCameraText.SplitLines(false))
+            {
+                hangarCameraIniList.Add(line);
             }
 
             ICollection<string> hangarMapIniList;
@@ -339,7 +351,8 @@ namespace XwaHangarMapEditor
             try
             {
                 bool includeHangar = this.exportIncludeHangar.IsChecked == true;
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar);
+                bool includeCamera = this.exportIncludeCamera.IsChecked == true;
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera);
 
                 optFile.Save(fileName);
 
@@ -389,7 +402,8 @@ namespace XwaHangarMapEditor
             try
             {
                 bool includeHangar = this.exportIncludeHangar.IsChecked == true;
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar);
+                bool includeCamera = this.exportIncludeCamera.IsChecked == true;
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera);
 
                 OptObjConverter.Converter.OptToObj(optFile, fileName, true);
 

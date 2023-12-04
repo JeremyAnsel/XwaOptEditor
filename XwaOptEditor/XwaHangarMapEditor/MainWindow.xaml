@@ -86,6 +86,8 @@
                         Click="ExportObjButton_Click">Obj...</Button>
                 <CheckBox x:Name="exportIncludeHangar"
                           IsChecked="True">Hangar</CheckBox>
+                <CheckBox x:Name="exportIncludeCamera"
+                          IsChecked="True">Camera</CheckBox>
             </ToolBar>
             <StackPanel>
                 <DockPanel>
@@ -125,6 +127,13 @@
                 </TabItem>
                 <TabItem Header="Objects">
                     <TextBox Text="{Binding HangarObjectsText, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                             FontFamily="Courier New"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto" />
+                </TabItem>
+                <TabItem Header="Camera">
+                    <TextBox Text="{Binding HangarCameraText, UpdateSourceTrigger=PropertyChanged, Delay=500}"
                              FontFamily="Courier New"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
@@ -198,6 +207,8 @@
                               IsChecked="{Binding ShowRescueShuttle}" />
                     <CheckBox Content="HangarRoofCrane"
                               IsChecked="{Binding ShowHangarRoofCrane}" />
+                    <CheckBox Content="Camera"
+                              IsChecked="{Binding ShowCamera}" />
                 </ToolBar>
                 <xctk:ColorPicker x:Name="backgroundColorPicker"
                                   DockPanel.Dock="Bottom"

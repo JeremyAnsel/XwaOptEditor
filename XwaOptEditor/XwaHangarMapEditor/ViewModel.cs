@@ -1,4 +1,5 @@
-﻿using JeremyAnsel.Xwa.Opt;
+﻿using HelixToolkit.Wpf;
+using JeremyAnsel.Xwa.Opt;
 using JeremyAnsel.Xwa.WpfOpt;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Media3D;
 
 namespace XwaHangarMapEditor
@@ -184,6 +186,28 @@ namespace XwaHangarMapEditor
             }
         }
 
+        private bool _showCamera = true;
+
+        public bool ShowCamera
+        {
+            get
+            {
+                return this._showCamera;
+            }
+
+            set
+            {
+                if (this._showCamera == value)
+                {
+                    return;
+                }
+
+                this._showCamera = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.HangarMap3D));
+            }
+        }
+
         public List<ObjectItem> ObjectItems
         {
             get
@@ -336,6 +360,37 @@ namespace XwaHangarMapEditor
             }
         }
 
+        private string hangarCameraText = GlobalConstants.DefaultHangarCameraText;
+
+        public string HangarCameraText
+        {
+            get
+            {
+                return this.hangarCameraText;
+            }
+
+            set
+            {
+                if (this.hangarCameraText == value)
+                {
+                    return;
+                }
+
+                this.hangarCameraText = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.HangarCamera));
+                this.OnPropertyChanged(nameof(this.HangarMap3D));
+            }
+        }
+
+        public HangarCamera HangarCamera
+        {
+            get
+            {
+                return HangarCamera.FromText(this.HangarCameraText);
+            }
+        }
+
         private string hangarMapText = GlobalConstants.DefaultHangarMapText;
 
         public string HangarMapText
@@ -399,6 +454,7 @@ namespace XwaHangarMapEditor
             {
                 HangarSkins hangarSkins = this.HangarSkins;
                 HangarObjects hangarObjects = this.HangarObjects;
+                HangarCamera hangarCamera = this.HangarCamera;
                 HangarMap hangarMap = this.HangarMap;
                 bool isRegularHangar = this.IsRegularHangar;
 
@@ -515,6 +571,57 @@ namespace XwaHangarMapEditor
                     }
                 }
 
+                if (this.ShowCamera)
+                {
+                    double offsetX = hangarObjects.PlayerOffsetX;
+                    double offsetY = hangarObjects.PlayerOffsetY;
+                    double offsetZ;
+
+                    if (isRegularHangar)
+                    {
+                        offsetY -= 0x320;
+                    }
+                    else
+                    {
+                        offsetY -= 0x1A90;
+                    }
+
+                    if (hangarObjects.IsPlayerFloorInverted)
+                    {
+                        offsetZ = hangarFloorZ + hangarObjects.HangarFloorInvertedHeight;
+                    }
+                    else
+                    {
+                        offsetZ = hangarFloorZ;
+                    }
+
+                    offsetZ += hangarObjects.PlayerOffsetZ;
+
+                    Point3D cameraTarget = new(offsetY, -offsetX, offsetZ);
+
+                    var cameraPositions = new List<Point3D>
+                    {
+                        new(hangarCamera.Key1_Y, -hangarCamera.Key1_X, hangarCamera.Key1_Z),
+                        new(hangarCamera.Key2_Y, -hangarCamera.Key2_X, hangarCamera.Key2_Z),
+                        new(hangarCamera.Key3_Y, -hangarCamera.Key3_X, hangarCamera.Key3_Z),
+                        new(hangarCamera.Key6_Y, -hangarCamera.Key6_X, hangarCamera.Key6_Z),
+                        new(hangarCamera.Key9_Y, -hangarCamera.Key9_X, hangarCamera.Key9_Z),
+                    };
+
+                    foreach (Point3D cameraPosition in cameraPositions)
+                    {
+                        var visual = new ArrowVisual3D
+                        {
+                            Material = Materials.Green,
+                            Point1 = cameraTarget,
+                            Point2 = cameraPosition,
+                            Diameter = 8.0
+                        };
+
+                        collection.Add(visual);
+                    }
+                }
+
                 return collection;
             }
         }
@@ -627,10 +734,11 @@ namespace XwaHangarMapEditor
             return modelVisual3D;
         }
 
-        public OptFile BuildOptMap(bool includeHangar = true)
+        public OptFile BuildOptMap(bool includeHangar, bool includeCamera)
         {
             HangarSkins hangarSkins = this.HangarSkins;
             HangarObjects hangarObjects = this.HangarObjects;
+            HangarCamera hangarCamera = this.HangarCamera;
             HangarMap hangarMap = this.HangarMap;
             bool isRegularHangar = this.IsRegularHangar;
 
@@ -661,8 +769,6 @@ namespace XwaHangarMapEditor
 
                 isHangarFloorInverted = hangarObjects.IsHangarFloorInverted;
             }
-
-            var collection = new List<Visual3D>(hangarMap.Count);
 
             foreach (HangarItem item in hangarMap)
             {
@@ -715,6 +821,118 @@ namespace XwaHangarMapEditor
                 if (model != null)
                 {
                     MergeOpt(optFile, model);
+                }
+            }
+
+            if (this.ShowCamera)
+            {
+                double offsetX = hangarObjects.PlayerOffsetX;
+                double offsetY = hangarObjects.PlayerOffsetY;
+                double offsetZ;
+
+                if (isRegularHangar)
+                {
+                    offsetY -= 0x320;
+                }
+                else
+                {
+                    offsetY -= 0x1A90;
+                }
+
+                if (hangarObjects.IsPlayerFloorInverted)
+                {
+                    offsetZ = hangarFloorZ + hangarObjects.HangarFloorInvertedHeight;
+                }
+                else
+                {
+                    offsetZ = hangarFloorZ;
+                }
+
+                offsetZ += hangarObjects.PlayerOffsetZ;
+
+                Point3D cameraTarget = new(offsetY, -offsetX, offsetZ);
+
+                var cameraPositions = new List<Point3D>
+                {
+                    new(hangarCamera.Key1_Y, -hangarCamera.Key1_X, hangarCamera.Key1_Z),
+                    new(hangarCamera.Key2_Y, -hangarCamera.Key2_X, hangarCamera.Key2_Z),
+                    new(hangarCamera.Key3_Y, -hangarCamera.Key3_X, hangarCamera.Key3_Z),
+                    new(hangarCamera.Key6_Y, -hangarCamera.Key6_X, hangarCamera.Key6_Z),
+                    new(hangarCamera.Key9_Y, -hangarCamera.Key9_X, hangarCamera.Key9_Z),
+                };
+
+                var texture = new JeremyAnsel.Xwa.Opt.Texture
+                {
+                    Name = "Arrow",
+                    Width = 8,
+                    Height = 8,
+                    ImageData = new byte[8 * 8 * 4 * 2 - 4]
+                };
+
+                for (int i = 0; i < texture.ImageData.Length; i += 4)
+                {
+                    texture.ImageData[i + 0] = 0;
+                    texture.ImageData[i + 1] = 0xff;
+                    texture.ImageData[i + 2] = 0;
+                    texture.ImageData[i + 3] = 0xff;
+                }
+
+                optFile.Textures.Add(texture.Name, texture);
+
+                foreach (Point3D cameraPosition in cameraPositions)
+                {
+                    var visual = new ArrowVisual3D
+                    {
+                        Material = Materials.Green,
+                        Point1 = cameraTarget,
+                        Point2 = cameraPosition,
+                        Diameter = 8.0
+                    };
+
+                    MeshGeometry3D geometry = (MeshGeometry3D)visual.Model.Geometry;
+
+                    var optMesh = new JeremyAnsel.Xwa.Opt.Mesh();
+                    optFile.Meshes.Add(optMesh);
+
+                    foreach (Point3D position in geometry.Positions)
+                    {
+                        optMesh.Vertices.Add(position.ToVector());
+                    }
+
+                    foreach (Vector3D normal in geometry.Normals)
+                    {
+                        optMesh.VertexNormals.Add(normal.ToPoint3D().ToVector());
+                    }
+
+                    foreach (Point coords in geometry.TextureCoordinates)
+                    {
+                        optMesh.TextureCoordinates.Add(new TextureCoordinates((float)coords.X, -(float)coords.Y));
+                    }
+
+                    var optLod = new JeremyAnsel.Xwa.Opt.MeshLod();
+                    optMesh.Lods.Add(optLod);
+
+                    var optFaceGroup = new JeremyAnsel.Xwa.Opt.FaceGroup();
+                    optLod.FaceGroups.Add(optFaceGroup);
+
+                    optFaceGroup.Textures.Add(texture.Name);
+
+                    for (int index = 0; index < geometry.TriangleIndices.Count; index += 3)
+                    {
+                        int index0 = geometry.TriangleIndices[index];
+                        int index1 = geometry.TriangleIndices[index + 1];
+                        int index2 = geometry.TriangleIndices[index + 2];
+                        Indices indices = new(index0, index1, index2);
+
+                        var face = new JeremyAnsel.Xwa.Opt.Face
+                        {
+                            VerticesIndex = indices,
+                            VertexNormalsIndex = indices,
+                            TextureCoordinatesIndex = indices
+                        };
+
+                        optFaceGroup.Faces.Add(face);
+                    }
                 }
             }
 
