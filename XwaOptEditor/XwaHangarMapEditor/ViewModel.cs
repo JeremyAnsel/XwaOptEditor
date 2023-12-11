@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -734,7 +735,7 @@ namespace XwaHangarMapEditor
             return modelVisual3D;
         }
 
-        public OptFile BuildOptMap(bool includeHangar, bool includeCamera)
+        public OptFile BuildOptMap(bool includeHangar, bool includeCamera, out List<string> optMeshesNames)
         {
             HangarSkins hangarSkins = this.HangarSkins;
             HangarObjects hangarObjects = this.HangarObjects;
@@ -743,6 +744,8 @@ namespace XwaHangarMapEditor
             bool isRegularHangar = this.IsRegularHangar;
 
             var optFile = new OptFile();
+            var optNames = new Dictionary<string, int>();
+            optMeshesNames = new();
 
             OptModel hangar = string.IsNullOrWhiteSpace(this.HangarModel) ? null : this.GetOptModel(this.HangarModel);
 
@@ -753,7 +756,7 @@ namespace XwaHangarMapEditor
             {
                 if (includeHangar)
                 {
-                    MergeOpt(optFile, hangar.File);
+                    MergeOpt(optFile, optNames, optMeshesNames, hangar.File);
                 }
 
                 Hardpoint hangarFloorHardpoint = hangar.File
@@ -776,7 +779,7 @@ namespace XwaHangarMapEditor
 
                 if (model != null)
                 {
-                    MergeOpt(optFile, model);
+                    MergeOpt(optFile, optNames, optMeshesNames, model);
                 }
             }
 
@@ -798,7 +801,7 @@ namespace XwaHangarMapEditor
 
                 if (model != null)
                 {
-                    MergeOpt(optFile, model);
+                    MergeOpt(optFile, optNames, optMeshesNames, model);
                 }
             }
 
@@ -820,11 +823,11 @@ namespace XwaHangarMapEditor
 
                 if (model != null)
                 {
-                    MergeOpt(optFile, model);
+                    MergeOpt(optFile, optNames, optMeshesNames, model);
                 }
             }
 
-            if (this.ShowCamera)
+            if (includeCamera)
             {
                 double offsetX = hangarObjects.PlayerOffsetX;
                 double offsetY = hangarObjects.PlayerOffsetY;
@@ -861,6 +864,8 @@ namespace XwaHangarMapEditor
                     new(hangarCamera.Key9_Y, -hangarCamera.Key9_X, hangarCamera.Key9_Z),
                 };
 
+                OptFile model = new();
+
                 var texture = new JeremyAnsel.Xwa.Opt.Texture
                 {
                     Name = "Arrow",
@@ -877,7 +882,7 @@ namespace XwaHangarMapEditor
                     texture.ImageData[i + 3] = 0xff;
                 }
 
-                optFile.Textures.Add(texture.Name, texture);
+                model.Textures.Add(texture.Name, texture);
 
                 foreach (Point3D cameraPosition in cameraPositions)
                 {
@@ -892,7 +897,7 @@ namespace XwaHangarMapEditor
                     MeshGeometry3D geometry = (MeshGeometry3D)visual.Model.Geometry;
 
                     var optMesh = new JeremyAnsel.Xwa.Opt.Mesh();
-                    optFile.Meshes.Add(optMesh);
+                    model.Meshes.Add(optMesh);
 
                     foreach (Point3D position in geometry.Positions)
                     {
@@ -934,6 +939,8 @@ namespace XwaHangarMapEditor
                         optFaceGroup.Faces.Add(face);
                     }
                 }
+
+                MergeOpt(optFile, optNames, optMeshesNames, model);
             }
 
             optFile.CompactTextures();
@@ -1104,7 +1111,7 @@ namespace XwaHangarMapEditor
             }
         }
 
-        private static void MergeOpt(OptFile opt, OptFile import)
+        private static void MergeOpt(OptFile opt, Dictionary<string, int> optNames, List<string> optMeshesNames, OptFile import)
         {
             import = import.Clone();
 
@@ -1142,8 +1149,22 @@ namespace XwaHangarMapEditor
                 opt.Textures[texture.Name] = texture;
             }
 
+            string name = Path.GetFileNameWithoutExtension(import.FileName);
+            string nameKey = name?.ToUpperInvariant() ?? string.Empty;
+
+            if (!optNames.TryGetValue(nameKey, out int nameIndex))
+            {
+                nameIndex = -1;
+            }
+
+            nameIndex++;
+            optNames[nameKey] = nameIndex;
+
+            name = string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}", name, nameIndex);
+
             foreach (var mesh in import.Meshes)
             {
+                optMeshesNames.Add(name);
                 opt.Meshes.Add(mesh);
             }
         }

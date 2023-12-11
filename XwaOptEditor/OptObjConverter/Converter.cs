@@ -26,10 +26,15 @@ namespace OptObjConverter
             Converter.OptToObj(opt, objPath, scale, null, true);
         }
 
+        public static void OptToObj(OptFile opt, string objPath, bool scale, List<string> meshesNames = null)
+        {
+            Converter.OptToObj(opt, objPath, scale, null, true, meshesNames);
+        }
+
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public static void OptToObj(OptFile opt, string objPath, bool scale, Action<string> notify, bool addTexturePrefix)
+        public static void OptToObj(OptFile opt, string objPath, bool scale, Action<string> notify, bool addTexturePrefix, List<string> meshesNames = null)
         {
             if (opt == null)
             {
@@ -116,6 +121,7 @@ namespace OptObjConverter
                 }
 
                 var obj = new ObjFile();
+                int meshesIndex = -1;
 
                 int objectsIndex = 0;
                 int verticesIndex = 0;
@@ -124,6 +130,8 @@ namespace OptObjConverter
 
                 foreach (var mesh in opt.Meshes)
                 {
+                    meshesIndex++;
+
                     var lod = mesh.Lods.FirstOrDefault(t => t.Distance <= distances[distance]);
 
                     if (lod == null)
@@ -131,7 +139,9 @@ namespace OptObjConverter
                         continue;
                     }
 
-                    var objMesh = new ObjMesh(string.Format(CultureInfo.InvariantCulture, "{0:D3}.{1}", objectsIndex, mesh.Descriptor.MeshType));
+                    string meshName = meshesNames?.ElementAtOrDefault(meshesIndex) ?? string.Empty;
+
+                    var objMesh = new ObjMesh(string.Format(CultureInfo.InvariantCulture, "{0}.{1:D3}.{2}", meshName, objectsIndex, mesh.Descriptor.MeshType));
                     obj.Meshes.Add(objMesh);
                     objectsIndex++;
 

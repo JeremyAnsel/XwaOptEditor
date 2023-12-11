@@ -352,7 +352,7 @@ namespace XwaHangarMapEditor
             {
                 bool includeHangar = this.exportIncludeHangar.IsChecked == true;
                 bool includeCamera = this.exportIncludeCamera.IsChecked == true;
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera);
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera, out List<string> optMeshesNames);
 
                 optFile.Save(fileName);
 
@@ -403,9 +403,9 @@ namespace XwaHangarMapEditor
             {
                 bool includeHangar = this.exportIncludeHangar.IsChecked == true;
                 bool includeCamera = this.exportIncludeCamera.IsChecked == true;
-                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera);
+                JeremyAnsel.Xwa.Opt.OptFile optFile = this.ViewModel.BuildOptMap(includeHangar, includeCamera, out List<string> optMeshesNames);
 
-                OptObjConverter.Converter.OptToObj(optFile, fileName, true);
+                OptObjConverter.Converter.OptToObj(optFile, fileName, true, optMeshesNames);
 
                 Xceed.Wpf.Toolkit.MessageBox.Show(this, "Exported.", this.Title);
             }
