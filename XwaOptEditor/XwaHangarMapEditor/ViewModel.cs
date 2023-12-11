@@ -503,8 +503,8 @@ namespace XwaHangarMapEditor
                     {
                         ModelIndex = 1,
                         Markings = 0,
-                        PositionX = hangarObjects.PlayerOffsetX,
-                        PositionY = hangarObjects.PlayerOffsetY,
+                        PositionX = hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetX : hangarObjects.PlayerOffsetX,
+                        PositionY = hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetY : hangarObjects.PlayerOffsetY,
                         PositionZ = 0x7FFFFFFF,
                         HeadingXY = 0,
                         HeadingZ = 0,
@@ -520,7 +520,7 @@ namespace XwaHangarMapEditor
                         player.PositionY -= 0x1A90;
                     }
 
-                    Visual3D model = this.CreateModel3D(player, hangarObjects.PlayerOffsetZ, hangarFloorZ, hangarObjects.IsPlayerFloorInverted, hangarSkins, hangarObjects);
+                    Visual3D model = this.CreateModel3D(player, hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetZ : hangarObjects.PlayerOffsetZ, hangarFloorZ, hangarObjects.IsPlayerFloorInverted, hangarSkins, hangarObjects);
 
                     if (model != null)
                     {
@@ -596,7 +596,7 @@ namespace XwaHangarMapEditor
                         offsetZ = hangarFloorZ;
                     }
 
-                    offsetZ += hangarObjects.PlayerOffsetZ;
+                    offsetZ += hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetZ : hangarObjects.PlayerOffsetZ;
 
                     Point3D cameraTarget = new(offsetY, -offsetX, offsetZ);
 
