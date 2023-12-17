@@ -1,6 +1,8 @@
 ﻿using HelixToolkit.Wpf;
 using JeremyAnsel.Xwa.HooksConfig;
 using JeremyAnsel.Xwa.Opt;
+using JeremyAnsel.Xwa.OptTransform;
+using JeremyAnsel.Xwa.OptTransform.Wpf;
 using JeremyAnsel.Xwa.WpfOpt;
 using Microsoft.Win32;
 using System;
@@ -36,6 +38,8 @@ namespace XwaSFoilsEditor
         }
 
         public OptFile OptFile { get; set; }
+
+        public string OptFileProfile { get; set; }
 
         public OptCache OptCache { get; set; }
 
@@ -139,7 +143,7 @@ namespace XwaSFoilsEditor
                 mesh.RotationScale.Right = model.Right;
             }
 
-            string baseFilename = GetBaseOptFilename(this.OptFile.FileName);
+            string baseFilename = OptTransformHelpers.GetBaseOptFilename(this.OptFile.FileName);
             var iniFile = new XwaIniFile(baseFilename);
             iniFile.ParseIni();
             iniFile.Read("SFoils", "SFoils", true);
@@ -216,27 +220,11 @@ namespace XwaSFoilsEditor
             dialog.ShowDialog();
         }
 
-        private static string GetBaseOptFilename(string filename)
-        {
-            string baseFilename = System.IO.Path.ChangeExtension(filename, null);
-
-            if (baseFilename.EndsWith("exterior", StringComparison.OrdinalIgnoreCase))
-            {
-                baseFilename = baseFilename.Substring(0, baseFilename.Length - "exterior".Length);
-            }
-            else if (baseFilename.EndsWith("cockpit", StringComparison.OrdinalIgnoreCase))
-            {
-                baseFilename = baseFilename.Substring(0, baseFilename.Length - "cockpit".Length);
-            }
-
-            return baseFilename;
-        }
-
         private void LoadOpt(string filename)
         {
             this.DataContext = null;
 
-            string baseFilename = GetBaseOptFilename(filename);
+            string baseFilename = OptTransformHelpers.GetBaseOptFilename(filename);
 
             string optFilename;
 
@@ -255,6 +243,19 @@ namespace XwaSFoilsEditor
             }
 
             var opt = OptFile.FromFile(optFilename);
+
+            var selector = new OptProfileSelectorDialog(optFilename);
+
+            if (selector.ShowDialog() == true)
+            {
+                opt = OptTransformModel.GetTransformedOpt(opt, selector.SelectedVersion, selector.SelectedObjectProfile, selector.SelectedSkinsKeys);
+                this.OptFileProfile = $"Version={selector.SelectedVersion} ObjectProfile={selector.SelectedObjectProfile} Skins={string.Join(",", selector.SelectedSkinsKeys)}";
+            }
+            else
+            {
+                this.OptFileProfile = "No profile selected";
+            }
+
             var cache = new OptCache(opt);
             var sfoils = SFoil.GetSFoilsList(baseFilename + ".opt");
 
@@ -315,7 +316,7 @@ namespace XwaSFoilsEditor
             try
             {
                 var optFile = GetTransformedOptFile();
-                string baseFilename = GetBaseOptFilename(optFile.FileName);
+                string baseFilename = OptTransformHelpers.GetBaseOptFilename(optFile.FileName);
 
                 string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".opt");
 
@@ -343,7 +344,7 @@ namespace XwaSFoilsEditor
             try
             {
                 var optFile = GetTransformedOptFile();
-                string baseFilename = GetBaseOptFilename(optFile.FileName);
+                string baseFilename = OptTransformHelpers.GetBaseOptFilename(optFile.FileName);
 
                 string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".obj");
 
@@ -371,7 +372,7 @@ namespace XwaSFoilsEditor
             try
             {
                 var optFile = GetTransformedOptFile();
-                string baseFilename = GetBaseOptFilename(optFile.FileName);
+                string baseFilename = OptTransformHelpers.GetBaseOptFilename(optFile.FileName);
 
                 string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".3dm");
 
@@ -399,7 +400,7 @@ namespace XwaSFoilsEditor
             try
             {
                 var optFile = GetTransformedOptFile();
-                string baseFilename = GetBaseOptFilename(optFile.FileName);
+                string baseFilename = OptTransformHelpers.GetBaseOptFilename(optFile.FileName);
 
                 string saveFilename = GetSaveAsFile(baseFilename + "_sfoils", ".an8");
 

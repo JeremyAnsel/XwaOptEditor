@@ -1,5 +1,6 @@
 ﻿using HelixToolkit.Wpf;
 using JeremyAnsel.Xwa.Opt;
+using JeremyAnsel.Xwa.OptTransform;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -32,10 +33,6 @@ namespace XwaOptProfilesViewer
         }
 
         public OptFile OptFile { get; set; }
-
-        public Dictionary<string, List<int>> OptObjectProfiles { get; set; }
-
-        public List<string> OptSkins { get; set; }
 
         private void viewport3D_CameraChanged(object sender, RoutedEventArgs e)
         {
@@ -136,15 +133,16 @@ namespace XwaOptProfilesViewer
         {
             this.DataContext = null;
             this.OptFile = null;
-            this.OptObjectProfiles = null;
-            this.OptSkins = null;
+
+            if (!System.IO.File.Exists(filename))
+            {
+                return;
+            }
 
             this.OptFile = OptFile.FromFile(filename);
             this.versionSelector.Value = 0;
-            this.OptObjectProfiles = OptModel.GetObjectProfiles(filename);
-            this.optObjectProfilesListBox.SelectedIndex = 0;
-            this.optSelectedSkinsListBox.Items.Clear();
-            this.OptSkins = OptModel.GetSkins(filename);
+
+            this.optProfileSelector.LoadOpt(filename);
 
             this.DataContext = this;
             this.viewport3D.ZoomExtents();
@@ -206,38 +204,6 @@ namespace XwaOptProfilesViewer
             }
         }
 
-        private void clearSelectedSkinsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.optSelectedSkinsListBox.Items.Clear();
-        }
-
-        private void addSelectedSkinsButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.AddSelectedSkin();
-        }
-
-        private void optSkinsListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            this.AddSelectedSkin();
-        }
-
-        private void AddSelectedSkin()
-        {
-            string item = this.optSkinsListBox.SelectedItem as string;
-
-            if (item == null)
-            {
-                return;
-            }
-
-            if (this.optSelectedSkinsListBox.Items.Contains(item))
-            {
-                return;
-            }
-
-            this.optSelectedSkinsListBox.Items.Add(item);
-        }
-
         private OptFile GetTransformedOptFile()
         {
             if (this.OptFile == null || string.IsNullOrEmpty(this.OptFile.FileName))
@@ -246,10 +212,10 @@ namespace XwaOptProfilesViewer
             }
 
             int version = this.versionSelector.Value.Value;
-            var selectedObjectProfileItem = (KeyValuePair<string, List<int>>)this.optObjectProfilesListBox.SelectedItem;
-            var selectedSkins = this.optSelectedSkinsListBox.Items.Cast<string>().ToList();
+            var selectedObjectProfile = this.optProfileSelector.SelectedObjectProfile;
+            var selectedSkins = this.optProfileSelector.SelectedSkinsKeys;
 
-            var opt = OptModel.GetTransformedOpt(this.OptFile, version, selectedObjectProfileItem.Value, selectedSkins);
+            var opt = OptTransformModel.GetTransformedOpt(this.OptFile, version, selectedObjectProfile, selectedSkins);
 
             return opt;
         }

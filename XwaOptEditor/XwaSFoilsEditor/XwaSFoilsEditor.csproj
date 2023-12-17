@@ -15,17 +15,13 @@
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
     <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
+    <PackageReference Include="JeremyAnsel.Xwa.HooksConfig" Version="1.0.4" />
     <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.47" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.9" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform.Wpf" Version="1.0.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj" />
-    <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj" />
-    <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj" />
     <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj" />
     <ProjectReference Include="..\OptAn8Converter\OptAn8Converter.csproj" />
     <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj" />

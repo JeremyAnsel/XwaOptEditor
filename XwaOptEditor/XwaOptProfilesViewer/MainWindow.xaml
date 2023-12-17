@@ -6,21 +6,30 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:hx="http://helix-toolkit.org/wpf"
         xmlns:wpfOpt="clr-namespace:JeremyAnsel.Xwa.WpfOpt;assembly=JeremyAnsel.Xwa.WpfOpt"
+        xmlns:optWpf="clr-namespace:JeremyAnsel.Xwa.OptTransform.Wpf;assembly=JeremyAnsel.Xwa.OptTransform.Wpf"
         xmlns:local="clr-namespace:XwaOptProfilesViewer"
         mc:Ignorable="d"
         Title="Xwa Opt Profiles Viewer"
-        Height="500" Width="700"
+        Height="500"
+        Width="700"
         UseLayoutRounding="True"
         ContentRendered="Window_ContentRendered">
     <DockPanel>
-        <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
+        <ToolBarTray DockPanel.Dock="Top"
+                     IsLocked="True">
             <ToolBar>
-                <Button x:Name="openButton" Content="Open..." Click="openButton_Click" />
-                <Button x:Name="reloadButton" Content="Reload" Click="reloadButton_Click" />
-                <Separator/>
+                <Button x:Name="openButton"
+                        Content="Open..."
+                        Click="openButton_Click" />
+                <Button x:Name="reloadButton"
+                        Content="Reload"
+                        Click="reloadButton_Click" />
+                <Separator />
                 <TextBlock Text="Export " />
-                <Button Content="Opt..." Click="exportOptButton_Click" />
-                <Button Content="Obj..." Click="exportObjButton_Click" />
+                <Button Content="Opt..."
+                        Click="exportOptButton_Click" />
+                <Button Content="Obj..."
+                        Click="exportObjButton_Click" />
             </ToolBar>
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom">
@@ -34,7 +43,8 @@
                               ShowStandardColors="False"
                               AvailableColorsSortingMode="HueSaturationBrightness"
                               SelectedColor="Black" />
-            <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+            <ToolBarTray DockPanel.Dock="Bottom"
+                         IsLocked="True">
                 <ToolBar>
                     <TextBlock Text="Lights Intensity: " />
                     <TextBox Width="50"
@@ -68,7 +78,8 @@
                             LargeChange="0.1" />
                 </ToolBar>
             </ToolBarTray>
-            <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
+            <ToolBarTray DockPanel.Dock="Bottom"
+                         IsLocked="True">
                 <ToolBar>
                     <CheckBox x:Name="modelShowSolid"
                               IsChecked="True"
@@ -94,8 +105,13 @@
                 </ToolBar>
                 <ToolBar>
                     <TextBlock Text="Distance: " />
-                    <TextBox Width="80" Text="{Binding ElementName=distanceSelector, Path=Value, Mode=TwoWay, Converter={x:Static local:LodDistanceConverter.Default}}" />
-                    <Slider x:Name="distanceSelector" Width="100" Minimum="0.0" Maximum="0.001" Value="0.001" />
+                    <TextBox Width="80"
+                             Text="{Binding ElementName=distanceSelector, Path=Value, Mode=TwoWay, Converter={x:Static local:LodDistanceConverter.Default}}" />
+                    <Slider x:Name="distanceSelector"
+                            Width="100"
+                            Minimum="0.0"
+                            Maximum="0.001"
+                            Value="0.001" />
                 </ToolBar>
                 <ToolBar>
                     <TextBlock Text="Version: " />
@@ -107,21 +123,9 @@
                                         DefaultValue="0" />
                 </ToolBar>
             </ToolBarTray>
-            <DockPanel DockPanel.Dock="Left">
-                <TextBlock DockPanel.Dock="Top" Text="Object Profiles: " />
-                <ListBox x:Name="optObjectProfilesListBox" ItemsSource="{Binding OptObjectProfiles}" DisplayMemberPath="Key" />
-            </DockPanel>
-            <DockPanel DockPanel.Dock="Left">
-                <TextBlock DockPanel.Dock="Top" Text="Skins: " />
-                <ListBox x:Name="optSelectedSkinsListBox" DockPanel.Dock="Bottom" IsEnabled="False" />
-                <ToolBarTray DockPanel.Dock="Bottom" IsLocked="True">
-                    <ToolBar>
-                        <Button x:Name="clearSelectedSkinsButton" Content="Clear" Click="clearSelectedSkinsButton_Click" />
-                        <Button x:Name="addSelectedSkinsButton" Content="Add" Click="addSelectedSkinsButton_Click" />
-                    </ToolBar>
-                </ToolBarTray>
-                <ListBox x:Name="optSkinsListBox" ItemsSource="{Binding OptSkins}" MouseDoubleClick="optSkinsListBox_MouseDoubleClick" />
-            </DockPanel>
+            <optWpf:OptProfileSelectorControl x:Name="optProfileSelector"
+                                              DockPanel.Dock="Left"
+                                              ShowVersions="False" />
             <Expander DockPanel.Dock="Right"
                       ExpandDirection="Left">
                 <Expander.Header>
@@ -149,17 +153,17 @@
                 </ListBox>
             </Expander>
             <wpfOpt:GlobalHelixViewport3D x:Name="viewport3D"
-                                Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
-                                ClipToBounds="False"
-                                IsHeadLightEnabled="True"
-                                HeadLightIntensity="{Binding ElementName=headLightIntensitySlider, Path=Value}"
-                                IsViewCubeEdgeClicksEnabled="True"
-                                CameraMode="Inspect"
-                                CameraRotationMode="Trackball"
-                                IsChangeFieldOfViewEnabled="False"
-                                IsMoveEnabled="False"
-                                CameraChanged="viewport3D_CameraChanged"
-                                Orthographic="{Binding IsChecked, ElementName=cameraOrthographic}">
+                                          Background="{Binding ElementName=backgroundColorPicker, Path=SelectedColor, Converter={x:Static local:ColorToBrushConverter.Default}, FallbackValue=Black}"
+                                          ClipToBounds="False"
+                                          IsHeadLightEnabled="True"
+                                          HeadLightIntensity="{Binding ElementName=headLightIntensitySlider, Path=Value}"
+                                          IsViewCubeEdgeClicksEnabled="True"
+                                          CameraMode="Inspect"
+                                          CameraRotationMode="Trackball"
+                                          IsChangeFieldOfViewEnabled="False"
+                                          IsMoveEnabled="False"
+                                          CameraChanged="viewport3D_CameraChanged"
+                                          Orthographic="{Binding IsChecked, ElementName=cameraOrthographic}">
                 <!--<hx:DefaultLights />-->
                 <wpfOpt:GlobalLights LightsIntensity="{Binding ElementName=lightsIntensitySlider, Path=Value}"
                                      AmbientIntensity="{Binding ElementName=ambientIntensitySlider, Path=Value}" />
@@ -168,13 +172,20 @@
                         <MultiBinding Converter="{x:Static local:OptMeshesConverter.Default}">
                             <Binding RelativeSource="{RelativeSource Self}" />
                             <Binding Path="OptFile" />
-                            <Binding Path="Value" ElementName="versionSelector" />
-                            <Binding Path="Value" ElementName="distanceSelector" />
-                            <Binding Path="IsChecked" ElementName="modelShowSolid" />
-                            <Binding Path="IsChecked" ElementName="modelShowWireframe" />
-                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
-                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
-                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Value"
+                                     ElementName="versionSelector" />
+                            <Binding Path="Value"
+                                     ElementName="distanceSelector" />
+                            <Binding Path="IsChecked"
+                                     ElementName="modelShowSolid" />
+                            <Binding Path="IsChecked"
+                                     ElementName="modelShowWireframe" />
+                            <Binding Path="SelectedObjectProfile"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys.Count"
+                                     ElementName="optProfileSelector" />
                         </MultiBinding>
                     </ModelVisual3D.Content>
                 </ModelVisual3D>
@@ -182,15 +193,23 @@
                     <ModelVisual3D.Content>
                         <MultiBinding Converter="{x:Static local:OptHardpointsConverter.Default}">
                             <Binding RelativeSource="{RelativeSource Self}" />
-                            <Binding Path="Children" ElementName="modelVisual3D" />
-                            <Binding Path="IsChecked" ElementName="modelShowHardpoints" />
-                            <Binding Path="IsChecked" ElementName="modelShowHardpointsText" />
-                            <Binding Path="Children.Count" ElementName="modelVisual3D" />
+                            <Binding Path="Children"
+                                     ElementName="modelVisual3D" />
+                            <Binding Path="IsChecked"
+                                     ElementName="modelShowHardpoints" />
+                            <Binding Path="IsChecked"
+                                     ElementName="modelShowHardpointsText" />
+                            <Binding Path="Children.Count"
+                                     ElementName="modelVisual3D" />
                             <Binding Path="OptFile" />
-                            <Binding Path="Value" ElementName="distanceSelector" />
-                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
-                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
-                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Value"
+                                     ElementName="distanceSelector" />
+                            <Binding Path="SelectedObjectProfile"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys.Count"
+                                     ElementName="optProfileSelector" />
                         </MultiBinding>
                     </ModelVisual3D.Content>
                 </ModelVisual3D>
@@ -198,14 +217,21 @@
                     <ModelVisual3D.Content>
                         <MultiBinding Converter="{x:Static local:OptEngineGlowsConverter.Default}">
                             <Binding RelativeSource="{RelativeSource Self}" />
-                            <Binding Path="Children" ElementName="modelVisual3D" />
-                            <Binding Path="IsChecked" ElementName="modelShowEngineGlows" />
-                            <Binding Path="Children.Count" ElementName="modelVisual3D" />
+                            <Binding Path="Children"
+                                     ElementName="modelVisual3D" />
+                            <Binding Path="IsChecked"
+                                     ElementName="modelShowEngineGlows" />
+                            <Binding Path="Children.Count"
+                                     ElementName="modelVisual3D" />
                             <Binding Path="OptFile" />
-                            <Binding Path="Value" ElementName="distanceSelector" />
-                            <Binding Path="SelectedItem.Value" ElementName="optObjectProfilesListBox" />
-                            <Binding Path="Items" ElementName="optSelectedSkinsListBox" />
-                            <Binding Path="Items.Count" ElementName="optSelectedSkinsListBox" />
+                            <Binding Path="Value"
+                                     ElementName="distanceSelector" />
+                            <Binding Path="SelectedObjectProfile"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys"
+                                     ElementName="optProfileSelector" />
+                            <Binding Path="SelectedSkinsKeys.Count"
+                                     ElementName="optProfileSelector" />
                         </MultiBinding>
                     </ModelVisual3D.Content>
                 </ModelVisual3D>

@@ -1,5 +1,6 @@
 ﻿using HelixToolkit.Wpf;
 using JeremyAnsel.Xwa.Opt;
+using JeremyAnsel.Xwa.OptTransform;
 using JeremyAnsel.Xwa.WpfOpt;
 using System;
 using System.Collections.Generic;
@@ -36,16 +37,16 @@ namespace XwaHangarMapEditor
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }
 
-        private readonly SortedDictionary<string, Dictionary<string, IList<int>>> _optObjectProfiles = new();
+        private readonly SortedDictionary<string, Dictionary<string, List<int>>> _optObjectProfiles = new();
 
-        private Dictionary<string, IList<int>> GetOptObjectProfiles(string name)
+        private Dictionary<string, List<int>> GetOptObjectProfiles(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
                 return null;
             }
 
-            if (!_optObjectProfiles.TryGetValue(name, out Dictionary<string, IList<int>> model))
+            if (!_optObjectProfiles.TryGetValue(name, out Dictionary<string, List<int>> model))
             {
                 string fileName = AppSettings.WorkingDirectory + "FlightModels\\" + name + ".opt";
 
@@ -54,7 +55,7 @@ namespace XwaHangarMapEditor
                     return null;
                 }
 
-                model = OptProfileHelper.GetObjectProfiles(fileName);
+                model = OptTransformHelpers.GetObjectProfiles(fileName);
 
                 _optObjectProfiles.Add(name, model);
             }
@@ -62,16 +63,16 @@ namespace XwaHangarMapEditor
             return model;
         }
 
-        private readonly SortedDictionary<string, IList<string>> _optSkins = new();
+        private readonly SortedDictionary<string, List<string>> _optSkins = new();
 
-        private IList<string> GetOptSkins(string name)
+        private List<string> GetOptSkins(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
                 return null;
             }
 
-            if (!_optSkins.TryGetValue(name, out IList<string> model))
+            if (!_optSkins.TryGetValue(name, out List<string> model))
             {
                 string fileName = AppSettings.WorkingDirectory + "FlightModels\\" + name + ".opt";
 
@@ -80,7 +81,7 @@ namespace XwaHangarMapEditor
                     return null;
                 }
 
-                model = OptProfileHelper.GetSkins(fileName);
+                model = OptTransformHelpers.GetSkins(fileName);
 
                 _optSkins.Add(name, model);
             }
@@ -90,7 +91,7 @@ namespace XwaHangarMapEditor
 
         private readonly SortedDictionary<string, OptModel> _optModels = new();
 
-        private OptModel GetOptModel(string name, int version = 0, IList<int> objectProfile = null, IList<string> skins = null)
+        private OptModel GetOptModel(string name, int version = 0, List<int> objectProfile = null, List<string> skins = null)
         {
             if (string.IsNullOrEmpty(AppSettings.WorkingDirectory))
             {
@@ -223,7 +224,7 @@ namespace XwaHangarMapEditor
                             ModelName = (string)ExeModelIndexConverter.Default.Convert(index, null, null, null)
                         };
 
-                        Dictionary<string, IList<int>> objectProfiles = this.GetOptObjectProfiles(item.ModelName);
+                        Dictionary<string, List<int>> objectProfiles = this.GetOptObjectProfiles(item.ModelName);
 
                         if (objectProfiles is not null)
                         {
@@ -232,7 +233,7 @@ namespace XwaHangarMapEditor
                                 .ToList();
                         }
 
-                        IList<string> skins = this.GetOptSkins(item.ModelName);
+                        List<string> skins = this.GetOptSkins(item.ModelName);
 
                         if (skins is not null)
                         {
@@ -648,11 +649,11 @@ namespace XwaHangarMapEditor
                 return null;
             }
 
-            objectProfiles.TryGetValue(item.ObjectProfile, out IList<int> objectProfile);
+            objectProfiles.TryGetValue(item.ObjectProfile, out List<int> objectProfile);
 
-            IList<string> skin = null;
+            List<string> skin = null;
 
-            if (hangarSkins.TryGetValue(name, out Dictionary<int, IList<string>> skins))
+            if (hangarSkins.TryGetValue(name, out Dictionary<int, List<string>> skins))
             {
                 if (!skins.TryGetValue(item.Markings, out skin))
                 {
@@ -970,11 +971,11 @@ namespace XwaHangarMapEditor
                 return null;
             }
 
-            objectProfiles.TryGetValue(item.ObjectProfile, out IList<int> objectProfile);
+            objectProfiles.TryGetValue(item.ObjectProfile, out List<int> objectProfile);
 
-            IList<string> skin = null;
+            List<string> skin = null;
 
-            if (hangarSkins.TryGetValue(name, out Dictionary<int, IList<string>> skins))
+            if (hangarSkins.TryGetValue(name, out Dictionary<int, List<string>> skins))
             {
                 if (!skins.TryGetValue(item.Markings, out skin))
                 {

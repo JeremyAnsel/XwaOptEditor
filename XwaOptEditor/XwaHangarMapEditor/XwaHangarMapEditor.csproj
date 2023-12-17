@@ -16,11 +16,12 @@
     <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
     <PackageReference Include="JeremyAnsel.IO.Locator" Version="3.0.38" />
+    <PackageReference Include="JeremyAnsel.Xwa.HooksConfig" Version="1.0.4" />
     <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.47" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj" />
     <ProjectReference Include="..\JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj" />
     <ProjectReference Include="..\OptObjConverter\OptObjConverter.csproj" />
   </ItemGroup>

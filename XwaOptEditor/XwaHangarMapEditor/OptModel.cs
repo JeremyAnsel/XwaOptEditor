@@ -1,5 +1,6 @@
 ﻿using JeremyAnsel.Xwa.HooksConfig;
 using JeremyAnsel.Xwa.Opt;
+using JeremyAnsel.Xwa.OptTransform;
 using JeremyAnsel.Xwa.WpfOpt;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,11 @@ namespace XwaHangarMapEditor
 
         public float ClosedSFoilsElevationInverted { get; set; }
 
-        public static OptModel FromFile(string path, int version, IList<int> objectProfile = null, IList<string> skins = null)
+        public static OptModel FromFile(string path, int version, List<int> objectProfile = null, List<string> skins = null)
         {
             OptFile opt = OptFile.FromFile(path);
 
-            opt = OptProfileHelper.GetTransformedOpt(
+            opt = OptTransformModel.GetTransformedOpt(
                 opt,
                 version,
                 objectProfile ?? new List<int>(),

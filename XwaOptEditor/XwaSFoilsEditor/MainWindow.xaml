@@ -26,6 +26,8 @@
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom">
             <TextBlock Text="{Binding OptFile.FileName}" />
+            <Separator />
+            <TextBlock Text="{Binding OptFileProfile}" />
         </StatusBar>
         <ListBox x:Name="meshesList" DockPanel.Dock="Left" Width="200" ItemsSource="{Binding Meshes}" IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>

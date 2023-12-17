@@ -5,8 +5,6 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaOptEditor", "XwaOptEditor\XwaOptEditor.csproj", "{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyAnsel.Xwa.HooksConfig", "JeremyAnsel.Xwa.HooksConfig\JeremyAnsel.Xwa.HooksConfig.csproj", "{DB442A7B-9516-41D6-8DEC-F20CE77C7396}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyAnsel.Xwa.WpfOpt", "JeremyAnsel.Xwa.WpfOpt\JeremyAnsel.Xwa.WpfOpt.csproj", "{A1BC0819-12F6-467C-A418-41934C332FD0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptAn8Converter", "OptAn8Converter\OptAn8Converter.csproj", "{4F33558E-5C1F-448A-961D-B005C4B4E63D}"
@@ -27,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaOptProfilesViewer", "Xwa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaSFoilsEditor", "XwaSFoilsEditor\XwaSFoilsEditor.csproj", "{3A33A112-65A3-4273-A9B0-EAB70EED0C42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaHangarMapEditor", "XwaHangarMapEditor\XwaHangarMapEditor.csproj", "{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaHangarMapEditor", "XwaHangarMapEditor\XwaHangarMapEditor.csproj", "{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +37,6 @@ Global
 		{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{569A9CCE-73C2-431B-B6B2-45E0705DB1D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB442A7B-9516-41D6-8DEC-F20CE77C7396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB442A7B-9516-41D6-8DEC-F20CE77C7396}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB442A7B-9516-41D6-8DEC-F20CE77C7396}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB442A7B-9516-41D6-8DEC-F20CE77C7396}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1BC0819-12F6-467C-A418-41934C332FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1BC0819-12F6-467C-A418-41934C332FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1BC0819-12F6-467C-A418-41934C332FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU

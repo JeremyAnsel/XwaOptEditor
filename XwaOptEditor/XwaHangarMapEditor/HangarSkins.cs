@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace XwaHangarMapEditor
 {
-    public sealed class HangarSkins : Dictionary<string, Dictionary<int, IList<string>>>
+    public sealed class HangarSkins : Dictionary<string, Dictionary<int, List<string>>>
     {
         public HangarSkins()
             : base(StringComparer.OrdinalIgnoreCase)
@@ -52,7 +52,7 @@ namespace XwaHangarMapEditor
                     }
                 }
 
-                Dictionary<int, IList<string>> skin;
+                Dictionary<int, List<string>> skin;
 
                 if (skins.ContainsKey(optName))
                 {
@@ -60,13 +60,13 @@ namespace XwaHangarMapEditor
                 }
                 else
                 {
-                    skin = new Dictionary<int, IList<string>>();
+                    skin = new Dictionary<int, List<string>>();
                     skins[optName] = skin;
                 }
 
                 if (!skin.ContainsKey(markings))
                 {
-                    skin[markings] = XwaHooksConfig.Tokennize(pair.Value);
+                    skin[markings] = XwaHooksConfig.Tokennize(pair.Value).ToList();
                 }
             }
 

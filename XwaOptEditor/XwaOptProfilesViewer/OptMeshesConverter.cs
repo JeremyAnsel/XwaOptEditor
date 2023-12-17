@@ -1,4 +1,5 @@
 ﻿using JeremyAnsel.Xwa.Opt;
+using JeremyAnsel.Xwa.OptTransform;
 using JeremyAnsel.Xwa.WpfOpt;
 using System;
 using System.Collections.Generic;
@@ -64,10 +65,10 @@ namespace XwaOptProfilesViewer
 
             bool showSolid = (bool)values[4];
             bool showWireframe = (bool)values[5];
-            var selectedObjectProfile = (List<int>)values[6];
-            var selectedSkins = ((ItemCollection)values[7]).Cast<string>().ToList();
+            var selectedObjectProfile = (string)values[6];
+            var selectedSkins = (List<string>)values[7];
 
-            var opt = OptModel.GetTransformedOpt(optFile, version, selectedObjectProfile, selectedSkins);
+            var opt = OptTransformModel.GetTransformedOpt(optFile, version, selectedObjectProfile, selectedSkins);
 
             var visual = new OptVisual3D
             {
