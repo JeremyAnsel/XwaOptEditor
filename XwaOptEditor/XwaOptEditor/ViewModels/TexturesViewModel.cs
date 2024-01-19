@@ -31,6 +31,10 @@ namespace XwaOptEditor.ViewModels
             this.UpCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteUpCommand);
             this.DownCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteDownCommand);
 
+            this.GenerateSelectedMipmapsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteGenerateSelectedMipmapsCommand);
+            this.ConvertSelectedTo8BitsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteConvertSelectedTo8BitsCommand);
+            this.ConvertSelectedTo32BitsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteConvertSelectedTo32BitsCommand);
+
             this.GenerateAllMipmapsCommand = new DelegateCommand(this.ExecuteGenerateAllMipmapsCommand);
             this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
             this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo32BitsCommand);
@@ -75,6 +79,12 @@ namespace XwaOptEditor.ViewModels
         public ICommand UpCommand { get; private set; }
 
         public ICommand DownCommand { get; private set; }
+
+        public ICommand GenerateSelectedMipmapsCommand { get; private set; }
+
+        public ICommand ConvertSelectedTo8BitsCommand { get; private set; }
+
+        public ICommand ConvertSelectedTo32BitsCommand { get; private set; }
 
         public ICommand GenerateAllMipmapsCommand { get; private set; }
 
@@ -516,6 +526,105 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage("Move down textures.", ex));
+                }
+            });
+        }
+
+        private void ExecuteGenerateSelectedMipmapsCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    var selectedItems = textures.ToList();
+
+                    BusyIndicatorService.Notify("Generating selected mipmaps...");
+
+                    selectedItems
+                        .AsParallel()
+                        .ForAll(t => t.Value.GenerateMipmaps());
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("generate mipmaps"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Generate selected mipmaps.", ex));
+                }
+            });
+        }
+
+        private void ExecuteConvertSelectedTo8BitsCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var selectedItems = textures.ToList();
+
+                bool doConvertion = true;
+
+                foreach (var item in selectedItems)
+                {
+                    if (!item.Value.CanBeConvertedWithoutLoss())
+                    {
+                        doConvertion = false;
+                        break;
+                    }
+                }
+
+                if (!doConvertion)
+                {
+                    var result = Messenger.Instance.Notify(new MessageBoxMessage(
+                        "All textures can not be converted without loss. Do you want to continue?",
+                        "Convert textures to 8 bits",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning));
+
+                    doConvertion = result.Result == MessageBoxResult.Yes;
+                }
+
+                if (!doConvertion)
+                {
+                    return;
+                }
+
+                try
+                {
+                    BusyIndicatorService.Notify("Converting textures to 8 bits...");
+
+                    selectedItems
+                        .AsParallel()
+                        .ForAll(t => t.Value.Convert32To8());
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("convert to 8 bpp"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Convert textures to 8 bits.", ex));
+                }
+            });
+        }
+
+        private void ExecuteConvertSelectedTo32BitsCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    var selectedItems = textures.ToList();
+
+                    BusyIndicatorService.Notify("Converting textures to 32 bits...");
+
+                    selectedItems
+                        .AsParallel()
+                        .ForAll(t => t.Value.Convert8To32());
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("convert to 32 bpp"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Convert textures to 32 bits.", ex));
                 }
             });
         }

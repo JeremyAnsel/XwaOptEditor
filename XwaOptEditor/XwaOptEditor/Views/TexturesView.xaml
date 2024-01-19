@@ -71,16 +71,29 @@
                 <ToolBar Band="3"
                          BandIndex="0"
                          IsEnabled="{Binding HasItems}">
-                    <Button Content="Generate Mipmaps"
+                    <TextBlock Text="Generate for selection: " />
+                    <Button Content="Mipmaps"
+                            Command="{Binding DataContext.GenerateSelectedMipmapsCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
+                    <Button Content="8 bits"
+                            Command="{Binding DataContext.ConvertSelectedTo8BitsCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
+                    <Button Content="32 bits"
+                            Command="{Binding DataContext.ConvertSelectedTo32BitsCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
+                </ToolBar>
+                <ToolBar Band="4"
+                         BandIndex="0"
+                         IsEnabled="{Binding HasItems}">
+                    <TextBlock Text="Generate for all: " />
+                    <Button Content="Mipmaps"
                             Command="{Binding DataContext.GenerateAllMipmapsCommand}" />
-                    <Separator />
-                    <TextBlock Text="Convert All to: " />
                     <Button Content="8 bits"
                             Command="{Binding DataContext.ConvertAllTo8BitsCommand}" />
                     <Button Content="32 bits"
                             Command="{Binding DataContext.ConvertAllTo32BitsCommand}" />
                 </ToolBar>
-                <ToolBar Band="4"
+                <ToolBar Band="5"
                          BandIndex="0"
                          IsEnabled="{Binding HasItems}">
                     <Button Content="Compact"
