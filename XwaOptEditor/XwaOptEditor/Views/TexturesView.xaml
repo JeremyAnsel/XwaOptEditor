@@ -75,6 +75,9 @@
                     <Button Content="Mipmaps"
                             Command="{Binding DataContext.GenerateSelectedMipmapsCommand}"
                             CommandParameter="{Binding SelectedItems}" />
+                    <Button Content="Remove MIPs"
+                            Command="{Binding DataContext.RemoveSelectedMipmapsCommand}"
+                            CommandParameter="{Binding SelectedItems}" />
                     <Button Content="8 bits"
                             Command="{Binding DataContext.ConvertSelectedTo8BitsCommand}"
                             CommandParameter="{Binding SelectedItems}" />
@@ -88,6 +91,8 @@
                     <TextBlock Text="Generate for all: " />
                     <Button Content="Mipmaps"
                             Command="{Binding DataContext.GenerateAllMipmapsCommand}" />
+                    <Button Content="Remove MIPs"
+                            Command="{Binding DataContext.RemoveAllMipmapsCommand}" />
                     <Button Content="8 bits"
                             Command="{Binding DataContext.ConvertAllTo8BitsCommand}" />
                     <Button Content="32 bits"

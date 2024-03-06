@@ -32,10 +32,12 @@ namespace XwaOptEditor.ViewModels
             this.DownCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteDownCommand);
 
             this.GenerateSelectedMipmapsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteGenerateSelectedMipmapsCommand);
+            this.RemoveSelectedMipmapsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteRemoveSelectedMipmapsCommand);
             this.ConvertSelectedTo8BitsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteConvertSelectedTo8BitsCommand);
             this.ConvertSelectedTo32BitsCommand = new DelegateCommandOfList<KeyValuePair<string, Texture>>(this.ExecuteConvertSelectedTo32BitsCommand);
 
             this.GenerateAllMipmapsCommand = new DelegateCommand(this.ExecuteGenerateAllMipmapsCommand);
+            this.RemoveAllMipmapsCommand = new DelegateCommand(this.ExecuteRemoveAllMipmapsCommand);
             this.ConvertAllTo8BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo8BitsCommand);
             this.ConvertAllTo32BitsCommand = new DelegateCommand(this.ExecuteConvertAllTo32BitsCommand);
             this.CompactCommand = new DelegateCommand(this.ExecuteCompactCommand);
@@ -82,11 +84,15 @@ namespace XwaOptEditor.ViewModels
 
         public ICommand GenerateSelectedMipmapsCommand { get; private set; }
 
+        public ICommand RemoveSelectedMipmapsCommand { get; private set; }
+
         public ICommand ConvertSelectedTo8BitsCommand { get; private set; }
 
         public ICommand ConvertSelectedTo32BitsCommand { get; private set; }
 
         public ICommand GenerateAllMipmapsCommand { get; private set; }
+
+        public ICommand RemoveAllMipmapsCommand { get; private set; }
 
         public ICommand ConvertAllTo8BitsCommand { get; private set; }
 
@@ -554,6 +560,30 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
+        private void ExecuteRemoveSelectedMipmapsCommand(IList<KeyValuePair<string, Texture>> textures)
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    var selectedItems = textures.ToList();
+
+                    BusyIndicatorService.Notify("Removing selected mipmaps...");
+
+                    selectedItems
+                        .AsParallel()
+                        .ForAll(t => t.Value.RemoveMipmaps());
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("remove mipmaps"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Remove selected mipmaps.", ex));
+                }
+            });
+        }
+
         private void ExecuteConvertSelectedTo8BitsCommand(IList<KeyValuePair<string, Texture>> textures)
         {
             BusyIndicatorService.Run(dispatcher =>
@@ -645,6 +675,26 @@ namespace XwaOptEditor.ViewModels
                 catch (Exception ex)
                 {
                     Messenger.Instance.Notify(new MessageBoxMessage("Generate all mipmaps.", ex));
+                }
+            });
+        }
+
+        private void ExecuteRemoveAllMipmapsCommand()
+        {
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                try
+                {
+                    BusyIndicatorService.Notify("Removing all mipmaps...");
+
+                    this.OptModel.File.RemoveTexturesMipmaps();
+
+                    dispatcher(() => this.OptModel.File = this.OptModel.File);
+                    dispatcher(() => this.OptModel.UndoStackPush("remove mipmaps"));
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Instance.Notify(new MessageBoxMessage("Remove all mipmaps.", ex));
                 }
             });
         }
