@@ -162,6 +162,39 @@ namespace XwaOptEditor.Views
             this.OptModel.UndoStackPush("reset illumination");
         }
 
+        private void SetTextureAlphaReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Textures.SelectedItem == null)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<string, Texture> texture in this.Textures.SelectedItems)
+            {
+                int bpp = texture.Value.BitsPerPixel;
+
+                if (bpp == 8)
+                {
+                    texture.Value.AlphaIllumData = null;
+                }
+                else if (bpp == 32)
+                {
+                    byte[] imageData = texture.Value.ImageData;
+                    int length = imageData.Length / 4;
+
+                    for (int i = 0; i < length; i++)
+                    {
+                        imageData[i * 4 + 3] = 0xff;
+                    }
+
+                    texture.Value.Palette[2] = 0;
+                }
+            }
+
+            this.OptModel.File = this.OptModel.File;
+            this.OptModel.UndoStackPush("reset alpha");
+        }
+
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
