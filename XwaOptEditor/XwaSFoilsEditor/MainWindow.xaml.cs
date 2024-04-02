@@ -244,17 +244,17 @@ namespace XwaSFoilsEditor
 
             var opt = OptFile.FromFile(optFilename);
 
-            var selector = new OptProfileSelectorDialog(optFilename);
+            //var selector = new OptProfileSelectorDialog(optFilename);
 
-            if (selector.ShowDialog() == true)
-            {
-                opt = OptTransformModel.GetTransformedOpt(opt, selector.SelectedVersion, selector.SelectedObjectProfile, selector.SelectedSkinsKeys);
-                this.OptFileProfile = $"Version={selector.SelectedVersion} ObjectProfile={selector.SelectedObjectProfile} Skins={string.Join(",", selector.SelectedSkinsKeys)}";
-            }
-            else
-            {
-                this.OptFileProfile = "No profile selected";
-            }
+            //if (selector.ShowDialog() == true)
+            //{
+            //    opt = OptTransformModel.GetTransformedOpt(opt, selector.SelectedVersion, selector.SelectedObjectProfile, selector.SelectedSkinsKeys);
+            //    this.OptFileProfile = $"Version={selector.SelectedVersion} ObjectProfile={selector.SelectedObjectProfile} Skins={string.Join(",", selector.SelectedSkinsKeys)}";
+            //}
+            //else
+            //{
+            //    this.OptFileProfile = "No profile selected";
+            //}
 
             var cache = new OptCache(opt);
             var sfoils = SFoil.GetSFoilsList(baseFilename + ".opt");
