@@ -452,22 +452,26 @@ namespace XwaOptEditor.ViewModels
                     dispatcher(() => this.OptModel.File = null);
 
                     var import = OptFile.FromFile(fileName);
-                    string importName = System.IO.Path.GetFileNameWithoutExtension(fileName) + "_";
 
-                    foreach (var faceGroup in import.Meshes.SelectMany(t => t.Lods).SelectMany(t => t.FaceGroups))
+                    if (this.IsAddPrefixToTexturesEnabled)
                     {
-                        var textures = faceGroup.Textures.ToList();
-                        faceGroup.Textures.Clear();
+                        string importName = System.IO.Path.GetFileNameWithoutExtension(fileName) + "_";
 
-                        foreach (var texture in textures)
+                        foreach (var faceGroup in import.Meshes.SelectMany(t => t.Lods).SelectMany(t => t.FaceGroups))
                         {
-                            faceGroup.Textures.Add(texture.StartsWith(importName, StringComparison.Ordinal) ? texture : (importName + texture));
-                        }
-                    }
+                            var textures = faceGroup.Textures.ToList();
+                            faceGroup.Textures.Clear();
 
-                    foreach (var texture in import.Textures.Values)
-                    {
-                        texture.Name = texture.Name.StartsWith(importName, StringComparison.Ordinal) ? texture.Name : (importName + texture.Name);
+                            foreach (var texture in textures)
+                            {
+                                faceGroup.Textures.Add(texture.StartsWith(importName, StringComparison.Ordinal) ? texture : (importName + texture));
+                            }
+                        }
+
+                        foreach (var texture in import.Textures.Values)
+                        {
+                            texture.Name = texture.Name.StartsWith(importName, StringComparison.Ordinal) ? texture.Name : (importName + texture.Name);
+                        }
                     }
 
                     foreach (var texture in import.Textures.Values)
