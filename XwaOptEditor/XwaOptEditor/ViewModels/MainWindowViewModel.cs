@@ -852,7 +852,35 @@ namespace XwaOptEditor.ViewModels
 
                 BusyIndicatorService.Notify(string.Concat(message.ScaleType, "..."));
 
+                List<float> lodDistances = null;
+
+                if (!message.ScaleLodDistance)
+                {
+                    lodDistances = new List<float>();
+
+                    foreach (var mesh in opt.Meshes)
+                    {
+                        foreach (var lod in mesh.Lods)
+                        {
+                            lodDistances.Add(lod.Distance);
+                        }
+                    }
+                }
+
                 opt.Scale(message.ScaleX, message.ScaleY, message.ScaleZ);
+
+                if (!message.ScaleLodDistance)
+                {
+                    int lodDistanceIndex = 0;
+                    foreach (var mesh in opt.Meshes)
+                    {
+                        foreach (var lod in mesh.Lods)
+                        {
+                            lod.Distance = lodDistances[lodDistanceIndex];
+                            lodDistanceIndex++;
+                        }
+                    }
+                }
 
                 dispatcher(() => this.OptModel.File = opt);
                 dispatcher(() => this.OptModel.UndoStackPush("scale"));

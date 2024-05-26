@@ -20,6 +20,8 @@ namespace XwaOptEditor
     /// </summary>
     public partial class ScaleFactorDialog : Window, INotifyPropertyChanged
     {
+        private bool scaleLodDistance = true;
+
         private float scaleX = 1.0f;
 
         private float scaleY = 1.0f;
@@ -46,6 +48,17 @@ namespace XwaOptEditor
         public float SizeY { get; private set; }
 
         public float SizeZ { get; private set; }
+
+        public bool ScaleLodDistance
+        {
+            get { return this.scaleLodDistance; }
+
+            set
+            {
+                this.scaleLodDistance = value;
+                this.NotifyPropertyChanged("ScaleLodDistance");
+            }
+        }
 
         public float ScaleX
         {

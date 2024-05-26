@@ -262,6 +262,7 @@ namespace XwaOptEditor
 
                 if (dialog.ShowDialog() == true)
                 {
+                    message.ScaleLodDistance = dialog.ScaleLodDistance;
                     message.ScaleX = dialog.ScaleX;
                     message.ScaleY = dialog.ScaleY;
                     message.ScaleZ = dialog.ScaleZ;

@@ -16,6 +16,8 @@ namespace XwaOptEditor.Messages
 
         public bool Changed { get; set; }
 
+        public bool ScaleLodDistance { get; set; }
+
         public float ScaleX { get; set; }
 
         public float ScaleY { get; set; }

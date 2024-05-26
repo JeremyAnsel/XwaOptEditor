@@ -26,91 +26,97 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
-                    Grid.Column="1"
-                    Text="Mul: " />
+                   Grid.Column="1"
+                   Text="Mul: " />
         <TextBlock Grid.Row="0"
-                    Grid.Column="2"
-                    Text="Div: " />
+                   Grid.Column="2"
+                   Text="Div: " />
         <TextBlock Grid.Row="0"
-                    Grid.Column="3"
-                    Text="Meter: " />
+                   Grid.Column="3"
+                   Text="Meter: " />
         <TextBlock Grid.Row="0"
-                    Grid.Column="4"
-                    Text="%: " />
+                   Grid.Column="4"
+                   Text="%: " />
         <TextBlock Grid.Row="1"
-                    Grid.Column="0"
-                    Text="Scale X: " />
+                   Grid.Column="0"
+                   Text="Scale X: " />
         <TextBox Grid.Row="1"
-                    Grid.Column="1"
-                    Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="1"
+                 Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="1"
-                    Grid.Column="2"
-                    Text="{Binding ScaleXDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="2"
+                 Text="{Binding ScaleXDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="1"
-                    Grid.Column="3"
-                    Text="{Binding ScaleXMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="3"
+                 Text="{Binding ScaleXMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="1"
-                    Grid.Column="4"
-                    Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
+                 Grid.Column="4"
+                 Text="{Binding ScaleX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="2"
-                    Grid.Column="0"
-                    Text="Scale Y: " />
+                   Grid.Column="0"
+                   Text="Scale Y: " />
         <TextBox Grid.Row="2"
-                    Grid.Column="1"
-                    Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="1"
+                 Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="2"
-                    Grid.Column="2"
-                    Text="{Binding ScaleYDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="2"
+                 Text="{Binding ScaleYDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="2"
-                    Grid.Column="3"
-                    Text="{Binding ScaleYMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="3"
+                 Text="{Binding ScaleYMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="2"
-                    Grid.Column="4"
-                    Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
+                 Grid.Column="4"
+                 Text="{Binding ScaleY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="3"
-                    Grid.Column="0"
-                    Text="Scale Z: " />
+                   Grid.Column="0"
+                   Text="Scale Z: " />
         <TextBox Grid.Row="3"
-                    Grid.Column="1"
-                    Text="{Binding ScaleZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="1"
+                 Text="{Binding ScaleZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="3"
-                    Grid.Column="2"
-                    Text="{Binding ScaleZDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="2"
+                 Text="{Binding ScaleZDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="3"
-                    Grid.Column="3"
-                    Text="{Binding ScaleZMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="3"
+                 Text="{Binding ScaleZMeter, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="3"
-                    Grid.Column="4"
-                    Text="{Binding ScaleZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
+                 Grid.Column="4"
+                 Text="{Binding ScaleZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True, Converter={vc:PercentConverter}, StringFormat='\{0\} %'}" />
         <TextBlock Grid.Row="4"
-                    Grid.Column="0"
-                    Text="Scale XYZ: " />
+                   Grid.Column="0"
+                   Text="Scale XYZ: " />
         <TextBox Grid.Row="4"
-                    Grid.Column="1"
-                    Text="{Binding ScaleFactor, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="1"
+                 Text="{Binding ScaleFactor, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="4"
-                    Grid.Column="2"
-                    Text="{Binding ScaleFactorDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="2"
+                 Text="{Binding ScaleFactorDiv, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="4"
-                    Grid.Column="3"
-                    Text="{Binding ScaleFactorMeterX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="3"
+                 Text="{Binding ScaleFactorMeterX, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="4"
-                    Grid.Column="4"
-                    Text="{Binding ScaleFactorMeterY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="4"
+                 Text="{Binding ScaleFactorMeterY, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
         <TextBox Grid.Row="4"
-                    Grid.Column="5"
-                    Text="{Binding ScaleFactorMeterZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                 Grid.Column="5"
+                 Text="{Binding ScaleFactorMeterZ, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+        <CheckBox Grid.Row="5"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  VerticalContentAlignment="Center"
+                  IsChecked="{Binding ScaleLodDistance}"
+                  Content="Scale Lod Distance" />
         <Button x:Name="Cancel"
                 Grid.Row="5"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
                 Margin="30 2"
                 Click="Cancel_Click"
                 IsCancel="True">Cancel</Button>
         <Button x:Name="Ok"
                 Grid.Row="5"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
                 Margin="30 2"
                 Click="Ok_Click"
                 IsDefault="True">OK</Button>

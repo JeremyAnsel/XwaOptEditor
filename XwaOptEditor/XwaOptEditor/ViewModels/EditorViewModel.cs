@@ -835,7 +835,10 @@ namespace XwaOptEditor.ViewModels
 
                         foreach (var lod in mesh.Lods)
                         {
-                            lod.Distance /= Math.Max(Math.Max(Math.Abs(message.ScaleX), Math.Abs(message.ScaleY)), Math.Abs(message.ScaleZ));
+                            if (message.ScaleLodDistance)
+                            {
+                                lod.Distance /= Math.Max(Math.Max(Math.Abs(message.ScaleX), Math.Abs(message.ScaleY)), Math.Abs(message.ScaleZ));
+                            }
 
                             foreach (var face in lod.FaceGroups.SelectMany(t => t.Faces))
                             {
