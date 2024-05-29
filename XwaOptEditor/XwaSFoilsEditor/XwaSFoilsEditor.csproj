@@ -17,8 +17,8 @@
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
     <PackageReference Include="JeremyAnsel.Xwa.HooksConfig" Version="1.0.4" />
     <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.47" />
-    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.9" />
-    <PackageReference Include="JeremyAnsel.Xwa.OptTransform.Wpf" Version="1.0.9" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.10" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform.Wpf" Version="1.0.10" />
   </ItemGroup>
 
   <ItemGroup>
