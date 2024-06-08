@@ -43,12 +43,12 @@ namespace XwaHangarMapEditor
             var model = (ModelVisual3D)values[0];
             model.Children.Clear();
 
-            model.Children.Add(hangar);
-
             foreach (var item in items)
             {
                 model.Children.Add(item);
             }
+
+            model.Children.Add(hangar);
 
             //var viewport = GetViewport(model);
 
