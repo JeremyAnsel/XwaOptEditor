@@ -452,38 +452,47 @@
                     </TabItem.Header>
                     <DockPanel>
                         <ToolBarTray DockPanel.Dock="Top"
-                                     IsLocked="True"
-                                     DataContext="{Binding ElementName=Hardpoints}">
+                                     IsLocked="True">
                             <ToolBar>
                                 <Button Content="New"
-                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
-                                        Command="{Binding DataContext.NewHardpointCommand}" />
+                                        IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding NewHardpointCommand}" />
                                 <Button Content="Delete"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.DeleteHardpointsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=Hardpoints,Path=HasItems}"
+                                        Command="{Binding DeleteHardpointsCommand}"
+                                        CommandParameter="{Binding CurrentHardpoints.SelectedItems}" />
                                 <Separator />
                                 <Button Content="Cut"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.CutHardpointsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=Hardpoints, Path=HasItems}"
+                                        Command="{Binding CutHardpointsCommand}"
+                                        CommandParameter="{Binding CurrentHardpoints.SelectedItems}" />
                                 <Button Content="Copy"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.CopyHardpointsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=Hardpoints, Path=HasItems}"
+                                        Command="{Binding CopyHardpointsCommand}"
+                                        CommandParameter="{Binding CurrentHardpoints.SelectedItems}" />
                                 <Button Content="Paste"
-                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
-                                        Command="{Binding DataContext.PasteHardpointsCommand}" />
+                                        IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding PasteHardpointsCommand}" />
+                                <Separator />
+                                <Button Content="Up"
+                                        IsEnabled="{Binding CurrentHardpoints.HasSelectedItems}"
+                                        Command="{Binding UpHardpointsCommand}"
+                                        CommandParameter="{Binding CurrentHardpoints.SelectedItems}" />
+                                <Button Content="Down"
+                                        IsEnabled="{Binding CurrentHardpoints.HasSelectedItems}"
+                                        Command="{Binding DownHardpointsCommand}"
+                                        CommandParameter="{Binding CurrentHardpoints.SelectedItems}" />
                             </ToolBar>
                         </ToolBarTray>
                         <ListView x:Name="Hardpoints"
-                                  ItemsSource="{Binding CurrentMeshes.SelectedItem.Hardpoints}"
-                                  IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding CurrentHardpoints}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling"
                                   mvvm:AttachedProperties.RegisterCommandBindings="{Binding HardpointsCutCopyCommandBindings}">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected}" />
                                     <Setter Property="HorizontalContentAlignment"
                                             Value="Stretch" />
                                 </Style>
@@ -496,9 +505,9 @@
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <!--<localControl:EnumComboBox EnumType="{x:Type opt:HardpointType}"
-                                                                               Text="{Binding HardpointType}" />-->
+                                                                               Text="{Binding Value.HardpointType}" />-->
                                                     <ComboBox ItemsSource="{Binding Source={x:Static vc:OptHardpointsConverter.HardpointsColors}, Path=Keys}"
-                                                              Text="{Binding HardpointType, Converter={vc:OptHardpointTypeConverter}}" />
+                                                              Text="{Binding Value.HardpointType, Converter={vc:OptHardpointTypeConverter}}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -506,7 +515,7 @@
                                                         Width="250">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Position, Converter={vc:VectorScaleConverter}}" />
+                                                    <TextBox Text="{Binding Value.Position, Converter={vc:VectorScaleConverter}}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -525,38 +534,51 @@
                     </TabItem.Header>
                     <DockPanel>
                         <ToolBarTray DockPanel.Dock="Top"
-                                     IsLocked="True"
-                                     DataContext="{Binding ElementName=EngineGlows}">
+                                     IsLocked="True">
                             <ToolBar>
                                 <Button Content="New"
-                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
-                                        Command="{Binding DataContext.NewEngineGlowCommand}" />
+                                        IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding NewEngineGlowCommand}" />
                                 <Button Content="Delete"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.DeleteEngineGlowsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=EngineGlows, Path=HasItems}"
+                                        Command="{Binding DeleteEngineGlowsCommand}"
+                                        CommandParameter="{Binding CurrentEngineGlows.SelectedItems}" />
                                 <Separator />
                                 <Button Content="Cut"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.CutEngineGlowsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=EngineGlows, Path=HasItems}"
+                                        Command="{Binding CutEngineGlowsCommand}"
+                                        CommandParameter="{Binding CurrentEngineGlows.SelectedItems}" />
                                 <Button Content="Copy"
-                                        IsEnabled="{Binding HasItems}"
-                                        Command="{Binding DataContext.CopyEngineGlowsCommand}"
-                                        CommandParameter="{Binding SelectedItems}" />
+                                        IsEnabled="{Binding ElementName=EngineGlows, Path=HasItems}"
+                                        Command="{Binding CopyEngineGlowsCommand}"
+                                        CommandParameter="{Binding CurrentEngineGlows.SelectedItems}" />
                                 <Button Content="Paste"
-                                        IsEnabled="{Binding DataContext.CurrentMeshes.HasSelectedItems}"
-                                        Command="{Binding DataContext.PasteEngineGlowsCommand}" />
+                                        IsEnabled="{Binding CurrentMeshes.HasSelectedItems}"
+                                        Command="{Binding PasteEngineGlowsCommand}" />
+                                <Separator />
+                                <Button Content="Up"
+                                        IsEnabled="{Binding CurrentEngineGlows.HasSelectedItems}"
+                                        Command="{Binding UpEngineGlowsCommand}"
+                                        CommandParameter="{Binding CurrentEngineGlows.SelectedItems}" />
+                                <Button Content="Down"
+                                        IsEnabled="{Binding CurrentEngineGlows.HasSelectedItems}"
+                                        Command="{Binding DownEngineGlowsCommand}"
+                                        CommandParameter="{Binding CurrentEngineGlows.SelectedItems}" />
                             </ToolBar>
                         </ToolBarTray>
                         <ListView x:Name="EngineGlows"
-                                  ItemsSource="{Binding CurrentMeshes.SelectedItem.EngineGlows}"
-                                  IsSynchronizedWithCurrentItem="True"
+                                  ItemsSource="{Binding CurrentEngineGlows}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling"
                                   Grid.IsSharedSizeScope="True"
                                   HorizontalContentAlignment="Stretch"
                                   mvvm:AttachedProperties.RegisterCommandBindings="{Binding EngineGlowsCutCopyCommandBindings}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected}" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -579,13 +601,13 @@
                                                    Text="Is Disabled: " />
                                         <CheckBox Grid.Row="0"
                                                   Grid.Column="1"
-                                                  IsChecked="{Binding IsDisabled}" />
+                                                  IsChecked="{Binding Value.IsDisabled}" />
                                         <TextBlock Grid.Row="1"
                                                    Grid.Column="0"
                                                    Text="Core Color: " />
                                         <xctk:ColorPicker Grid.Row="1"
                                                           Grid.Column="1"
-                                                          SelectedColor="{Binding CoreColor, Converter={vc:ColorConverter}}"
+                                                          SelectedColor="{Binding Value.CoreColor, Converter={vc:ColorConverter}}"
                                                           DisplayColorAndName="True"
                                                           ColorMode="ColorCanvas" />
                                         <TextBlock Grid.Row="2"
@@ -593,7 +615,7 @@
                                                    Text="Outer Color: " />
                                         <xctk:ColorPicker Grid.Row="2"
                                                           Grid.Column="1"
-                                                          SelectedColor="{Binding OuterColor, Converter={vc:ColorConverter}}"
+                                                          SelectedColor="{Binding Value.OuterColor, Converter={vc:ColorConverter}}"
                                                           DisplayColorAndName="True"
                                                           ColorMode="ColorCanvas" />
                                         <TextBlock Grid.Row="3"
@@ -601,31 +623,31 @@
                                                    Text="Format: " />
                                         <TextBox Grid.Row="3"
                                                  Grid.Column="1"
-                                                 Text="{Binding Format, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.Format, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="4"
                                                    Grid.Column="0"
                                                    Text="Position (m): " />
                                         <TextBox Grid.Row="4"
                                                  Grid.Column="1"
-                                                 Text="{Binding Position, Converter={vc:VectorScaleConverter}}" />
+                                                 Text="{Binding Value.Position, Converter={vc:VectorScaleConverter}}" />
                                         <TextBlock Grid.Row="5"
                                                    Grid.Column="0"
                                                    Text="Look: " />
                                         <TextBox Grid.Row="5"
                                                  Grid.Column="1"
-                                                 Text="{Binding Look, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.Look, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="0"
                                                    Text="Up: " />
                                         <TextBox Grid.Row="6"
                                                  Grid.Column="1"
-                                                 Text="{Binding Up, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.Up, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="7"
                                                    Grid.Column="0"
                                                    Text="Right: " />
                                         <TextBox Grid.Row="7"
                                                  Grid.Column="1"
-                                                 Text="{Binding Right, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.Right, Converter={vc:VectorConverter}}" />
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -1032,8 +1054,7 @@
                                     <Binding Path="OptModel.File" />
                                     <Binding Path="ShowHardpoints" />
                                     <Binding Path="ShowHardpointsText" />
-                                    <Binding Path="SelectedItem"
-                                             ElementName="Hardpoints" />
+                                    <Binding Path="CurrentHardpoints.SelectedItem" />
                                     <Binding Path="CurrentMeshes.CheckedItems" />
                                     <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                     <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
@@ -1047,8 +1068,7 @@
                                     <Binding RelativeSource="{RelativeSource Self}" />
                                     <Binding Path="OptModel.File" />
                                     <Binding Path="ShowEngineGlows" />
-                                    <Binding Path="SelectedItem"
-                                             ElementName="EngineGlows" />
+                                    <Binding Path="CurrentEngineGlows.SelectedItem" />
                                     <Binding Path="CurrentMeshes.CheckedItems" />
                                     <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                     <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
@@ -1110,8 +1130,7 @@
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowHardpoints" />
                                 <Binding Path="ShowHardpointsText" />
-                                <Binding Path="SelectedItem"
-                                         ElementName="Hardpoints" />
+                                <Binding Path="CurrentHardpoints.SelectedItem" />
                                 <Binding Path="CurrentMeshes.CheckedItems" />
                                 <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
@@ -1125,8 +1144,7 @@
                                 <Binding RelativeSource="{RelativeSource Self}" />
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowEngineGlows" />
-                                <Binding Path="SelectedItem"
-                                         ElementName="EngineGlows" />
+                                <Binding Path="CurrentEngineGlows.SelectedItem" />
                                 <Binding Path="CurrentMeshes.CheckedItems" />
                                 <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />
@@ -1176,8 +1194,7 @@
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowHardpoints" />
                                 <Binding Path="ShowHardpointsText" />
-                                <Binding Path="SelectedItem"
-                                         ElementName="Hardpoints" />
+                                <Binding Path="CurrentHardpoints.SelectedItem" />
                                 <Binding Path="CurrentMeshes.CheckedItems" />
                                 <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.Hardpoints/HardpointType" />
@@ -1191,8 +1208,7 @@
                                 <Binding RelativeSource="{RelativeSource Self}" />
                                 <Binding Path="CurrentMeshes.SelectedItem" />
                                 <Binding Path="ShowEngineGlows" />
-                                <Binding Path="SelectedItem"
-                                         ElementName="EngineGlows" />
+                                <Binding Path="CurrentEngineGlows.SelectedItem" />
                                 <Binding Path="CurrentMeshes.CheckedItems" />
                                 <Binding Path="CurrentMeshes.CheckedItems.Count" />
                                 <Binding Path="CurrentMeshes.SelectedItem.EngineGlows/CoreColor" />

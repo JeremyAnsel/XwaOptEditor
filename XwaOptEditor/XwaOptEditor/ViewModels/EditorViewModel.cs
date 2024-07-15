@@ -47,6 +47,8 @@ namespace XwaOptEditor.ViewModels
         public EditorViewModel()
         {
             this.CurrentMeshes = new SelectableCollection<Mesh>();
+            this.CurrentHardpoints = new SelectableCollection<Hardpoint>();
+            this.CurrentEngineGlows = new SelectableCollection<EngineGlow>();
             this.CurrentLods = new SelectableCollection<MeshLod>();
             this.CurrentFaceGroups = new SelectableCollection<FaceGroup>();
             this.CurrentTextureNames = new StringCollection();
@@ -55,10 +57,14 @@ namespace XwaOptEditor.ViewModels
             {
                 if (this.CurrentMeshes.SelectedItem == null)
                 {
+                    this.CurrentHardpoints.LoadItems(null);
+                    this.CurrentEngineGlows.LoadItems(null);
                     this.CurrentLods.LoadItems(null);
                 }
                 else
                 {
+                    this.CurrentHardpoints.LoadItems(this.CurrentMeshes.SelectedItem.Hardpoints);
+                    this.CurrentEngineGlows.LoadItems(this.CurrentMeshes.SelectedItem.EngineGlows);
                     this.CurrentLods.LoadItems(this.CurrentMeshes.SelectedItem.Lods);
                 }
             };
@@ -122,12 +128,16 @@ namespace XwaOptEditor.ViewModels
             this.CutHardpointsCommand = new DelegateCommandOfList<Hardpoint>(this.ExecuteCutHardpointsCommand);
             this.CopyHardpointsCommand = new DelegateCommandOfList<Hardpoint>(this.ExecuteCopyHardpointsCommand);
             this.PasteHardpointsCommand = new DelegateCommand(this.ExecutePasteHardpointsCommand);
+            this.UpHardpointsCommand = new DelegateCommandOfList<Hardpoint>(this.ExecuteUpHardpointsCommand);
+            this.DownHardpointsCommand = new DelegateCommandOfList<Hardpoint>(this.ExecuteDownHardpointsCommand);
 
             this.NewEngineGlowCommand = new DelegateCommand(this.ExecuteNewEngineGlowCommand);
             this.DeleteEngineGlowsCommand = new DelegateCommandOfList<EngineGlow>(this.ExecuteDeleteEngineGlowsCommand);
             this.CutEngineGlowsCommand = new DelegateCommandOfList<EngineGlow>(this.ExecuteCutEngineGlowsCommand);
             this.CopyEngineGlowsCommand = new DelegateCommandOfList<EngineGlow>(this.ExecuteCopyEngineGlowsCommand);
             this.PasteEngineGlowsCommand = new DelegateCommand(this.ExecutePasteEngineGlowsCommand);
+            this.UpEngineGlowsCommand = new DelegateCommandOfList<EngineGlow>(this.ExecuteUpEngineGlowsCommand);
+            this.DownEngineGlowsCommand = new DelegateCommandOfList<EngineGlow>(this.ExecuteDownEngineGlowsCommand);
 
             this.AddTextureNameCommand = new DelegateCommand(this.ExecuteAddTextureNameCommand);
             this.BrowseTextureNameCommand = new DelegateCommand(this.ExecuteBrowseTextureNameCommand);
@@ -223,6 +233,10 @@ namespace XwaOptEditor.ViewModels
 
         public ICommand PasteHardpointsCommand { get; private set; }
 
+        public ICommand UpHardpointsCommand { get; private set; }
+
+        public ICommand DownHardpointsCommand { get; private set; }
+
         public ICommand NewEngineGlowCommand { get; private set; }
 
         public ICommand DeleteEngineGlowsCommand { get; private set; }
@@ -232,6 +246,10 @@ namespace XwaOptEditor.ViewModels
         public ICommand CopyEngineGlowsCommand { get; private set; }
 
         public ICommand PasteEngineGlowsCommand { get; private set; }
+
+        public ICommand UpEngineGlowsCommand { get; private set; }
+
+        public ICommand DownEngineGlowsCommand { get; private set; }
 
         public ICommand AddTextureNameCommand { get; private set; }
 
@@ -272,6 +290,10 @@ namespace XwaOptEditor.ViewModels
         public CommandBindingCollection EngineGlowsPasteCommandBindings { get; private set; }
 
         public SelectableCollection<Mesh> CurrentMeshes { get; private set; }
+
+        public SelectableCollection<Hardpoint> CurrentHardpoints { get; private set; }
+
+        public SelectableCollection<EngineGlow> CurrentEngineGlows { get; private set; }
 
         public SelectableCollection<MeshLod> CurrentLods { get; private set; }
 
@@ -1527,6 +1549,72 @@ namespace XwaOptEditor.ViewModels
             });
         }
 
+        private void ExecuteUpHardpointsCommand(IList<Hardpoint> hardpoints)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+
+                dispatcher(() => this.CurrentHardpoints.ClearSelection());
+
+                foreach (var hardpoint in hardpoints)
+                {
+                    int index = mesh.Hardpoints.IndexOf(hardpoint);
+
+                    if (index == 0)
+                    {
+                        continue;
+                    }
+
+                    mesh.Hardpoints.RemoveAt(index);
+                    mesh.Hardpoints.Insert(index - 1, hardpoint);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentHardpoints.SetSelection(hardpoints));
+                dispatcher(() => this.OptModel.UndoStackPush("move up hardpoints"));
+            });
+        }
+
+        private void ExecuteDownHardpointsCommand(IList<Hardpoint> hardpoints)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+
+                dispatcher(() => this.CurrentHardpoints.ClearSelection());
+
+                foreach (var hardpoint in hardpoints)
+                {
+                    int index = mesh.Hardpoints.IndexOf(hardpoint);
+
+                    if (index == mesh.Hardpoints.Count - 1)
+                    {
+                        continue;
+                    }
+
+                    mesh.Hardpoints.RemoveAt(index);
+                    mesh.Hardpoints.Insert(index + 1, hardpoint);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentHardpoints.SetSelection(hardpoints));
+                dispatcher(() => this.OptModel.UndoStackPush("move down hardpoints"));
+            });
+        }
+
         private void ExecuteNewEngineGlowCommand()
         {
             if (this.CurrentMeshes.SelectedItem == null)
@@ -1641,6 +1729,72 @@ namespace XwaOptEditor.ViewModels
                 dispatcher(() => this.UpdateModel());
                 dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
                 dispatcher(() => this.OptModel.UndoStackPush("paste engine glows"));
+            });
+        }
+
+        private void ExecuteUpEngineGlowsCommand(IList<EngineGlow> engineGlows)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+
+                dispatcher(() => this.CurrentEngineGlows.ClearSelection());
+
+                foreach (var engineGlow in engineGlows)
+                {
+                    int index = mesh.EngineGlows.IndexOf(engineGlow);
+
+                    if (index == 0)
+                    {
+                        continue;
+                    }
+
+                    mesh.EngineGlows.RemoveAt(index);
+                    mesh.EngineGlows.Insert(index - 1, engineGlow);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentEngineGlows.SetSelection(engineGlows));
+                dispatcher(() => this.OptModel.UndoStackPush("move up engine glows"));
+            });
+        }
+
+        private void ExecuteDownEngineGlowsCommand(IList<EngineGlow> engineGlows)
+        {
+            if (this.CurrentMeshes.SelectedItem == null)
+            {
+                return;
+            }
+
+            BusyIndicatorService.Run(dispatcher =>
+            {
+                var mesh = this.CurrentMeshes.SelectedItem;
+
+                dispatcher(() => this.CurrentEngineGlows.ClearSelection());
+
+                foreach (var engineGlow in engineGlows)
+                {
+                    int index = mesh.EngineGlows.IndexOf(engineGlow);
+
+                    if (index == mesh.EngineGlows.Count - 1)
+                    {
+                        continue;
+                    }
+
+                    mesh.EngineGlows.RemoveAt(index);
+                    mesh.EngineGlows.Insert(index + 1, engineGlow);
+                }
+
+                dispatcher(() => this.UpdateModel());
+                dispatcher(() => this.CurrentMeshes.SetSelection(mesh));
+                dispatcher(() => this.CurrentEngineGlows.SetSelection(engineGlows));
+                dispatcher(() => this.OptModel.UndoStackPush("move down engine glows"));
             });
         }
 
