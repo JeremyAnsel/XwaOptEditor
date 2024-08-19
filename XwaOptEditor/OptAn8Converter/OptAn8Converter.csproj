@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JeremyAnsel.Media.An8" Version="3.0.42" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.47" />
+    <PackageReference Include="JeremyAnsel.Media.An8" Version="3.0.44" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.50" />
   </ItemGroup>
 
 </Project>
