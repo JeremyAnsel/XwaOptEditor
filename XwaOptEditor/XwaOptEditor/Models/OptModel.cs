@@ -40,16 +40,124 @@ namespace XwaOptEditor.Models
             {
                 this.file = null;
                 this.cache = null;
-                this.RaisePropertyChangedEvent("File");
-                this.RaisePropertyChangedEvent("FileCenter");
+                this.RaisePropertyChangedEvent(nameof(File));
+                this.RaisePropertyChangedEvent(nameof(FileCenter));
+                this.RaisePropertyChangedEvent(nameof(FileMainTrianglesCount));
+                this.RaisePropertyChangedEvent(nameof(FileMainVerticesCount));
+                this.RaisePropertyChangedEvent(nameof(FileLodsTrianglesCount));
+                this.RaisePropertyChangedEvent(nameof(FileLodsVerticesCount));
 
                 this.file = value;
-                this.RaisePropertyChangedEvent("File");
-                this.RaisePropertyChangedEvent("FileCenter");
+                this.RaisePropertyChangedEvent(nameof(File));
+                this.RaisePropertyChangedEvent(nameof(FileCenter));
+                this.RaisePropertyChangedEvent(nameof(FileMainTrianglesCount));
+                this.RaisePropertyChangedEvent(nameof(FileMainVerticesCount));
+                this.RaisePropertyChangedEvent(nameof(FileLodsTrianglesCount));
+                this.RaisePropertyChangedEvent(nameof(FileLodsVerticesCount));
 
                 this.Cache = new OptCache(this.file);
 
                 this.CheckPlayability();
+            }
+        }
+
+        public int FileMainTrianglesCount
+        {
+            get
+            {
+                if (this.File == null)
+                {
+                    return 0;
+                }
+
+                int count = 0;
+
+                foreach (var mesh in this.file.Meshes)
+                {
+                    if (mesh.Lods.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    var lod = mesh.Lods[0];
+
+                    count += lod.TrianglesCount;
+                }
+
+                return count;
+            }
+        }
+
+        public int FileMainVerticesCount
+        {
+            get
+            {
+                if (this.File == null)
+                {
+                    return 0;
+                }
+
+                int count = 0;
+
+                foreach (var mesh in this.file.Meshes)
+                {
+                    if (mesh.Lods.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    var lod = mesh.Lods[0];
+
+                    count += lod.VerticesCount;
+                }
+
+                return count;
+            }
+        }
+
+        public int FileLodsTrianglesCount
+        {
+            get
+            {
+                if (this.File == null)
+                {
+                    return 0;
+                }
+
+                int count = 0;
+
+                foreach (var mesh in this.file.Meshes)
+                {
+                    foreach (var lod in mesh.Lods)
+                    {
+                        count += lod.TrianglesCount;
+                    }
+                }
+
+                return count;
+            }
+        }
+
+        public int FileLodsVerticesCount
+        {
+            get
+            {
+                if (this.File == null)
+                {
+                    return 0;
+                }
+
+                int count = 0;
+
+                foreach (var mesh in this.file.Meshes)
+                {
+                    foreach (var lod in mesh.Lods)
+                    {
+                        count += lod.VerticesCount;
+                    }
+                }
+
+                return count;
             }
         }
 

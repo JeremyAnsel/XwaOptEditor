@@ -44,6 +44,16 @@
                 <TextBlock Text="  Center (m): " />
                 <TextBlock Text="{Binding OptModel.FileCenter, Converter={vc:VectorScaleConverter}}" />
             </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal">
+                <TextBlock Text="First lod :" />
+                <TextBlock Text="{Binding OptModel.FileMainTrianglesCount, StringFormat='{} {0} triangles'}" />
+                <TextBlock Text="{Binding OptModel.FileMainVerticesCount, StringFormat='{} {0} vertices'}" />
+                <TextBlock Text=" | " />
+                <TextBlock Text="All lods :" />
+                <TextBlock Text="{Binding OptModel.FileLodsTrianglesCount, StringFormat='{} {0} triangles'}" />
+                <TextBlock Text="{Binding OptModel.FileLodsVerticesCount, StringFormat='{} {0} vertices'}" />
+            </StackPanel>
             <DockPanel DockPanel.Dock="Top">
                 <DockPanel>
                     <ToolBar DockPanel.Dock="Right"
