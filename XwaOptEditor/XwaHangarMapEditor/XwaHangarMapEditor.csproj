@@ -15,9 +15,9 @@
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.115" />
     <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
-    <PackageReference Include="JeremyAnsel.Xwa.HooksConfig" Version="1.0.8" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.50" />
-    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.12" />
+    <PackageReference Include="JeremyAnsel.Xwa.HooksConfig" Version="1.0.10" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.51" />
+    <PackageReference Include="JeremyAnsel.Xwa.OptTransform" Version="1.0.18" />
   </ItemGroup>
 
   <ItemGroup>

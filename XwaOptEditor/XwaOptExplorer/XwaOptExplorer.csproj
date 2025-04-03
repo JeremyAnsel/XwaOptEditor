@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.115" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.20.2" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.50" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.51" />
   </ItemGroup>
 
   <ItemGroup>
