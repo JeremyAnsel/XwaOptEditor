@@ -9,6 +9,7 @@
     <Version>1.0.0</Version>
     <Company>Jérémy Ansel</Company>
     <Copyright>Copyright © 2015-2022 Jérémy Ansel</Copyright>
+    <ApplicationIcon>OptTextures.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
