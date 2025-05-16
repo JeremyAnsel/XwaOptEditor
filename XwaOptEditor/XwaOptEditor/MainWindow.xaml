@@ -146,7 +146,7 @@
                         <Button x:Name="RestoreUndoStackButton" Content="Restore" Click="RestoreUndoStackButton_Click" />
                         <Button x:Name="ClearUndoStackButton" Content="Clear" Click="ClearUndoStackButton_Click" />
                     </UniformGrid>
-                    <ListBox x:Name="UndoStackListBox" Width="150"
+                    <ListBox x:Name="UndoStackListBox" Width="Auto"
                          ItemsSource="{Binding Source={StaticResource MainViewModel}, Path=OptModel.UndoStack}"
                          DisplayMemberPath="Item1" />
                 </DockPanel>
