@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaSFoilsEditor", "XwaSFoil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XwaHangarMapEditor", "XwaHangarMapEditor\XwaHangarMapEditor.csproj", "{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptSkinsChecker", "XwaOptSkinsChecker\XwaOptSkinsChecker.csproj", "{DB332C8B-1E20-4D62-A87D-F451759FA069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XwaOptSkinsSplitter", "XwaOptSkinsSplitter\XwaOptSkinsSplitter.csproj", "{152E07DB-29D3-4B7F-881E-841DE13D54B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE57964C-C4D1-41CB-B0A1-5F7127B100D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB332C8B-1E20-4D62-A87D-F451759FA069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB332C8B-1E20-4D62-A87D-F451759FA069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB332C8B-1E20-4D62-A87D-F451759FA069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB332C8B-1E20-4D62-A87D-F451759FA069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{152E07DB-29D3-4B7F-881E-841DE13D54B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{152E07DB-29D3-4B7F-881E-841DE13D54B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{152E07DB-29D3-4B7F-881E-841DE13D54B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{152E07DB-29D3-4B7F-881E-841DE13D54B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

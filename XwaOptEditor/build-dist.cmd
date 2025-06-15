@@ -71,3 +71,19 @@ For %%a in (
 ) do (
 xcopy /s /d "%%~a" dist\
 )
+
+For %%a in (
+"XwaOptSkinsChecker\bin\Release\net48\*.dll"
+"XwaOptSkinsChecker\bin\Release\net48\*.exe"
+"XwaOptSkinsChecker\bin\Release\net48\*.config"
+) do (
+xcopy /s /d "%%~a" dist\
+)
+
+For %%a in (
+"XwaOptSkinsSplitter\bin\Release\net48\*.dll"
+"XwaOptSkinsSplitter\bin\Release\net48\*.exe"
+"XwaOptSkinsSplitter\bin\Release\net48\*.config"
+) do (
+xcopy /s /d "%%~a" dist\
+)
