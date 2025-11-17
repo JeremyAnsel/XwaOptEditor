@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace XwaOptEditor.Mvvm
 {
-    public class SelectableCollection<T> : ObservableRangeCollection<SelectableItem<T>> where T : class
+    public class SelectableCollection<T> : ObservableRangeCollection<SelectableItem<T>>
     {
         private T selectedItem;
 
@@ -39,7 +39,7 @@ namespace XwaOptEditor.Mvvm
 
             private set
             {
-                if (this.selectedItem != value)
+                if (!object.Equals(this.selectedItem, value))
                 {
                     this.selectedItem = value;
                     this.OnPropertyChanged(new PropertyChangedEventArgs("SelectedItem"));
@@ -115,7 +115,7 @@ namespace XwaOptEditor.Mvvm
 
         public void LoadItems(IEnumerable<T> items)
         {
-            this.SelectedItem = null;
+            this.SelectedItem = default;
             this.SelectedItems.Clear();
             this.Clear();
 
@@ -167,7 +167,7 @@ namespace XwaOptEditor.Mvvm
                 return;
             }
 
-            this.Where(t => t.Value == value)
+            this.Where(t => object.Equals(t.Value, value))
                 .First()
                 .IsSelected = true;
         }

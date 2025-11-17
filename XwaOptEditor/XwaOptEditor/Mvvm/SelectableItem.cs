@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XwaOptEditor.Mvvm
 {
-    public class SelectableItem<T> : ObservableObject where T : class
+    public class SelectableItem<T> : ObservableObject
     {
         private SelectableCollection<T> collection;
 

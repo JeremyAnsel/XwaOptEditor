@@ -45,12 +45,36 @@ namespace XwaOptEditor.Mvvm
 
         public bool CanExecute(object parameter)
         {
-            return this.canExecuteFunc == null ? true : this.canExecuteFunc(parameter == null ? null : ((IList)parameter).Cast<T>().ToList());
+            return this.canExecuteFunc == null ? true : this.canExecuteFunc(GetParameterList(parameter));
         }
 
         public void Execute(object parameter)
         {
-            this.executeAction(parameter == null ? null : ((IList)parameter).Cast<T>().ToList());
+            this.executeAction(GetParameterList(parameter));
+        }
+
+        private static List<T> GetParameterList(object parameter)
+        {
+            if (parameter is null)
+            {
+                return null;
+            }
+
+            var list = new List<T>();
+
+            foreach (object item in (IList)parameter)
+            {
+                if (item is SelectableItem<T> value)
+                {
+                    list.Add(value.Value);
+                }
+                else
+                {
+                    list.Add((T)item);
+                }
+            }
+
+            return list;
         }
     }
 }

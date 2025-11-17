@@ -1524,7 +1524,7 @@ namespace XwaOptEditor.ViewModels
                 {
                     foreach (var hardpoint in selected.Item2)
                     {
-                        mesh.Hardpoints
+                        mesh?.Hardpoints
                             .Add(new Hardpoint
                             {
                                 HardpointType = hardpoint.HardpointType,
@@ -1539,7 +1539,7 @@ namespace XwaOptEditor.ViewModels
                     foreach (var hardpoint in selected.Item2)
                     {
                         selected.Item1.Hardpoints.Remove(hardpoint);
-                        mesh.Hardpoints.Add(hardpoint);
+                        mesh?.Hardpoints.Add(hardpoint);
                     }
                 }
 
@@ -1701,7 +1701,7 @@ namespace XwaOptEditor.ViewModels
                 {
                     foreach (var engineGlow in selected.Item2)
                     {
-                        mesh.EngineGlows
+                        mesh?.EngineGlows
                             .Add(new EngineGlow
                             {
                                 IsDisabled = engineGlow.IsDisabled,
@@ -1722,7 +1722,7 @@ namespace XwaOptEditor.ViewModels
                     foreach (var engineGlow in selected.Item2)
                     {
                         selected.Item1.EngineGlows.Remove(engineGlow);
-                        mesh.EngineGlows.Add(engineGlow);
+                        mesh?.EngineGlows.Add(engineGlow);
                     }
                 }
 
