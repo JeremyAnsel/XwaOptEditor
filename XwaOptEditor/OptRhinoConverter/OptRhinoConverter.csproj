@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.51" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.53" />
     <PackageReference Include="Rhino3dm" Version="7.14.0" />
   </ItemGroup>
 

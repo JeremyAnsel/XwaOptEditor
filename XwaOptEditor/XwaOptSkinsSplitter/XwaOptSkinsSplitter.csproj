@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
-    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.51" />
+    <PackageReference Include="JeremyAnsel.Xwa.Opt" Version="3.0.53" />
   </ItemGroup>
 
 </Project>
