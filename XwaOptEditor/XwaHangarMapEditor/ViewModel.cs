@@ -144,6 +144,28 @@ namespace XwaHangarMapEditor
             }
         }
 
+        private ushort _playerModelIndex = 1;
+
+        public ushort PlayerModelIndex
+        {
+            get
+            {
+                return this._playerModelIndex;
+            }
+
+            set
+            {
+                if (this._playerModelIndex == value)
+                {
+                    return;
+                }
+
+                this._playerModelIndex = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.HangarMap3D));
+            }
+        }
+
         private bool _showRescueShuttle = true;
 
         public bool ShowRescueShuttle
@@ -502,7 +524,7 @@ namespace XwaHangarMapEditor
                 {
                     var player = new HangarItem
                     {
-                        ModelIndex = 1,
+                        ModelIndex = this.PlayerModelIndex,
                         Markings = 0,
                         PositionX = hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetX : hangarObjects.PlayerOffsetX,
                         PositionY = hangarObjects.IsPlayerFloorInverted ? hangarObjects.PlayerInvertedOffsetY : hangarObjects.PlayerOffsetY,

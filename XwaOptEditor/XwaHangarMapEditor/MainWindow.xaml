@@ -105,6 +105,15 @@
                                Text="Map file: " />
                     <TextBlock Text="{Binding HangarFileName}" />
                 </DockPanel>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left"
+                               Text="Player model: " />
+                    <TextBox DockPanel.Dock="Left"
+                             Width="40"
+                             Text="{Binding PlayerModelIndex, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Margin="4 0 0 0"
+                               Text="{Binding PlayerModelIndex, Converter={x:Static local:ExeModelIndexConverter.Default}}" />
+                </DockPanel>
             </StackPanel>
         </DockPanel>
         <Grid>
