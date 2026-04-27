@@ -87,11 +87,7 @@ namespace XwaSFoilsEditor
                         continue;
                     }
 
-                    double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
-                    angle *= showSFoilsOpened;
-                    var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
-                    transform.Freeze();
-                    model.Children[sfoil.MeshIndex].Transform = transform;
+                    model.Children[sfoil.MeshIndex].Transform = Utils.GetSFoilTransform(sfoil, showSFoilsOpened, true);
                 }
             }
 

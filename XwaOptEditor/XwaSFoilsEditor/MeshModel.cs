@@ -229,7 +229,8 @@ namespace XwaSFoilsEditor
         {
             get
             {
-                return this.Angle * this.LookLengthFactor;
+                float lookLength = this.LookLengthFactor;
+                return lookLength == 0 ? this.Angle : (this.Angle * lookLength);
             }
         }
 

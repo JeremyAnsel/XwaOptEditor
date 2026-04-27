@@ -460,10 +460,8 @@ namespace XwaSFoilsEditor
                     continue;
                 }
 
-                double angle = sfoil.Angle * 360.0 / 255 * sfoil.Look.LengthFactor();
-                angle *= showSFoilsOpened;
-                var transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle), sfoil.Pivot.ToPoint3D());
-                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), angle));
+                var transform = Utils.GetSFoilTransform(sfoil, showSFoilsOpened, true);
+                var transformRotation = Utils.GetSFoilTransform(sfoil, showSFoilsOpened, false);
 
                 var mesh = optFile.Meshes[sfoil.MeshIndex];
                 TransformMesh(mesh, transform, transformRotation);
