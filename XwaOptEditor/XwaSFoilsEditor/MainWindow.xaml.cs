@@ -130,11 +130,6 @@ namespace XwaSFoilsEditor
 
             foreach (MeshModel model in this.Meshes)
             {
-                if (model.Angle == 0)
-                {
-                    continue;
-                }
-
                 var mesh = this.OptFile.Meshes[model.MeshIndex];
 
                 mesh.RotationScale.Pivot = model.Pivot;
@@ -198,10 +193,10 @@ namespace XwaSFoilsEditor
 
             foreach (MeshModel model in this.Meshes)
             {
-                if (model.Angle == 0)
-                {
-                    continue;
-                }
+                //if (model.Angle == 0)
+                //{
+                //    continue;
+                //}
 
                 sb.AppendFormat(CultureInfo.InvariantCulture, "{0} - {1}\n", model.MeshIndex, model.Name);
                 sb.AppendLine("Pivot (m): " + model.Pivot.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, OptFile.ScaleFactor).ToString());
@@ -429,11 +424,6 @@ namespace XwaSFoilsEditor
 
             foreach (MeshModel model in this.Meshes)
             {
-                if (model.Angle == 0)
-                {
-                    continue;
-                }
-
                 var mesh = optFile.Meshes[model.MeshIndex];
 
                 mesh.RotationScale.Pivot = model.Pivot;
