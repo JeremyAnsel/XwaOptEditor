@@ -12,7 +12,8 @@
              xmlns:localControl="clr-namespace:XwaOptEditor.Controls"
              mc:Ignorable="d"
              d:DesignHeight="600"
-             d:DesignWidth="1200">
+             d:DesignWidth="1200"
+             x:Name="this">
     <UserControl.DataContext>
         <vm:EditorViewModel />
     </UserControl.DataContext>
@@ -942,7 +943,7 @@
             </DockPanel>
             <ToolBarTray DockPanel.Dock="Bottom"
                          IsLocked="True">
-                <ToolBar>
+                <ToolBar Band="0">
                     <CheckBox IsChecked="{Binding ShowHitzones}"
                               ToolTip="Show Hitzones">Hitzones</CheckBox>
                     <CheckBox IsChecked="{Binding ShowHardpoints}"
@@ -955,15 +956,21 @@
                     <CheckBox IsChecked="{Binding ShowNormals}"
                               ToolTip="Show Normals">Normals</CheckBox>
                 </ToolBar>
-                <ToolBar>
+                <ToolBar Band="1"
+                         BandIndex="0">
                     <CheckBox IsChecked="{Binding ModelShowSolid}"
                               ToolTip="Show Solid">Solid</CheckBox>
                     <CheckBox IsChecked="{Binding ModelShowWireframe}"
                               ToolTip="Show Wireframe">Wireframe</CheckBox>
                 </ToolBar>
-                <ToolBar>
+                <ToolBar Band="1"
+                         BandIndex="1">
                     <CheckBox IsChecked="{Binding ShowCenter}"
-                              ToolTip="Show Center Axis">Axis</CheckBox>
+                              ToolTip="Show Center Axis">Center</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowAxes}"
+                              ToolTip="Show Look Up Right Axes">Axes</CheckBox>
+                    <CheckBox IsChecked="{Binding ShowAnim}"
+                              ToolTip="Show Anim">Anim</CheckBox>
                 </ToolBar>
             </ToolBarTray>
             <Grid>
@@ -1009,8 +1016,24 @@
                                                         IsHeadLightEnabled="True"
                                                         IsViewCubeEdgeClicksEnabled="True"
                                                         MouseLeftButtonDown="HelixViewport3D_MouseLeftButtonDown">
+                        <localControl:CustomHelixViewport3D.Triggers>
+                            <EventTrigger RoutedEvent="Viewport3D.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="this"
+                                                         Storyboard.TargetProperty="AnimTime"
+                                                         From="0.0"
+                                                         To="1.0"
+                                                         Duration="0:0:05"
+                                                         AutoReverse="True"
+                                                         RepeatBehavior="Forever" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </localControl:CustomHelixViewport3D.Triggers>
                         <hx:DefaultLights />
-                        <localControl:CustomOptVisual3D Cache="{Binding OptModel.Cache}"
+                        <localControl:CustomOptVisual3D x:Name="customOptVisual3DFull"
+                                                        Cache="{Binding OptModel.Cache}"
                                                         Distance="{Binding ModelDistance}"
                                                         Version="{Binding ModelVersion}"
                                                         IsSolid="{Binding ModelShowSolid}"
@@ -1087,6 +1110,29 @@
                                     <Binding Path="ModelDistance" />
                                     <Binding Path="CurrentMeshes.CheckedItems" />
                                     <Binding Path="CurrentMeshes.CheckedItems.Count" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptAxesConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="CurrentMeshes.SelectedItem" />
+                                    <Binding Path="ShowAxes" />
+                                </MultiBinding>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <MultiBinding Converter="{vc:OptPivotAxisConverter}">
+                                    <Binding RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="OptModel.File" />
+                                    <Binding Path="CurrentMeshes.SelectedItem" />
+                                    <Binding Path="ShowAnim" />
+                                    <Binding ElementName="customOptVisual3DFull" />
+                                    <Binding ElementName="this"
+                                             Path="AnimTime" />
                                 </MultiBinding>
                             </ModelVisual3D.Content>
                         </ModelVisual3D>

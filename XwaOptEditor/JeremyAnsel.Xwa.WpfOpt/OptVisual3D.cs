@@ -522,5 +522,29 @@ namespace JeremyAnsel.Xwa.WpfOpt
                 }
             };
         }
+
+        public List<int> GetMeshIndices(Mesh mesh)
+        {
+            var list = new List<int>();
+
+            for (int index = 0; index < this.Children.Count; index++)
+            {
+                var child = this.Children[index];
+
+                if (child is not ModelVisual3D visual)
+                {
+                    continue;
+                }
+
+                MeshLodFace model = this.ModelToMeshLodFace[visual.Content];
+
+                if (model.Mesh == mesh)
+                {
+                    list.Add(index);
+                }
+            }
+
+            return list;
+        }
     }
 }

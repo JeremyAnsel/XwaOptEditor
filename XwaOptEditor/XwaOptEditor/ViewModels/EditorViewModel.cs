@@ -44,6 +44,10 @@ namespace XwaOptEditor.ViewModels
 
         private bool showCenter = true;
 
+        private bool showAxes = true;
+
+        private bool showAnim = false;
+
         public EditorViewModel()
         {
             this.CurrentMeshes = new SelectableCollection<Mesh>();
@@ -506,6 +510,40 @@ namespace XwaOptEditor.ViewModels
                 {
                     this.showCenter = value;
                     this.RaisePropertyChangedEvent("ShowCenter");
+                }
+            }
+        }
+
+        public bool ShowAxes
+        {
+            get
+            {
+                return this.showAxes;
+            }
+
+            set
+            {
+                if (this.showAxes != value)
+                {
+                    this.showAxes = value;
+                    this.RaisePropertyChangedEvent("ShowAxes");
+                }
+            }
+        }
+
+        public bool ShowAnim
+        {
+            get
+            {
+                return this.showAnim;
+            }
+
+            set
+            {
+                if (this.showAnim != value)
+                {
+                    this.showAnim = value;
+                    this.RaisePropertyChangedEvent("ShowAnim");
                 }
             }
         }

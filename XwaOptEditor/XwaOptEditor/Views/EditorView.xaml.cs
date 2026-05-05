@@ -45,6 +45,17 @@ namespace XwaOptEditor.Views
         public static readonly DependencyProperty OptModelProperty =
             DependencyProperty.Register("OptModel", typeof(OptModel), typeof(EditorView), new PropertyMetadata(new PropertyChangedCallback(EditorView.OnPropertyChanged)));
 
+
+
+        public double AnimTime
+        {
+            get { return (double)GetValue(AnimTimeProperty); }
+            set { SetValue(AnimTimeProperty, value); }
+        }
+
+        public static readonly DependencyProperty AnimTimeProperty =
+            DependencyProperty.Register("AnimTime", typeof(double), typeof(EditorView), new PropertyMetadata(0.0));
+
         private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var view = (EditorView)sender;
