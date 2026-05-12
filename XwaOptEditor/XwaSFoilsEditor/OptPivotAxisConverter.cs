@@ -60,8 +60,8 @@ namespace XwaSFoilsEditor
             var visual = new ArrowVisual3D
             {
                 Material = Materials.Red,
-                Point1 = pivot + direction,
-                Point2 = pivot - direction,
+                Point1 = pivot - direction,
+                Point2 = pivot + direction,
                 Diameter = opt.Size * 0.005
             };
 

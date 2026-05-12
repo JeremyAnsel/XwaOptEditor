@@ -201,9 +201,9 @@ namespace XwaSFoilsEditor
                 sb.AppendFormat(CultureInfo.InvariantCulture, "{0} - {1}\n", model.MeshIndex, model.Name);
                 sb.AppendLine("Pivot (m): " + model.Pivot.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, OptFile.ScaleFactor).ToString());
                 sb.AppendLine("Pivot: " + model.Pivot.ToString());
-                sb.AppendLine("Look: " + model.Look.ToString());
-                sb.AppendLine("Up: " + model.Up.ToString());
-                sb.AppendLine("Right: " + model.Right.ToString());
+                sb.AppendLine("Rotation Axis: " + model.Look.ToString());
+                sb.AppendLine("Direction Axis: " + model.Up.ToString());
+                sb.AppendLine("Up Axis: " + model.Right.ToString());
                 sb.AppendLine("Angle: " + model.Angle.ToString());
                 sb.AppendLine("Closing Speed: " + model.ClosingSpeed.ToString());
                 sb.AppendLine("Opening Speed: " + model.OpeningSpeed.ToString());

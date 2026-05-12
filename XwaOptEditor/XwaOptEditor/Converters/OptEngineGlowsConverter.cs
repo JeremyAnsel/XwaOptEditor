@@ -68,9 +68,17 @@ namespace XwaOptEditor.Converters
                 var transform = new Transform3DGroup();
 
                 transform.Children.Add(new ScaleTransform3D(
-                    Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * .5,
                     engine.Format.X,
-                    engine.Format.Y));
+                    engine.Format.Y,
+                    Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * .5
+                    ));
+
+                Matrix3D matrix = new(
+                    -engine.Right.Y, engine.Right.X, engine.Right.Z, 0,
+                    -engine.Up.Y, engine.Up.X, engine.Up.Z, 0,
+                    -engine.Look.Y, engine.Look.X, engine.Look.Z, 0,
+                    0, 0, 0, 1);
+                transform.Children.Add(new MatrixTransform3D(matrix));
 
                 transform.Children.Add(new TranslateTransform3D(
                     -engine.Position.Y,
@@ -81,7 +89,7 @@ namespace XwaOptEditor.Converters
                 {
                     BaseRadius = .4,
                     Height = .8,
-                    Normal = new Vector3D(-engine.Look.Y, -engine.Look.X, engine.Look.Z),
+                    Normal = new Vector3D(0, 0, 1),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.CoreColor))),
                     BaseCap = false,
                     Transform = transform
@@ -91,7 +99,7 @@ namespace XwaOptEditor.Converters
                 {
                     BaseRadius = .5,
                     Height = 1,
-                    Normal = new Vector3D(-engine.Look.Y, -engine.Look.X, engine.Look.Z),
+                    Normal = new Vector3D(0, 0, 1),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.OuterColor))),
                     BaseCap = false,
                     Transform = transform

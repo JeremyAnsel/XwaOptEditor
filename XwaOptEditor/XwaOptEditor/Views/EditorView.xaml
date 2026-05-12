@@ -425,19 +425,19 @@
                                      Text="{Binding RotationScale.Pivot, Converter={vc:VectorScaleConverter}}" />
                             <TextBlock Grid.Row="9"
                                        Grid.Column="0"
-                                       Text="Look: " />
+                                       Text="Rotation Axis: " />
                             <TextBox Grid.Row="9"
                                      Grid.Column="1"
                                      Text="{Binding RotationScale.Look, Converter={vc:VectorConverter}}" />
                             <TextBlock Grid.Row="10"
                                        Grid.Column="0"
-                                       Text="Up: " />
+                                       Text="Direction Axis: " />
                             <TextBox Grid.Row="10"
                                      Grid.Column="1"
                                      Text="{Binding RotationScale.Up, Converter={vc:VectorConverter}}" />
                             <TextBlock Grid.Row="11"
                                        Grid.Column="0"
-                                       Text="Right: " />
+                                       Text="Up Axis: " />
                             <TextBox Grid.Row="11"
                                      Grid.Column="1"
                                      Text="{Binding RotationScale.Right, Converter={vc:VectorConverter}}" />
@@ -621,7 +621,7 @@
                                                           ColorMode="ColorCanvas" />
                                         <TextBlock Grid.Row="3"
                                                    Grid.Column="0"
-                                                   Text="Format: " />
+                                                   Text="Dimensions: " />
                                         <TextBox Grid.Row="3"
                                                  Grid.Column="1"
                                                  Text="{Binding Value.Format, Converter={vc:VectorConverter}}" />
@@ -968,7 +968,7 @@
                     <CheckBox IsChecked="{Binding ShowCenter}"
                               ToolTip="Show Center Axis">Center</CheckBox>
                     <CheckBox IsChecked="{Binding ShowAxes}"
-                              ToolTip="Show Look Up Right Axes">Axes</CheckBox>
+                              ToolTip="Show Rotation Axes">Axes</CheckBox>
                     <CheckBox IsChecked="{Binding ShowAnim}"
                               ToolTip="Show Anim">Anim</CheckBox>
                 </ToolBar>
