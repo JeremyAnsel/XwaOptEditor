@@ -708,8 +708,8 @@ namespace XwaHangarMapEditor
                     Version = item.Markings
                 };
 
-                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.Look.LengthFactor();
-                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
+                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.RotationAxis.LengthFactor();
+                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
                 transform.Freeze();
                 visual.Transform = transform;
 
@@ -1058,9 +1058,9 @@ namespace XwaHangarMapEditor
                 var mesh = model.File.Meshes[meshIndex];
                 var sfoil = model.SFoils.Where(t => t.MeshIndex == meshIndex).FirstOrDefault() ?? new SFoil();
 
-                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.Look.LengthFactor();
-                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
-                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle));
+                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.RotationAxis.LengthFactor();
+                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
+                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), angle));
 
                 TransformMesh(modelVisualOpt.Meshes[meshIndex], transform, transformRotation);
             }
@@ -1094,9 +1094,9 @@ namespace XwaHangarMapEditor
                 var mesh = model.File.Meshes[bridgeIndex];
                 var sfoil = model.SFoils.Where(t => t.MeshIndex == bridgeIndex).FirstOrDefault() ?? new SFoil();
 
-                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.Look.LengthFactor();
-                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
-                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), angle));
+                double angle = sfoil.Angle * 360.0 / 255 * mesh.RotationScale.RotationAxis.LengthFactor();
+                var transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), angle), mesh.RotationScale.Pivot.ToPoint3D());
+                var transformRotation = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), angle));
 
                 foreach (var modelMesh in modelVisualOpt.Meshes)
                 {

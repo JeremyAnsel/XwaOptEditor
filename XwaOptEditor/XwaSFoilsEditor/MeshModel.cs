@@ -19,11 +19,11 @@ namespace XwaSFoilsEditor
 
         private Vector pivot;
 
-        private Vector look;
+        private Vector rotationAxis;
 
-        private Vector up;
+        private Vector directionAxis;
 
-        private Vector right;
+        private Vector upAxis;
 
         private int angle;
 
@@ -99,55 +99,90 @@ namespace XwaSFoilsEditor
             }
         }
 
-        public Vector Look
+        public Vector RotationAxis
         {
             get
             {
-                return this.look;
+                return this.rotationAxis;
             }
 
             set
             {
-                if (value != this.look)
+                if (value != this.rotationAxis)
                 {
-                    this.look = value;
+                    this.rotationAxis = value;
                     this.OnPropertyChanged();
-                    this.OnPropertyChanged(nameof(LookLength));
-                    this.OnPropertyChanged(nameof(LookLengthFactor));
+                    this.OnPropertyChanged(nameof(RotationLength));
+                    this.OnPropertyChanged(nameof(RotationLengthFactor));
                     this.OnPropertyChanged(nameof(RealAngle));
                     this.OnPropertyChanged(nameof(RealAngleDegree));
                 }
             }
         }
 
-        public float LookLength
+        public float RotationLength
         {
             get
             {
-                return this.Look.Length();
+                return this.RotationAxis.Length();
             }
         }
 
-        public float LookLengthFactor
+        public float RotationLengthFactor
         {
             get
             {
-                return this.Look.LengthFactor();
+                return this.RotationAxis.LengthFactor();
             }
         }
 
-        public Vector Up
+        public Vector DirectionAxis
         {
             get
             {
-                return this.up;
+                return this.directionAxis;
             }
 
             set
             {
-                if (value != this.up)
+                if (value != this.directionAxis)
                 {
-                    this.up = value;
+                    this.directionAxis = value;
+                    this.OnPropertyChanged();
+                    this.OnPropertyChanged(nameof(DirectionLength));
+                    this.OnPropertyChanged(nameof(DirectionLengthFactor));
+                }
+            }
+        }
+
+        public float DirectionLength
+        {
+            get
+            {
+                return this.DirectionAxis.Length();
+            }
+        }
+
+        public float DirectionLengthFactor
+        {
+            get
+            {
+                return this.DirectionAxis.LengthFactor();
+            }
+        }
+
+        public Vector UpAxis
+        {
+            get
+            {
+                return this.upAxis;
+            }
+
+            set
+            {
+                if (value != this.upAxis)
+                {
+                    this.upAxis = value;
                     this.OnPropertyChanged();
                     this.OnPropertyChanged(nameof(UpLength));
                     this.OnPropertyChanged(nameof(UpLengthFactor));
@@ -159,7 +194,7 @@ namespace XwaSFoilsEditor
         {
             get
             {
-                return this.Up.Length();
+                return this.UpAxis.Length();
             }
         }
 
@@ -167,42 +202,7 @@ namespace XwaSFoilsEditor
         {
             get
             {
-                return this.Up.LengthFactor();
-            }
-        }
-
-        public Vector Right
-        {
-            get
-            {
-                return this.right;
-            }
-
-            set
-            {
-                if (value != this.right)
-                {
-                    this.right = value;
-                    this.OnPropertyChanged();
-                    this.OnPropertyChanged(nameof(RightLength));
-                    this.OnPropertyChanged(nameof(RightLengthFactor));
-                }
-            }
-        }
-
-        public float RightLength
-        {
-            get
-            {
-                return this.Right.Length();
-            }
-        }
-
-        public float RightLengthFactor
-        {
-            get
-            {
-                return this.Right.LengthFactor();
+                return this.UpAxis.LengthFactor();
             }
         }
 
@@ -229,7 +229,7 @@ namespace XwaSFoilsEditor
         {
             get
             {
-                float lookLength = this.LookLengthFactor;
+                float lookLength = this.RotationLengthFactor;
                 return lookLength == 0 ? this.Angle : (this.Angle * lookLength);
             }
         }

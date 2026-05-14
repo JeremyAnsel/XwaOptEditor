@@ -53,53 +53,53 @@ namespace XwaOptEditor.Converters
             float length = opt.Size * 2;
             double diameter = opt.Size * 0.005;
 
-            Vector3D look;
+            Vector3D rotationAxis;
 
-            if (mesh.RotationScale.Look.Length() == 0)
+            if (mesh.RotationScale.RotationAxis.Length() == 0)
             {
-                var upVector = mesh.RotationScale.Up.Normalize().ToVector3D();
-                var rightVector = mesh.RotationScale.Right.Normalize().ToVector3D();
-                look = Vector3D.CrossProduct(upVector, rightVector);
-                look = Vector3D.Multiply(look, length);
+                var upVector = mesh.RotationScale.DirectionAxis.Normalize().ToVector3D();
+                var rightVector = mesh.RotationScale.UpAxis.Normalize().ToVector3D();
+                rotationAxis = Vector3D.CrossProduct(upVector, rightVector);
+                rotationAxis = Vector3D.Multiply(rotationAxis, length);
             }
             else
             {
-                look = mesh.RotationScale.Look.Normalize().Scale(length).ToVector3D();
+                rotationAxis = mesh.RotationScale.RotationAxis.Normalize().Scale(length).ToVector3D();
             }
 
-            var lookVisual = new ArrowVisual3D
+            var rotationVisual = new ArrowVisual3D
             {
                 Material = Materials.Red,
                 Point1 = pivot,
-                Point2 = pivot + look,
+                Point2 = pivot + rotationAxis,
                 Diameter = diameter
             };
 
-            model.Children.Add(lookVisual);
+            model.Children.Add(rotationVisual);
 
-            Vector3D up = mesh.RotationScale.Up.Normalize().Scale(length).ToVector3D();
+            Vector3D directionAxis = mesh.RotationScale.DirectionAxis.Normalize().Scale(length).ToVector3D();
 
-            var upVisual = new ArrowVisual3D
+            var directionVisual = new ArrowVisual3D
             {
                 Material = Materials.Green,
                 Point1 = pivot,
-                Point2 = pivot + up,
+                Point2 = pivot + directionAxis,
+                Diameter = diameter
+            };
+
+            model.Children.Add(directionVisual);
+
+            Vector3D upAxis = mesh.RotationScale.UpAxis.Normalize().Scale(length).ToVector3D();
+
+            var upVisual = new ArrowVisual3D
+            {
+                Material = Materials.Blue,
+                Point1 = pivot,
+                Point2 = pivot + upAxis,
                 Diameter = diameter
             };
 
             model.Children.Add(upVisual);
-
-            Vector3D right = mesh.RotationScale.Right.Normalize().Scale(length).ToVector3D();
-
-            var rightVisual = new ArrowVisual3D
-            {
-                Material = Materials.Blue,
-                Point1 = pivot,
-                Point2 = pivot + right,
-                Diameter = diameter
-            };
-
-            model.Children.Add(rightVisual);
 
             return null;
         }

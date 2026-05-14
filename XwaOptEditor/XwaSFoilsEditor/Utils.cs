@@ -17,7 +17,7 @@ namespace XwaSFoilsEditor
             Transform3D transform;
             Point3D pivot = usePivot ? sfoil.Pivot.ToPoint3D() : new Point3D();
 
-            if (sfoil.Look.Length() == 0)
+            if (sfoil.RotationAxis.Length() == 0)
             {
                 double a = angle * Math.PI / 180.0;
                 double cosA = Math.Cos(a);
@@ -25,8 +25,8 @@ namespace XwaSFoilsEditor
             }
             else
             {
-                double a = angle * sfoil.Look.LengthFactor();
-                transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.Look.ToVector3D(), a), pivot);
+                double a = angle * sfoil.RotationAxis.LengthFactor();
+                transform = new RotateTransform3D(new AxisAngleRotation3D(sfoil.RotationAxis.ToVector3D(), a), pivot);
             }
 
             transform.Freeze();

@@ -35,9 +35,9 @@ namespace XwaOptEditor.Extensions
             if (mesh.RotationScale != null)
             {
                 mesh.RotationScale.Pivot = mesh.RotationScale.Pivot.RotateXY(value, centerX, centerY);
-                mesh.RotationScale.Look = mesh.RotationScale.Look.RotateXY(value, 0, 0);
-                mesh.RotationScale.Up = mesh.RotationScale.Up.RotateXY(value, 0, 0);
-                mesh.RotationScale.Right = mesh.RotationScale.Right.RotateXY(value, 0, 0);
+                mesh.RotationScale.RotationAxis = mesh.RotationScale.RotationAxis.RotateXY(value, 0, 0);
+                mesh.RotationScale.DirectionAxis = mesh.RotationScale.DirectionAxis.RotateXY(value, 0, 0);
+                mesh.RotationScale.UpAxis = mesh.RotationScale.UpAxis.RotateXY(value, 0, 0);
             }
 
             foreach (var hardpoint in mesh.Hardpoints)
@@ -48,9 +48,9 @@ namespace XwaOptEditor.Extensions
             foreach (var engineGlow in mesh.EngineGlows)
             {
                 engineGlow.Position = engineGlow.Position.RotateXY(value, centerX, centerY);
-                engineGlow.Look = engineGlow.Look.RotateXY(value, 0, 0);
-                engineGlow.Up = engineGlow.Up.RotateXY(value, 0, 0);
-                engineGlow.Right = engineGlow.Right.RotateXY(value, 0, 0);
+                engineGlow.LookAxis = engineGlow.LookAxis.RotateXY(value, 0, 0);
+                engineGlow.UpAxis = engineGlow.UpAxis.RotateXY(value, 0, 0);
+                engineGlow.RightAxis = engineGlow.RightAxis.RotateXY(value, 0, 0);
             }
 
             mesh.ComputeHitzone();
@@ -82,9 +82,9 @@ namespace XwaOptEditor.Extensions
             if (mesh.RotationScale != null)
             {
                 mesh.RotationScale.Pivot = mesh.RotationScale.Pivot.RotateXZ(value, centerX, centerZ);
-                mesh.RotationScale.Look = mesh.RotationScale.Look.RotateXZ(value, 0, 0);
-                mesh.RotationScale.Up = mesh.RotationScale.Up.RotateXZ(value, 0, 0);
-                mesh.RotationScale.Right = mesh.RotationScale.Right.RotateXZ(value, 0, 0);
+                mesh.RotationScale.RotationAxis = mesh.RotationScale.RotationAxis.RotateXZ(value, 0, 0);
+                mesh.RotationScale.DirectionAxis = mesh.RotationScale.DirectionAxis.RotateXZ(value, 0, 0);
+                mesh.RotationScale.UpAxis = mesh.RotationScale.UpAxis.RotateXZ(value, 0, 0);
             }
 
             foreach (var hardpoint in mesh.Hardpoints)
@@ -95,9 +95,9 @@ namespace XwaOptEditor.Extensions
             foreach (var engineGlow in mesh.EngineGlows)
             {
                 engineGlow.Position = engineGlow.Position.RotateXZ(value, centerX, centerZ);
-                engineGlow.Look = engineGlow.Look.RotateXZ(value, 0, 0);
-                engineGlow.Up = engineGlow.Up.RotateXZ(value, 0, 0);
-                engineGlow.Right = engineGlow.Right.RotateXZ(value, 0, 0);
+                engineGlow.LookAxis = engineGlow.LookAxis.RotateXZ(value, 0, 0);
+                engineGlow.UpAxis = engineGlow.UpAxis.RotateXZ(value, 0, 0);
+                engineGlow.RightAxis = engineGlow.RightAxis.RotateXZ(value, 0, 0);
             }
 
             mesh.ComputeHitzone();
@@ -129,9 +129,9 @@ namespace XwaOptEditor.Extensions
             if (mesh.RotationScale != null)
             {
                 mesh.RotationScale.Pivot = mesh.RotationScale.Pivot.RotateYZ(value, centerY, centerZ);
-                mesh.RotationScale.Look = mesh.RotationScale.Look.RotateYZ(value, 0, 0);
-                mesh.RotationScale.Up = mesh.RotationScale.Up.RotateYZ(value, 0, 0);
-                mesh.RotationScale.Right = mesh.RotationScale.Right.RotateYZ(value, 0, 0);
+                mesh.RotationScale.RotationAxis = mesh.RotationScale.RotationAxis.RotateYZ(value, 0, 0);
+                mesh.RotationScale.DirectionAxis = mesh.RotationScale.DirectionAxis.RotateYZ(value, 0, 0);
+                mesh.RotationScale.UpAxis = mesh.RotationScale.UpAxis.RotateYZ(value, 0, 0);
             }
 
             foreach (var hardpoint in mesh.Hardpoints)
@@ -142,9 +142,9 @@ namespace XwaOptEditor.Extensions
             foreach (var engineGlow in mesh.EngineGlows)
             {
                 engineGlow.Position = engineGlow.Position.RotateYZ(value, centerY, centerZ);
-                engineGlow.Look = engineGlow.Look.RotateYZ(value, 0, 0);
-                engineGlow.Up = engineGlow.Up.RotateYZ(value, 0, 0);
-                engineGlow.Right = engineGlow.Right.RotateYZ(value, 0, 0);
+                engineGlow.LookAxis = engineGlow.LookAxis.RotateYZ(value, 0, 0);
+                engineGlow.UpAxis = engineGlow.UpAxis.RotateYZ(value, 0, 0);
+                engineGlow.RightAxis = engineGlow.RightAxis.RotateYZ(value, 0, 0);
             }
 
             mesh.ComputeHitzone();

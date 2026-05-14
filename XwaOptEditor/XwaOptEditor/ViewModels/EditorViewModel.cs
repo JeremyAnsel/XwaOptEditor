@@ -1666,7 +1666,7 @@ namespace XwaOptEditor.ViewModels
 
                 mesh.EngineGlows.Add(new EngineGlow
                 {
-                    Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
+                    Dimensions = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
                 });
 
                 dispatcher(() => this.UpdateModel(true));
@@ -1746,10 +1746,10 @@ namespace XwaOptEditor.ViewModels
                                 Position = engineGlow.Position,
                                 CoreColor = engineGlow.CoreColor,
                                 OuterColor = engineGlow.OuterColor,
-                                Format = engineGlow.Format,
-                                Look = engineGlow.Look,
-                                Up = engineGlow.Up,
-                                Right = engineGlow.Right
+                                Dimensions = engineGlow.Dimensions,
+                                LookAxis = engineGlow.LookAxis,
+                                UpAxis = engineGlow.UpAxis,
+                                RightAxis = engineGlow.RightAxis
                             });
                     }
                 }
@@ -2243,7 +2243,7 @@ namespace XwaOptEditor.ViewModels
                     .Add(new EngineGlow
                     {
                         Position = new JeremyAnsel.Xwa.Opt.Vector((float)-tag.Item2.Y, (float)-tag.Item2.X, (float)tag.Item2.Z),
-                        Format = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
+                        Dimensions = new JeremyAnsel.Xwa.Opt.Vector(50, 50, 1)
                     });
 
                 dispatcher(() => this.UpdateModel(true));

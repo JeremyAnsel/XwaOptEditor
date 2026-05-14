@@ -61,9 +61,9 @@ namespace XwaOptProfilesViewer
                 var transform = new Transform3DGroup();
 
                 transform.Children.Add(new ScaleTransform3D(
-                    Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * .5,
-                    engine.Format.X,
-                    engine.Format.Y));
+                    Math.Max(engine.Dimensions.X, engine.Dimensions.Y) * engine.Dimensions.Z * .5,
+                    engine.Dimensions.X,
+                    engine.Dimensions.Y));
 
                 transform.Children.Add(new TranslateTransform3D(
                     -engine.Position.Y,
@@ -74,7 +74,7 @@ namespace XwaOptProfilesViewer
                 {
                     BaseRadius = .4,
                     Height = .8,
-                    Normal = new Vector3D(-engine.Look.Y, -engine.Look.X, engine.Look.Z),
+                    Normal = new Vector3D(-engine.LookAxis.Y, -engine.LookAxis.X, engine.LookAxis.Z),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.CoreColor))),
                     BaseCap = false,
                     Transform = transform
@@ -84,7 +84,7 @@ namespace XwaOptProfilesViewer
                 {
                     BaseRadius = .5,
                     Height = 1,
-                    Normal = new Vector3D(-engine.Look.Y, -engine.Look.X, engine.Look.Z),
+                    Normal = new Vector3D(-engine.LookAxis.Y, -engine.LookAxis.X, engine.LookAxis.Z),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.OuterColor))),
                     BaseCap = false,
                     Transform = transform

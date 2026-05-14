@@ -62,16 +62,16 @@ namespace XwaOptEditor.Converters
             var pivot = mesh.RotationScale.Pivot.ToPoint3D();
             Vector3D direction;
 
-            if (mesh.RotationScale.Look.Length() == 0)
+            if (mesh.RotationScale.RotationAxis.Length() == 0)
             {
-                var up = mesh.RotationScale.Up.Normalize().ToVector3D();
-                var right = mesh.RotationScale.Right.Normalize().ToVector3D();
+                var up = mesh.RotationScale.DirectionAxis.Normalize().ToVector3D();
+                var right = mesh.RotationScale.UpAxis.Normalize().ToVector3D();
                 direction = Vector3D.CrossProduct(up, right);
                 direction = Vector3D.Multiply(direction, opt.Size);
             }
             else
             {
-                direction = mesh.RotationScale.Look.Normalize().Scale(opt.Size).ToVector3D();
+                direction = mesh.RotationScale.RotationAxis.Normalize().Scale(opt.Size).ToVector3D();
             }
 
             var visual = new ArrowVisual3D
@@ -86,7 +86,7 @@ namespace XwaOptEditor.Converters
 
             double angle = 64.0 * step;
             Transform3D transform;
-            if (mesh.RotationScale.Look.Length() == 0)
+            if (mesh.RotationScale.RotationAxis.Length() == 0)
             {
                 double a = angle * Math.PI / 180.0;
                 double cosA = Math.Cos(a);
@@ -94,8 +94,8 @@ namespace XwaOptEditor.Converters
             }
             else
             {
-                double a = angle * mesh.RotationScale.Look.LengthFactor();
-                transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.Look.ToVector3D(), a), pivot);
+                double a = angle * mesh.RotationScale.RotationAxis.LengthFactor();
+                transform = new RotateTransform3D(new AxisAngleRotation3D(mesh.RotationScale.RotationAxis.ToVector3D(), a), pivot);
             }
 
             transform.Freeze();

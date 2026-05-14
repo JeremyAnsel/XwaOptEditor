@@ -133,9 +133,9 @@ namespace XwaSFoilsEditor
                 var mesh = this.OptFile.Meshes[model.MeshIndex];
 
                 mesh.RotationScale.Pivot = model.Pivot;
-                mesh.RotationScale.Look = model.Look;
-                mesh.RotationScale.Up = model.Up;
-                mesh.RotationScale.Right = model.Right;
+                mesh.RotationScale.RotationAxis = model.RotationAxis;
+                mesh.RotationScale.DirectionAxis = model.DirectionAxis;
+                mesh.RotationScale.UpAxis = model.UpAxis;
             }
 
             string baseFilename = OptTransformHelpers.GetBaseOptFilename(this.OptFile.FileName);
@@ -201,9 +201,9 @@ namespace XwaSFoilsEditor
                 sb.AppendFormat(CultureInfo.InvariantCulture, "{0} - {1}\n", model.MeshIndex, model.Name);
                 sb.AppendLine("Pivot (m): " + model.Pivot.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, OptFile.ScaleFactor).ToString());
                 sb.AppendLine("Pivot: " + model.Pivot.ToString());
-                sb.AppendLine("Rotation Axis: " + model.Look.ToString());
-                sb.AppendLine("Direction Axis: " + model.Up.ToString());
-                sb.AppendLine("Up Axis: " + model.Right.ToString());
+                sb.AppendLine("Rotation Axis: " + model.RotationAxis.ToString());
+                sb.AppendLine("Direction Axis: " + model.DirectionAxis.ToString());
+                sb.AppendLine("Up Axis: " + model.UpAxis.ToString());
                 sb.AppendLine("Angle: " + model.Angle.ToString());
                 sb.AppendLine("Closing Speed: " + model.ClosingSpeed.ToString());
                 sb.AppendLine("Opening Speed: " + model.OpeningSpeed.ToString());
@@ -284,9 +284,9 @@ namespace XwaSFoilsEditor
                     Name = mesh.Descriptor.MeshType.ToString(),
                     MeshIndex = meshIndex,
                     Pivot = mesh.RotationScale.Pivot,
-                    Look = mesh.RotationScale.Look,
-                    Up = mesh.RotationScale.Up,
-                    Right = mesh.RotationScale.Right,
+                    RotationAxis = mesh.RotationScale.RotationAxis,
+                    DirectionAxis = mesh.RotationScale.DirectionAxis,
+                    UpAxis = mesh.RotationScale.UpAxis,
                     Angle = sfoil.Angle,
                     OpeningSpeed = sfoil.OpeningSpeed,
                     ClosingSpeed = sfoil.ClosingSpeed
@@ -427,9 +427,9 @@ namespace XwaSFoilsEditor
                 var mesh = optFile.Meshes[model.MeshIndex];
 
                 mesh.RotationScale.Pivot = model.Pivot;
-                mesh.RotationScale.Look = model.Look;
-                mesh.RotationScale.Up = model.Up;
-                mesh.RotationScale.Right = model.Right;
+                mesh.RotationScale.RotationAxis = model.RotationAxis;
+                mesh.RotationScale.DirectionAxis = model.DirectionAxis;
+                mesh.RotationScale.UpAxis = model.UpAxis;
             }
 
             double showSFoilsOpened = this.showSFoils.Value;
@@ -506,7 +506,7 @@ namespace XwaSFoilsEditor
                     }
 
                     var pivot = model.Pivot.ToPoint3D();
-                    var direction = model.Look.Normalize().Scale(optFile.Size).ToVector3D();
+                    var direction = model.RotationAxis.Normalize().Scale(optFile.Size).ToVector3D();
 
                     var visual = new ArrowVisual3D
                     {

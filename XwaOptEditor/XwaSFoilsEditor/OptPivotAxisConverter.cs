@@ -55,7 +55,7 @@ namespace XwaSFoilsEditor
             }
 
             var pivot = selected.Pivot.ToPoint3D();
-            var direction = selected.Look.Normalize().Scale(opt.Size).ToVector3D();
+            var direction = selected.RotationAxis.Normalize().Scale(opt.Size).ToVector3D();
 
             var visual = new ArrowVisual3D
             {

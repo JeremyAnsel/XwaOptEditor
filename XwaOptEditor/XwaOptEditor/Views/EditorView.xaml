@@ -428,19 +428,19 @@
                                        Text="Rotation Axis: " />
                             <TextBox Grid.Row="9"
                                      Grid.Column="1"
-                                     Text="{Binding RotationScale.Look, Converter={vc:VectorConverter}}" />
+                                     Text="{Binding RotationScale.RotationAxis, Converter={vc:VectorConverter}}" />
                             <TextBlock Grid.Row="10"
                                        Grid.Column="0"
                                        Text="Direction Axis: " />
                             <TextBox Grid.Row="10"
                                      Grid.Column="1"
-                                     Text="{Binding RotationScale.Up, Converter={vc:VectorConverter}}" />
+                                     Text="{Binding RotationScale.DirectionAxis, Converter={vc:VectorConverter}}" />
                             <TextBlock Grid.Row="11"
                                        Grid.Column="0"
                                        Text="Up Axis: " />
                             <TextBox Grid.Row="11"
                                      Grid.Column="1"
-                                     Text="{Binding RotationScale.Right, Converter={vc:VectorConverter}}" />
+                                     Text="{Binding RotationScale.UpAxis, Converter={vc:VectorConverter}}" />
                         </Grid>
                     </DockPanel>
                 </TabItem>
@@ -624,7 +624,7 @@
                                                    Text="Dimensions: " />
                                         <TextBox Grid.Row="3"
                                                  Grid.Column="1"
-                                                 Text="{Binding Value.Format, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.Dimensions, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="4"
                                                    Grid.Column="0"
                                                    Text="Position (m): " />
@@ -636,19 +636,19 @@
                                                    Text="Look: " />
                                         <TextBox Grid.Row="5"
                                                  Grid.Column="1"
-                                                 Text="{Binding Value.Look, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.LookAxis, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="0"
                                                    Text="Up: " />
                                         <TextBox Grid.Row="6"
                                                  Grid.Column="1"
-                                                 Text="{Binding Value.Up, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.UpAxis, Converter={vc:VectorConverter}}" />
                                         <TextBlock Grid.Row="7"
                                                    Grid.Column="0"
                                                    Text="Right: " />
                                         <TextBox Grid.Row="7"
                                                  Grid.Column="1"
-                                                 Text="{Binding Value.Right, Converter={vc:VectorConverter}}" />
+                                                 Text="{Binding Value.RightAxis, Converter={vc:VectorConverter}}" />
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

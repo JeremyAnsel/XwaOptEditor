@@ -68,15 +68,15 @@ namespace XwaOptEditor.Converters
                 var transform = new Transform3DGroup();
 
                 transform.Children.Add(new ScaleTransform3D(
-                    engine.Format.X,
-                    engine.Format.Y,
-                    Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * .5
+                    engine.Dimensions.X,
+                    engine.Dimensions.Y,
+                    Math.Max(engine.Dimensions.X, engine.Dimensions.Y) * engine.Dimensions.Z * .5
                     ));
 
                 Matrix3D matrix = new(
-                    -engine.Right.Y, engine.Right.X, engine.Right.Z, 0,
-                    -engine.Up.Y, engine.Up.X, engine.Up.Z, 0,
-                    -engine.Look.Y, engine.Look.X, engine.Look.Z, 0,
+                    -engine.RightAxis.Y, engine.RightAxis.X, engine.RightAxis.Z, 0,
+                    -engine.UpAxis.Y, engine.UpAxis.X, engine.UpAxis.Z, 0,
+                    -engine.LookAxis.Y, engine.LookAxis.X, engine.LookAxis.Z, 0,
                     0, 0, 0, 1);
                 transform.Children.Add(new MatrixTransform3D(matrix));
 
@@ -112,14 +112,14 @@ namespace XwaOptEditor.Converters
             {
                 var engine = selected;
 
-                double depth = Math.Max(engine.Format.X, engine.Format.Y) * engine.Format.Z * 2.0;
-                double width = engine.Format.X * 2.0;
-                double height = engine.Format.Y * 2.0;
+                double depth = Math.Max(engine.Dimensions.X, engine.Dimensions.Y) * engine.Dimensions.Z * 2.0;
+                double width = engine.Dimensions.X * 2.0;
+                double height = engine.Dimensions.Y * 2.0;
 
                 Vector3D position = new Vector3D(-engine.Position.Y, -engine.Position.X, engine.Position.Z);
-                Vector3D look = new Vector3D(-engine.Look.Y, -engine.Look.X, engine.Look.Z);
-                Vector3D up = new Vector3D(-engine.Up.Y, -engine.Up.X, engine.Up.Z);
-                Vector3D right = new Vector3D(-engine.Right.Y, -engine.Right.X, engine.Right.Z);
+                Vector3D look = new Vector3D(-engine.LookAxis.Y, -engine.LookAxis.X, engine.LookAxis.Z);
+                Vector3D up = new Vector3D(-engine.UpAxis.Y, -engine.UpAxis.X, engine.UpAxis.Z);
+                Vector3D right = new Vector3D(-engine.RightAxis.Y, -engine.RightAxis.X, engine.RightAxis.Z);
 
                 var points = new Point3DCollection();
 

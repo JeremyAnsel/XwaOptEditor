@@ -539,7 +539,7 @@ namespace XwaOptEditor.ViewModels
                 {
                     foreach (var engineGlow in mesh.EngineGlows)
                     {
-                        var format = engineGlow.Format.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, 1.0f);
+                        var format = engineGlow.Dimensions.Scale(OptFile.ScaleFactor, OptFile.ScaleFactor, 1.0f);
                         engineGlows.Add(Tuple.Create(engineGlow, format));
                     }
                 }
@@ -548,7 +548,7 @@ namespace XwaOptEditor.ViewModels
 
                 foreach (var engineGlow in engineGlows)
                 {
-                    engineGlow.Item1.Format = engineGlow.Item2;
+                    engineGlow.Item1.Dimensions = engineGlow.Item2;
                 }
             }
 
