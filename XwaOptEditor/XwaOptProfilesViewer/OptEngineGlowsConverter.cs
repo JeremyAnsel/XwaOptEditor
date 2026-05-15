@@ -61,9 +61,17 @@ namespace XwaOptProfilesViewer
                 var transform = new Transform3DGroup();
 
                 transform.Children.Add(new ScaleTransform3D(
-                    Math.Max(engine.Dimensions.X, engine.Dimensions.Y) * engine.Dimensions.Z * .5,
                     engine.Dimensions.X,
-                    engine.Dimensions.Y));
+                    engine.Dimensions.Y,
+                    Math.Max(engine.Dimensions.X, engine.Dimensions.Y) * engine.Dimensions.Z * .5
+                    ));
+
+                Matrix3D matrix = new(
+                    -engine.RightAxis.Y, engine.RightAxis.X, engine.RightAxis.Z, 0,
+                    -engine.UpAxis.Y, engine.UpAxis.X, engine.UpAxis.Z, 0,
+                    -engine.LookAxis.Y, engine.LookAxis.X, engine.LookAxis.Z, 0,
+                    0, 0, 0, 1);
+                transform.Children.Add(new MatrixTransform3D(matrix));
 
                 transform.Children.Add(new TranslateTransform3D(
                     -engine.Position.Y,
@@ -74,7 +82,7 @@ namespace XwaOptProfilesViewer
                 {
                     BaseRadius = .4,
                     Height = .8,
-                    Normal = new Vector3D(-engine.LookAxis.Y, -engine.LookAxis.X, engine.LookAxis.Z),
+                    Normal = new Vector3D(0, 0, 1),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.CoreColor))),
                     BaseCap = false,
                     Transform = transform
@@ -84,7 +92,7 @@ namespace XwaOptProfilesViewer
                 {
                     BaseRadius = .5,
                     Height = 1,
-                    Normal = new Vector3D(-engine.LookAxis.Y, -engine.LookAxis.X, engine.LookAxis.Z),
+                    Normal = new Vector3D(0, 0, 1),
                     Material = new DiffuseMaterial(new SolidColorBrush(ColorHelpers.FromUint(engine.OuterColor))),
                     BaseCap = false,
                     Transform = transform
