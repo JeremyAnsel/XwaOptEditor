@@ -223,7 +223,8 @@ namespace XwaSFoilsEditor
 
             string optFilename;
 
-            if (System.IO.File.Exists(baseFilename + "Exterior.opt"))
+            if (System.IO.File.Exists(baseFilename + "Exterior.opt")
+                && MessageBox.Show(this, "An exterior model exist for " + System.IO.Path.GetFileName(baseFilename) + ". Do you want to open it?", this.Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 optFilename = baseFilename + "Exterior.opt";
             }
